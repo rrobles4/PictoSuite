@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Pictogrames</title>
+<meta name="author" content="Rafa Robles Fontanet">
+    <meta name="copyright" content="Rafa Robles Fontanet 2026">
+    <meta name="license" content="CC BY-NC-SA 4.0">
+    <meta name="description" content="Eina per generar fitxes de vocabulari amb pictogrames per a escoles.">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@400;700&family=Fredoka:wght@400;600&family=Indie+Flower&family=Patrick+Hand&family=Roboto&display=swap" rel="stylesheet">
+    
+    <style>
+        /* --- ESTILS GENERALS --- */
+        :root {
+            --color-fons: #f0f8ff;
+            --color-principal: #4a90e2;
+            --color-secundari: #f39c12; 
+            --color-accio: #27ae60;
+            --mida-font-base: 18px; 
+            --tipus-font: 'Arial', sans-serif;
+            --color-font: #000000;
+            --num-columnes: 3;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--color-fons);
+            margin: 0; padding: 20px;
+        }
+
+        /* --- CONFIGURACIÓ (NO PRINT) --- */
+        .configuracio {
+            background-color: white; padding: 25px; border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 900px;
+            margin: 0 auto 20px auto; border-left: 10px solid var(--color-principal);
+        }
+
+        h1 { color: #2c3e50; text-align: center; margin-top: 0; font-size: 1.8em; }
+        
+        .fila-flex { display: flex; gap: 20px; margin-bottom: 15px; align-items: flex-end; }
+        .columna { flex: 1; }
+
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.9em; }
+        
+        input[type="text"], select, textarea {
+            width: 100%; padding: 10px; border: 2px solid #ddd;
+            border-radius: 8px; font-size: 16px; box-sizing: border-box;
+        }
+
+        /* ESTIL BOTÓ LOGO */
+        .input-logo-wrapper {
+            border: 2px dashed #ccc; padding: 8px; border-radius: 8px; 
+            text-align: center; cursor: pointer; transition: all 0.3s;
+            background: #fafafa; font-size: 0.9em; color: #777;
+        }
+        .input-logo-wrapper:hover { border-color: var(--color-principal); color: var(--color-principal); }
+        .input-logo-wrapper.feteservir {
+            border-style: solid; border-color: var(--color-accio); 
+            background-color: #e8f8f5; color: var(--color-accio); font-weight: bold;
+        }
+
+        /* BARRA D'EINES */
+        .barra-estils {
+            background: #eef2f7; padding: 15px; border-radius: 8px; margin-bottom: 20px;
+            border: 1px solid #d1d9e6; 
+            display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap;
+        }
+        .control-estil { display: flex; flex-direction: column; min-width: 90px; }
+        input[type="color"] { border: none; width: 100%; height: 40px; cursor: pointer; background: none; }
+        textarea { height: 80px; resize: vertical; }
+
+        /* BOTONS PANELL */
+        .btn-container { display: flex; gap: 10px; margin-top: 20px; }
+        button {
+            border: none; padding: 12px 25px; font-size: 16px; border-radius: 50px;
+            cursor: pointer; font-weight: bold; color: white;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            transition: transform 0.1s;
+        }
+        button:active { transform: scale(0.98); }
+        .btn-generar { background-color: var(--color-principal); flex: 2; }
+        .btn-imprimir { background-color: var(--color-accio); flex: 1; }
+
+        /* --- ZONA D'IMPRESSIÓ --- */
+        #zona-impressio {
+            background-color: white; 
+            padding: 15mm; 
+            min-height: 297mm; width: 210mm; 
+            margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+            box-sizing: border-box; 
+        }
+
+        /* CAPÇALERA IMPRESSIÓ */
+        .header-print {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px; 
+            align-items: center;
+            margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;
+            height: 70px;
+        }
+        .logo-escola { height: 100%; width: auto; max-height: 60px; object-fit: contain; display: none; }
+        
+        .titol-print-container { text-align: center; }
+        .titol-print-container h2 { margin: 0; font-size: 1.8em; color: #222; }
+        
+        .curs-print { font-size: 1.2em; font-weight: bold; color: #555; text-align: right; }
+
+        /* GRAELLA */
+        .graella {
+            display: grid; 
+            grid-template-columns: repeat(var(--num-columnes), 1fr); 
+            gap: 15px; 
+            width: 100%;
+        }
+
+        /* --- DISSENY DE LA TARGETA --- */
+        .pictograma {
+            border: 3px solid #000; 
+            border-radius: 15px; 
+            background: white; 
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: space-between; 
+            aspect-ratio: 0.85; 
+            padding: 10px;
+            cursor: grab; 
+            break-inside: avoid; page-break-inside: avoid;
+            box-sizing: border-box;
+        }
+        
+        .pictograma:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .pictograma.dragging { opacity: 0.4; border: 3px dashed #999; background: #eee; }
+
+        .pictograma img {
+            width: 100%; height: 70%; object-fit: contain; pointer-events: none;
+        }
+
+        .pictograma p {
+            margin: 0; width: 100%; text-align: center;
+            font-size: calc(var(--mida-font-base) * (1 + (5 - var(--num-columnes)) * 0.25));
+            font-family: var(--tipus-font); 
+            color: var(--color-font);
+            line-height: 1.1;
+            font-weight: bold;
+            height: 30%;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* MODAL */
+        #modal-edicio {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 1000;
+            justify-content: center; align-items: center;
+        }
+        .modal-contingut {
+            background: white; border-radius: 12px; width: 90%; max-width: 650px; 
+            display: flex; flex-direction: column; max-height: 90vh; overflow: hidden;
+        }
+        .modal-tabs { display: flex; background: #f1f1f1; border-bottom: 1px solid #ddd; }
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; background: none; cursor: pointer;
+            font-weight: bold; color: #555; border-bottom: 3px solid transparent;
+        }
+        .tab-btn.actiu { border-bottom: 3px solid var(--color-principal); color: var(--color-principal); background: white; }
+        
+        .modal-body { padding: 25px; overflow-y: auto; }
+        
+        .grup-titol-modal { margin-bottom: 20px; text-align: center; }
+        .grup-titol-modal label { font-size: 1.1em; color: var(--color-principal); margin-bottom: 8px; }
+        .nom-editable { 
+            width: 100%; font-size: 1.3em; font-weight: bold; text-align: center; 
+            border: 2px solid #eee; border-radius: 8px; padding: 8px; 
+        }
+
+        .cerca-wrapper { display: flex; gap: 8px; margin-bottom: 15px; }
+        .btn-cerca-modal {
+            background: var(--color-principal); border-radius: 8px; padding: 10px 20px;
+            font-size: 1em; flex-shrink: 0; color: white; border: none; cursor: pointer;
+        }
+        .btn-cerca-wiki { background: var(--color-secundari); }
+        .btn-cerca-open { background: #333; }
+
+        .resultats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
+        .resultats-grid img { width: 100%; height: 90px; object-fit: contain; border: 1px solid #eee; border-radius: 8px; cursor: pointer; padding: 5px; }
+        .resultats-grid img:hover { transform: scale(1.05); border-color: var(--color-principal); background: #f0f8ff; }
+
+        /* --- IMPRESSIÓ NETA --- */
+        @media print {
+            @page { size: A4 portrait; margin: 0 !important; }
+            body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; }
+            .configuracio, .no-print, #modal-edicio { display: none !important; }
+            #zona-impressio { padding: 15mm; width: 100%; max-width: 210mm; margin: 0 auto; box-shadow: none; }
+            .graella { gap: 8px; }
+            .pictograma { border: 3px solid #000; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="configuracio">
+        <h1>Generador de Pictogrames</h1>
+        
+        <div class="fila-flex">
+            <div class="columna" style="flex: 0.6;">
+                <label>Logo Escola:</label>
+                <div id="wrapper-logo" class="input-logo-wrapper" onclick="document.getElementById('input-logo').click()">
+                    📁 Pujar Logo
+                </div>
+                <input type="file" id="input-logo" accept="image/*" style="display:none" onchange="carregarLogo(this)">
+            </div>
+            <div class="columna" style="flex: 1.5;">
+                <label>Títol:</label>
+                <input type="text" id="titol-doc" placeholder="Ex: El cicle de l'aigua">
+            </div>
+            <div class="columna">
+                <label>Curs:</label>
+                <input type="text" id="curs" placeholder="Ex: 3r A">
+            </div>
+            <div class="columna" style="flex: 0.5;">
+                <label>Idioma:</label>
+                <select id="idioma">
+                    <option value="ca">Català</option>
+                    <option value="es">Castellano</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="barra-estils">
+            <div class="control-estil" style="flex:1;">
+                <label>Mida / Columnes</label>
+                <select id="selector-columnes" onchange="actualitzarEstils()">
+                    <option value="1">1 (Gegant)</option>
+                    <option value="2">2 (Molt Gran)</option>
+                    <option value="3" selected>3 (Gran)</option>
+                    <option value="4">4 (Mitjana)</option>
+                    <option value="5">5 (Petita - A4)</option>
+                </select>
+            </div>
+            <div class="control-estil" style="flex:1;">
+                <label>Font</label>
+                <select id="selector-font" onchange="actualitzarEstils()">
+                    <option value="'Arial', sans-serif">Arial</option>
+                    <option value="'Fredoka', sans-serif">Fredoka (Rodona)</option>
+                    <option value="'Patrick Hand', cursive">Manual</option>
+                    <option value="'Dancing Script', cursive">Lligada</option>
+                    <option value="'Andika', sans-serif">Lectoescriptura</option>
+                </select>
+            </div>
+            <div class="control-estil" style="flex:0.8;">
+                <label>Mida Lletra Base</label>
+                <input type="range" id="selector-mida" min="12" max="30" value="18" oninput="actualitzarEstils()">
+            </div>
+            <div class="control-estil" style="flex:0.5;">
+                <label>Color</label>
+                <input type="color" id="selector-color" value="#000000" onchange="actualitzarEstils()">
+            </div>
+        </div>
+
+        <div class="grup-input">
+            <label>Llista de paraules:</label>
+            <textarea id="llista-paraules" placeholder="Ex: aigua, torrent, núvol..."></textarea>
+        </div>
+
+        <div class="btn-container">
+            <button class="btn-generar" onclick="generarDocument()">⚡ Generar</button>
+            <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
+        </div>
+
+        <p class="no-print" style="text-align:center; color:#e74c3c; font-size:0.85em; margin-top:15px; margin-bottom:0;">
+            * Important: A la finestra d'imprimir, clica a "Més opcions" i desmarca "Capçaleres i peus de pàgina".
+        </p>
+    </div>
+
+    <div id="zona-impressio">
+        <div class="header-print">
+            <div style="display:flex; justify-content:flex-start;">
+                <img id="logo-visual" class="logo-escola" src="" alt="Logo">
+            </div>
+            <div class="titol-print-container">
+                <h2 id="titol-resultat">Títol del document</h2>
+            </div>
+            <div class="curs-print">
+                <span id="curs-resultat"></span>
+            </div>
+        </div>
+        <div class="graella" id="contenidor-picts"></div>
+    </div>
+
+    <div id="modal-edicio">
+        <div class="modal-contingut">
+            <div class="modal-tabs">
+                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 ARASAAC</button>
+                <button class="tab-btn" onclick="canviarPestanya('tab-wiki')">📷 Wiki</button>
+                <button class="tab-btn" onclick="canviarPestanya('tab-simbols')">✒️ Símbols</button>
+                <button class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar/IA</button>
+            </div>
+            
+            <div class="modal-body">
+                <div class="grup-titol-modal">
+                    <label>Títol de la targeta</label>
+                    <input type="text" id="nom-editable" class="nom-editable">
+                </div>
+
+                <div id="tab-arasaac" class="contingut-tab">
+                    <div class="cerca-wrapper">
+                        <input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()">
+                        <button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca la imatge</button>
+                    </div>
+                    <div id="resultats-arasaac" class="resultats-grid"></div>
+                </div>
+
+                <div id="tab-wiki" class="contingut-tab" style="display:none;">
+                    <div class="cerca-wrapper">
+                        <input id="input-wiki" onkeyup="if(event.key==='Enter') buscarWikiImages()">
+                        <button class="btn-cerca-modal btn-cerca-wiki" onclick="buscarWikiImages()">📷 Cerca la imatge</button>
+                    </div>
+                    <div id="resultats-wiki" class="resultats-grid"></div>
+                </div>
+
+                <div id="tab-simbols" class="contingut-tab" style="display:none;">
+                    <div class="cerca-wrapper">
+                        <input id="input-open" onkeyup="if(event.key==='Enter') buscarOpenSymbols()">
+                        <button class="btn-cerca-modal btn-cerca-open" onclick="buscarOpenSymbols()">✒️ Cerca la imatge</button>
+                    </div>
+                    <div id="resultats-open" class="resultats-grid"></div>
+                </div>
+
+                <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
+                    <p>Puja una imatge pròpia:</p>
+                    <input type="file" accept="image/*" onchange="pujarImatge(this)">
+                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+                    <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">
+                        🎨 Generar amb IA
+                    </button>
+                </div>
+            </div>
+            <div style="padding:15px;background:#f9f9f9;text-align:right;">
+                <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex;">✅ Fet</button>
+                <button onclick="tancarModal()" style="background:#999;display:inline-flex;">Tancar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let idiomaSeleccionat = 'ca';
+        let elementEditant = null;
+
+        // 1. LOGO
+        function carregarLogo(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) { 
+                    const img = document.getElementById('logo-visual');
+                    img.src = e.target.result; img.style.display = 'block';
+                    const wrp = document.getElementById('wrapper-logo');
+                    wrp.classList.add('feteservir'); wrp.innerHTML = "✅ Logo Carregat";
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 2. GENERACIÓ
+        async function generarDocument() {
+            const titol = document.getElementById('titol-doc').value || "Sense títol";
+            const curs = document.getElementById('curs').value;
+            const textParaules = document.getElementById('llista-paraules').value;
+            idiomaSeleccionat = document.getElementById('idioma').value;
+
+            document.getElementById('titol-resultat').innerText = titol;
+            const cursEl = document.getElementById('curs-resultat');
+            if (curs.trim()) { cursEl.innerText = curs; cursEl.style.display='block'; }
+            else { cursEl.style.display='none'; }
+
+            const contenidor = document.getElementById('contenidor-picts');
+            contenidor.innerHTML = '';
+
+            if (!textParaules.trim()) return alert("Escriu paraules!");
+            const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
+            
+            for (let paraula of llista) {
+                await crearTargeta(contenidor, paraula);
+            }
+            actualitzarEstils();
+        }
+
+        async function crearTargeta(contenidor, paraula) {
+            const div = document.createElement('div');
+            div.className = 'pictograma';
+            div.draggable = true; 
+
+            div.addEventListener('click', () => { if(!div.classList.contains('dragging')) obrirModal(div); });
+            div.addEventListener('dragstart', () => { div.classList.add('dragging'); });
+            div.addEventListener('dragend', () => { div.classList.remove('dragging'); });
+
+            const img = document.createElement('img');
+            img.src = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'; 
+            
+            const p = document.createElement('p');
+            p.innerText = paraula;
+
+            div.appendChild(img);
+            div.appendChild(p);
+            contenidor.appendChild(div);
+
+            buscarArasaacAuto(paraula, img);
+        }
+
+        // DRAG & DROP
+        const contenidor = document.getElementById('contenidor-picts');
+        contenidor.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            const dragging = document.querySelector('.dragging');
+            if(!dragging) return;
+            
+            const siblings = [...contenidor.querySelectorAll('.pictograma:not(.dragging)')];
+            let closest = null;
+            let minDistance = Number.POSITIVE_INFINITY;
+
+            siblings.forEach(sibling => {
+                const box = sibling.getBoundingClientRect();
+                const dx = e.clientX - (box.left + box.width / 2);
+                const dy = e.clientY - (box.top + box.height / 2);
+                const distance = Math.sqrt(dx*dx + dy*dy);
+                if (distance < minDistance) { minDistance = distance; closest = sibling; }
+            });
+
+            if (closest) {
+                const box = closest.getBoundingClientRect();
+                if(e.clientX > box.left + box.width/2) contenidor.insertBefore(dragging, closest.nextSibling);
+                else contenidor.insertBefore(dragging, closest);
+            } else {
+                contenidor.appendChild(dragging);
+            }
+        });
+
+        // FUNCIONS ESTIL
+        async function buscarArasaacAuto(text, img) {
+            try {
+                const r = await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(text)}`);
+                const d = await r.json();
+                if(d.length) img.src = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_500.png`;
+                else { img.src = "https://static.arasaac.org/images/no_results.png"; img.style.opacity="0.3"; }
+            } catch(e){}
+        }
+
+        function actualitzarEstils() {
+            const doc = document.documentElement.style;
+            doc.setProperty('--tipus-font', document.getElementById('selector-font').value);
+            doc.setProperty('--mida-font-base', document.getElementById('selector-mida').value + 'px');
+            doc.setProperty('--color-font', document.getElementById('selector-color').value);
+            doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
+        }
+
+        // MODALS
+        function obrirModal(el) {
+            elementEditant = el;
+            const nom = el.querySelector('p').innerText;
+            document.getElementById('nom-editable').value = nom;
+            document.getElementById('input-arasaac').value = nom;
+            document.getElementById('input-wiki').value = nom;
+            document.getElementById('input-open').value = nom;
+            document.getElementById('modal-edicio').style.display = 'flex';
+            canviarPestanya('tab-arasaac'); buscarArasaacModal();
+        }
+        function tancarModal() { document.getElementById('modal-edicio').style.display = 'none'; elementEditant=null; }
+        function guardarTancar() {
+            if(elementEditant) elementEditant.querySelector('p').innerText = document.getElementById('nom-editable').value;
+            tancarModal();
+        }
+        function canviarPestanya(id) {
+            document.querySelectorAll('.contingut-tab').forEach(e=>e.style.display='none');
+            document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('actiu'));
+            document.getElementById(id).style.display='block';
+            const map = {'tab-arasaac':0, 'tab-wiki':1, 'tab-simbols':2, 'tab-pujar':3};
+            document.querySelectorAll('.tab-btn')[map[id]].classList.add('actiu');
+        }
+        function aplicarImatge(src) { if(elementEditant) { elementEditant.querySelector('img').src = src; elementEditant.querySelector('img').style.opacity='1'; } }
+
+        // CERQUES
+        async function buscarArasaacModal() {
+            const q = document.getElementById('input-arasaac').value;
+            renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac');
+        }
+        async function buscarWikiImages() {
+            const q = document.getElementById('input-wiki').value;
+            const r = await fetch(`https://ca.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrnamespace=0&gsrlimit=10&prop=pageimages&piprop=thumbnail&pithumbsize=300&format=json&origin=*`).then(res=>res.json());
+            const urls = r.query?.pages ? Object.values(r.query.pages).filter(p=>p.thumbnail).map(p=>p.thumbnail.source) : [];
+            renderResultats(urls, 'resultats-wiki');
+        }
+        async function buscarOpenSymbols() {
+             const q = document.getElementById('input-open').value;
+             const d = await fetch(`https://www.opensymbols.org/api/v1/symbols/search?q=${encodeURIComponent(q)}`).then(r=>r.json());
+             renderResultats(d.slice(0,12).map(x=>x.image_url), 'resultats-open');
+        }
+        function renderResultats(urls, divId) {
+            const div = document.getElementById(divId); div.innerHTML='';
+            if(!urls || !urls.length) { div.innerHTML='<p style="text-align:center;color:#999">Cap resultat trobat.</p>'; return; }
+            urls.forEach(u => { const i = document.createElement('img'); i.src=u; i.onclick=()=>aplicarImatge(u); div.appendChild(i); });
+        }
+        function pujarImatge(i) {
+            const r = new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]);
+        }
+    </script>
+<div class="no-print" style="text-align: center; margin-top: 40px; padding: 20px; font-size: 0.8em; color: #666; border-top: 1px solid #eee;">
+    <p style="margin: 0;">Creat per <b>Rafa Robles Fontanet</b> | <b>Escola Pau Picasso</b></p>
+    <p style="margin: 5px 0;">
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2; text-decoration: none;">
+            <img alt="Llicència de Creative Commons" style="border-width:0; vertical-align: middle;" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" />
+            <br />Aquesta obra està subjecta a una llicència de Reconeixement-NoComercial-CompartirIgual 4.0 Internacional de Creative Commons
+        </a>
+    </p>
+</div></body>
+</html>
