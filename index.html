@@ -88,6 +88,7 @@
         /* --- ZONA D'IMPRESSIÓ --- */
         #zona-impressio {
             background-color: white; 
+            /* Marge superior de la PRIMERA PÀGINA */
             padding: 15mm; 
             min-height: 297mm; width: 210mm; 
             margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); 
@@ -99,7 +100,7 @@
             grid-template-columns: 120px 1fr 120px; 
             align-items: center;
             margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;
-            height: 70px; /* ALÇADA FIXA IMPORTANT PER ALINEACIÓ */
+            height: 70px; /* ALÇADA FIXA PER ASSEGURAR COINCIDÈNCIA */
             overflow: hidden;
         }
         .logo-escola { height: 100%; width: auto; max-height: 60px; object-fit: contain; display: none; }
@@ -165,7 +166,7 @@
 
         /* Darrere: Només Text */
         .mode-targeta-back .pictograma img { display: none; }
-        .mode-targeta-back .pictograma p { height: 100%; font-size: calc(var(--mida-font-base) * 2); } /* Text gegant */
+        .mode-targeta-back .pictograma p { height: 100%; font-size: calc(var(--mida-font-base) * 2); } 
         
         /* MODAL */
         #modal-edicio { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
@@ -196,15 +197,15 @@
             /* Lògica per Targetes (Flashcards) */
             .zona-revers {
                 display: block !important;
-                /* ELIMINEM MARGES QUE FAN NO COINCIDIR L'ALÇADA */
-                border: none !important; 
-                margin-top: 0 !important; 
-                padding-top: 0 !important;
                 
-                page-break-before: always; /* Salt de pàgina net */
+                /* AQUÍ ESTÀ EL TRUC: */
+                /* Forcem que la 2a pàgina tingui EXACTAMENT el mateix padding superior que el contenidor general */
+                padding-top: 15mm !important; 
+                margin-top: 0 !important;
+                border: none !important;
                 
-                /* TRUC DEL MIRALL */
-                direction: rtl; 
+                page-break-before: always; 
+                direction: rtl; /* Mode Mirall */
             }
         }
 
@@ -319,7 +320,8 @@
         <div class="graella" id="contenidor-picts"></div>
 
         <div id="contenidor-revers-wrapper" class="zona-revers">
-            <div class="header-print" style="direction: ltr;"> <div style="display:flex; justify-content:flex-start;">
+            <div class="header-print" style="direction: ltr;">
+                <div style="display:flex; justify-content:flex-start;">
                     <img id="logo-visual-back" class="logo-escola" src="" alt="Logo">
                 </div>
                 <div class="titol-print-container">
@@ -329,7 +331,6 @@
                     <span id="curs-resultat-back"></span>
                 </div>
             </div>
-
             <div class="graella" id="contenidor-revers"></div>
         </div>
     </div>
@@ -392,11 +393,9 @@
                 const reader = new FileReader();
                 reader.onload = function(e) { 
                     const img = document.getElementById('logo-visual');
-                    const imgBack = document.getElementById('logo-visual-back'); // Logo revers
-                    
+                    const imgBack = document.getElementById('logo-visual-back');
                     img.src = e.target.result; img.style.display = 'block';
                     imgBack.src = e.target.result; imgBack.style.display = 'block';
-                    
                     const wrp = document.getElementById('wrapper-logo');
                     wrp.classList.add('feteservir'); wrp.innerHTML = "✅ Logo Carregat";
                 }
@@ -412,20 +411,17 @@
             const mode = document.getElementById('selector-mode').value;
             idiomaSeleccionat = document.getElementById('idioma').value;
 
-            // Actualitzem Títol i Curs al Front
             document.getElementById('titol-resultat').innerText = titol;
-            const cursEl = document.getElementById('curs-resultat');
-            
-            // Actualitzem Títol i Curs al Revers (Back)
             document.getElementById('titol-resultat-back').innerText = titol;
+            
+            const cursEl = document.getElementById('curs-resultat');
             const cursElBack = document.getElementById('curs-resultat-back');
 
             if (curs.trim()) { 
                 cursEl.innerText = curs; cursEl.style.display='block'; 
                 cursElBack.innerText = curs; cursElBack.style.display='block';
             } else { 
-                cursEl.style.display='none'; 
-                cursElBack.style.display='none';
+                cursEl.style.display='none'; cursElBack.style.display='none';
             }
 
             const contenidor = document.getElementById('contenidor-picts');
@@ -435,7 +431,6 @@
             contenidor.innerHTML = '';
             contenidorRevers.innerHTML = '';
             
-            // Gestió visual del mode Targeta
             if (mode === 'targeta') {
                 wrapperRevers.style.display = 'block';
                 contenidor.classList.add('mode-targeta-front');
@@ -451,18 +446,13 @@
             
             for (let i = 0; i < llista.length; i++) {
                 let paraula = llista[i];
-                
-                // Pàgina 1 (Front)
                 const divFront = crearElementTargeta(paraula, i, 'front');
                 contenidor.appendChild(divFront);
 
-                // Pàgina 2 (Revers) - Només si és mode targeta
                 if (mode === 'targeta') {
                     const divBack = crearElementTargeta(paraula, i, 'back');
                     contenidorRevers.appendChild(divBack);
                 }
-                
-                // Buscar imatge (només una vegada)
                 buscarArasaacAuto(paraula, i);
             }
             actualitzarEstils();
@@ -472,15 +462,14 @@
             const div = document.createElement('div');
             div.className = 'pictograma';
             div.draggable = true; 
-            div.dataset.index = index; // Vinculem front i back pel ID
+            div.dataset.index = index; 
             
-            // Events Drag & Drop
             div.addEventListener('click', () => { if(!div.classList.contains('dragging') && tipus === 'front') obrirModal(div); });
             div.addEventListener('dragstart', () => { div.classList.add('dragging'); });
             div.addEventListener('dragend', () => { div.classList.remove('dragging'); });
 
             const img = document.createElement('img');
-            img.id = `img-${index}-${tipus}`; // ID únic
+            img.id = `img-${index}-${tipus}`; 
             img.src = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'; 
             
             const p = document.createElement('p');
@@ -522,15 +511,11 @@
                 const d = await r.json();
                 let src = "https://static.arasaac.org/images/no_results.png";
                 let opacitat = "0.3";
-                
                 if(d.length) {
                     src = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_500.png`;
                     opacitat = "1";
                 }
-                
-                // Actualitzar Front i Back (si existeix)
                 actualitzarImatgeTargeta(index, src, opacitat);
-                
             } catch(e){}
         }
 
@@ -553,7 +538,6 @@
             elementEditant = el;
             const index = el.dataset.index;
             const nom = document.getElementById(`text-${index}-front`).innerText;
-            
             document.getElementById('nom-editable').value = nom;
             document.getElementById('input-arasaac').value = nom;
             document.getElementById('input-wiki').value = nom;
