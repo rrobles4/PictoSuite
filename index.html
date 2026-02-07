@@ -7,7 +7,7 @@
     <meta name="author" content="Rafa Robles Fontanet">
     <meta name="copyright" content="Rafa Robles Fontanet 2026">
     <meta name="license" content="CC BY-NC-SA 4.0">
-    <meta name="description" content="Generador de pictogrames plurilingüe. Versió robusta 8.0">
+    <meta name="description" content="Generador de pictogrames plurilingüe v9.0">
 
     <title>Generador de Pictogrames Plurilingüe</title>
     
@@ -168,7 +168,6 @@
             font-size: var(--mida-font-base); white-space: nowrap;
         }
         .mode-standard .text-line:not(:last-child)::after { content: " / "; color: #999; }
-        /* Permetre trencar línia si cal */
         @media print { .mode-standard .text-line { white-space: normal; } }
 
         /* MODE 2: TARGETA (FRONT) - NOMÉS IMATGE */
@@ -212,8 +211,6 @@
                 page-break-before: always; direction: rtl; display: block !important;
             }
             .mode-standard + #contenidor-revers-wrapper { display: none !important; }
-            
-            /* IMPORTANT: Ocultar text al front en mode targeta */
             .mode-targeta-front .text-container { display: none !important; }
             .mode-standard .text-line { white-space: normal; }
         }
@@ -251,8 +248,22 @@
             </div>
         </div>
         
+        <div class="grup-input" style="background:#eef2f7; padding:15px; border-radius:8px; margin-bottom:20px;">
+            <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                <div style="flex:1; min-width:200px;">
+                    <label><strong>1. Llista de paraules en:</strong> (Idioma del que escrius)</label>
+                    <select id="idioma-origen">
+                        </select>
+                </div>
+                <div style="flex:2; min-width:300px;">
+                    <label><strong>2. Escriu les paraules:</strong></label>
+                    <textarea id="llista-paraules" placeholder="Ex: maduixa, plàtan..." style="height:50px;"></textarea>
+                </div>
+            </div>
+        </div>
+
         <div style="margin-bottom: 20px;">
-            <label>Selecciona els idiomes (Traducció fiable pas a pas):</label>
+            <label><strong>3. Selecciona els idiomes de DESTÍ:</strong> (Els que sortiran a la fitxa)</label>
             <div class="selector-idiomes-wrapper" id="contenidor-idiomes"></div>
             <div id="msg-limit" class="limit-info"></div>
         </div>
@@ -289,11 +300,6 @@
                 <label>Mida Lletra</label>
                 <input type="range" id="selector-mida" min="12" max="30" value="18" oninput="actualitzarEstils()">
             </div>
-        </div>
-
-        <div class="grup-input">
-            <label>Llista de paraules en Català (separa-les amb comes):</label>
-            <textarea id="llista-paraules" placeholder="Ex: maduixa, plàtan, llimona..."></textarea>
         </div>
 
         <div id="zona-progres">
@@ -375,31 +381,42 @@
 
     <script>
         const llistatIdiomes = [
-            { codi: 'ca', nom: 'Català', RTL: false, arasaac: true },
-            { codi: 'es', nom: 'Castellà', RTL: false, arasaac: true },
-            { codi: 'en', nom: 'Anglès', RTL: false, arasaac: true },
-            { codi: 'fr', nom: 'Francès', RTL: false, arasaac: true },
-            { codi: 'it', nom: 'Italià', RTL: false, arasaac: true },
-            { codi: 'pt', nom: 'Portuguès', RTL: false, arasaac: true },
-            { codi: 'de', nom: 'Alemany', RTL: false, arasaac: true },
-            { codi: 'uk', nom: 'Ucraïnès', RTL: false, arasaac: false },
-            { codi: 'ro', nom: 'Romanès', RTL: false, arasaac: true },
-            { codi: 'ru', nom: 'Rus', RTL: false, arasaac: true },
-            { codi: 'ar', nom: 'Àrab', RTL: true, arasaac: true },
-            { codi: 'zh-CN', nom: 'Xinès', RTL: false, arasaac: true },
-            { codi: 'ur', nom: 'Urdú', RTL: true, arasaac: false },
-            { codi: 'pa', nom: 'Panjabi', RTL: false, arasaac: false }
+            { codi: 'ca', nom: 'Català', RTL: false },
+            { codi: 'es', nom: 'Castellà', RTL: false },
+            { codi: 'en', nom: 'Anglès', RTL: false },
+            { codi: 'fr', nom: 'Francès', RTL: false },
+            { codi: 'it', nom: 'Italià', RTL: false },
+            { codi: 'pt', nom: 'Portuguès', RTL: false },
+            { codi: 'de', nom: 'Alemany', RTL: false },
+            { codi: 'uk', nom: 'Ucraïnès', RTL: false },
+            { codi: 'ro', nom: 'Romanès', RTL: false },
+            { codi: 'ru', nom: 'Rus', RTL: false },
+            { codi: 'ar', nom: 'Àrab', RTL: true },
+            { codi: 'zh-CN', nom: 'Xinès', RTL: false },
+            { codi: 'ur', nom: 'Urdú', RTL: true },
+            { codi: 'pa', nom: 'Panjabi', RTL: false }
         ];
 
         let elementEditant = null;
         let limitSeleccio = 2; 
 
         window.onload = function() {
-            generarSelectorIdiomes();
+            generarSelectors();
             canviarMode();
         };
 
-        function generarSelectorIdiomes() {
+        function generarSelectors() {
+            // 1. Desplegable Origen
+            const selOrigen = document.getElementById('idioma-origen');
+            llistatIdiomes.forEach(lang => {
+                const opt = document.createElement('option');
+                opt.value = lang.codi;
+                opt.innerText = lang.nom;
+                if(lang.codi === 'ca') opt.selected = true;
+                selOrigen.appendChild(opt);
+            });
+
+            // 2. Checkboxes Destí
             const cont = document.getElementById('contenidor-idiomes');
             llistatIdiomes.forEach(lang => {
                 const div = document.createElement('div');
@@ -409,9 +426,8 @@
                 chk.value = lang.codi;
                 chk.dataset.nom = lang.nom;
                 chk.dataset.rtl = lang.RTL;
-                chk.dataset.arasaac = lang.arasaac;
                 
-                if (lang.codi === 'ca') chk.checked = true; 
+                // Per defecte cap marcat (o català si es vol)
                 chk.addEventListener('change', controlarLimit);
 
                 const lbl = document.createElement('span');
@@ -426,7 +442,7 @@
             const mode = document.getElementById('selector-mode').value;
             const msg = document.getElementById('msg-limit');
             limitSeleccio = (mode === 'standard') ? 2 : 5;
-            msg.innerText = mode === 'standard' ? "Mode 'Imatge + Text': Màxim 2 idiomes." : "Mode 'Targeta (Doble Cara)': Màxim 5 idiomes.";
+            msg.innerText = mode === 'standard' ? "Mode 'Imatge + Text': Màxim 2 idiomes." : "Mode 'Targeta': Màxim 5 idiomes.";
             
             const checked = document.querySelectorAll('.opcio-idioma input:checked');
             if (checked.length > limitSeleccio) {
@@ -449,27 +465,27 @@
             checked.forEach(c => llista.push({ 
                 codi: c.value, 
                 nom: c.dataset.nom, 
-                rtl: c.dataset.rtl === 'true',
-                arasaac: c.dataset.arasaac === 'true'
+                rtl: c.dataset.rtl === 'true'
             }));
             return llista;
         }
 
-        // Funció "sleep" per esperar
+        // Funció "sleep" per esperar i no saturar
         const delay = ms => new Promise(res => setTimeout(res, ms));
 
-        async function traduirExternament(text, codiDesti) {
-            if (codiDesti === 'ca') return text; 
+        async function traduirExternament(text, codiOrigen, codiDesti) {
+            if (codiOrigen === codiDesti) return text; 
             try {
-                // Afegim un petit retard aleatori per evitar bloquejos massius
-                await delay(300); 
-                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ca|${codiDesti}`);
+                await delay(400); // Pausa de seguretat
+                const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${codiOrigen}|${codiDesti}`);
                 const data = await res.json();
                 if(data.responseData && data.responseData.translatedText) {
+                    // Si el traductor torna exactament el mateix text i no són el mateix idioma, pot ser sospitós, però ho acceptem.
+                    // Si torna error, MyMemory a vegades retorna el text original.
                     return data.responseData.translatedText;
                 }
-                return text; 
-            } catch (e) { return text; }
+                return ""; // SI FALLA, RETORNA BUIT (Com demanaves)
+            } catch (e) { return ""; }
         }
 
         async function generarDocument() {
@@ -477,6 +493,7 @@
             const curs = document.getElementById('curs').value;
             const textParaules = document.getElementById('llista-paraules').value;
             const mode = document.getElementById('selector-mode').value;
+            const idiomaOrigen = document.getElementById('idioma-origen').value;
             
             const btn = document.getElementById('btn-generar');
             const zonaProgres = document.getElementById('zona-progres');
@@ -502,8 +519,8 @@
             contenidor.innerHTML = '';
             contenidorRevers.innerHTML = '';
 
-            const idiomesActius = obtenirIdiomesSeleccionats();
-            if (idiomesActius.length === 0) return alert("Selecciona un idioma!");
+            const idiomesDesti = obtenirIdiomesSeleccionats();
+            if (idiomesDesti.length === 0) return alert("Selecciona almenys un idioma de destí!");
 
             if (mode === 'targeta') {
                 wrapperRevers.style.display = 'block';
@@ -518,28 +535,65 @@
             if (!textParaules.trim()) return; 
             const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
             
-            // --- INICI PROCÉS SÍNCRON ---
+            // --- INICI PROCÉS ---
             btn.disabled = true;
             zonaProgres.style.display = 'block';
             barra.style.width = '0%';
             
             for (let i = 0; i < llista.length; i++) {
-                let paraulaBase = llista[i];
+                let paraulaOrigen = llista[i];
                 
                 // Actualitzar UI progrés
                 const percent = Math.round(((i) / llista.length) * 100);
                 barra.style.width = percent + '%';
-                textProgres.innerText = `Processant (${i+1}/${llista.length}): ${paraulaBase}...`;
+                textProgres.innerText = `Traduint i cercant (${i+1}/${llista.length}): ${paraulaOrigen}...`;
 
-                // CRIDA I ESPERA (AWAIT) - Aquí està la clau de la fiabilitat
-                const dadesPictograma = await processarParaulaSmart(paraulaBase, idiomesActius);
-                
-                // Crear DOM amb les dades obtingudes
-                const divFront = crearTargetaDOM(i, 'front', dadesPictograma.textos, idiomesActius, dadesPictograma.imgSrc, dadesPictograma.opacitat);
+                // 1. TRADUCCIONS
+                let textos = {};
+                for (let lang of idiomesDesti) {
+                    // Si l'idioma destí és el mateix que l'origen, usem la paraula tal qual.
+                    if (lang.codi === idiomaOrigen) {
+                        textos[lang.nom] = paraulaOrigen.charAt(0).toUpperCase() + paraulaOrigen.slice(1);
+                    } else {
+                        let t = await traduirExternament(paraulaOrigen, idiomaOrigen, lang.codi);
+                        if(t) t = t.charAt(0).toUpperCase() + t.slice(1);
+                        textos[lang.nom] = t; // Si és buit, serà buit.
+                    }
+                }
+
+                // 2. IMATGE (Cercar a ARASAAC usant l'idioma d'origen)
+                let imgSrc = "https://static.arasaac.org/images/no_results.png";
+                let opacitat = "0.3";
+
+                try {
+                    // ARASAAC necessita codis de 2 lletres (es, ca, en). Si origen és 'zh-CN', passem a 'zh'
+                    let langSearch = idiomaOrigen.split('-')[0];
+                    // ARASAAC no suporta tots els idiomes per cercar (ex: urdú). Si no suporta, fallback a anglès (traduït prèviament)
+                    // Per simplificar, intentem cercar en l'idioma origen directament si és suportat.
+                    // Idiomes suportats search ARASAAC: es, en, ca, fr, it, de, pt... 
+                    // Si l'idioma origen és 'ur' (urdú), hem de traduir a anglès primer per buscar la foto.
+                    
+                    let textCercaImatge = paraulaOrigen;
+                    if (['ur', 'pa', 'uk'].includes(langSearch)) {
+                        textCercaImatge = await traduirExternament(paraulaOrigen, idiomaOrigen, 'en');
+                        langSearch = 'en';
+                    }
+
+                    const rSearch = await fetch(`https://api.arasaac.org/api/pictograms/${langSearch}/search/${encodeURIComponent(textCercaImatge)}`);
+                    const dSearch = await rSearch.json();
+                    if (dSearch.length > 0) {
+                        const idPic = dSearch[0]._id;
+                        imgSrc = `https://static.arasaac.org/pictograms/${idPic}/${idPic}_500.png`;
+                        opacitat = "1";
+                    }
+                } catch(e) { console.error("Error imatge", e); }
+
+                // Crear DOM
+                const divFront = crearTargetaDOM(i, 'front', textos, idiomesDesti, imgSrc, opacitat);
                 contenidor.appendChild(divFront);
 
                 if (mode === 'targeta') {
-                    const divBack = crearTargetaDOM(i, 'back', dadesPictograma.textos, idiomesActius, dadesPictograma.imgSrc, dadesPictograma.opacitat);
+                    const divBack = crearTargetaDOM(i, 'back', textos, idiomesDesti, imgSrc, opacitat);
                     contenidorRevers.appendChild(divBack);
                 }
             }
@@ -551,68 +605,6 @@
             zonaProgres.style.display = 'none';
             btn.disabled = false;
             actualitzarEstils();
-        }
-
-        // Aquesta funció ara retorna les dades en lloc de pintar directament
-        async function processarParaulaSmart(paraula, idiomes) {
-            let result = {
-                textos: {},
-                imgSrc: "https://static.arasaac.org/images/no_results.png",
-                opacitat: "0.3"
-            };
-
-            try {
-                // 1. Busquem l'ID a ARASAAC (en Català)
-                const rSearch = await fetch(`https://api.arasaac.org/api/pictograms/ca/search/${encodeURIComponent(paraula)}`);
-                const dSearch = await rSearch.json();
-
-                if (dSearch.length > 0) {
-                    const idPic = dSearch[0]._id;
-                    result.imgSrc = `https://static.arasaac.org/pictograms/${idPic}/${idPic}_500.png`;
-                    result.opacitat = "1";
-
-                    const rDetalls = await fetch(`https://api.arasaac.org/api/pictograms/${idPic}`);
-                    const dDetalls = await rDetalls.json();
-
-                    for (let lang of idiomes) {
-                        let textFinal = "";
-                        
-                        if (lang.codi === 'ca') {
-                            textFinal = paraula.charAt(0).toUpperCase() + paraula.slice(1);
-                        }
-                        else if (lang.arasaac) {
-                            const match = dDetalls.keywords.find(k => k.locale === lang.codi);
-                            if (match) {
-                                textFinal = match.keyword;
-                                textFinal = textFinal.charAt(0).toUpperCase() + textFinal.slice(1);
-                            } else {
-                                textFinal = await traduirExternament(paraula, lang.codi);
-                            }
-                        }
-                        else {
-                            // Idiomes difícils: Traduir des de l'Anglès
-                            const matchEn = dDetalls.keywords.find(k => k.locale === 'en');
-                            const baseText = matchEn ? matchEn.keyword : paraula;
-                            textFinal = await traduirExternament(baseText, lang.codi);
-                            // Neteja bàsica
-                            textFinal = textFinal.charAt(0).toUpperCase() + textFinal.slice(1);
-                        }
-                        result.textos[lang.nom] = textFinal;
-                    }
-
-                } else {
-                    // No trobat
-                    for (let lang of idiomes) {
-                        let t = await traduirExternament(paraula, lang.codi);
-                        result.textos[lang.nom] = t;
-                    }
-                }
-            } catch (e) { 
-                console.error(e);
-                // En cas d'error total, omplim amb la paraula original
-                idiomes.forEach(l => result.textos[l.nom] = paraula);
-            }
-            return result;
         }
 
         function crearTargetaDOM(index, tipus, textos, idiomes, src, opacitat) {
@@ -637,7 +629,7 @@
             idiomes.forEach(lang => {
                 const p = document.createElement('span'); 
                 p.className = 'text-line';
-                p.innerText = textos[lang.nom];
+                p.innerText = textos[lang.nom] || ""; // Buit si no hi ha traducció
                 p.dataset.lang = lang.nom;
                 if(lang.rtl) p.style.direction = 'rtl';
                 textContainer.appendChild(p);
@@ -648,7 +640,7 @@
             return div;
         }
 
-        // --- FUNCIONS AUXILIARS (Logo, Estils, Modal) ---
+        // --- FUNCIONS AUXILIARS ---
         function carregarLogo(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -678,14 +670,13 @@
             const containerInputs = document.getElementById('modal-inputs-idiomes');
             containerInputs.innerHTML = '';
             
+            // Cerquem els textos actuals per omplir el modal
             idiomesActius.forEach(lang => {
                 const containerTxt = document.getElementById(`txtcont-${index}-front`) || document.getElementById(`txtcont-${index}-back`);
                 let textActual = "";
-                // Buscar text en qualsevol dels contenidors
-                const fonts = [document.getElementById(`txtcont-${index}-front`), document.getElementById(`txtcont-${index}-back`)];
-                fonts.forEach(f => {
-                    if(f) f.querySelectorAll('.text-line').forEach(p => { if(p.dataset.lang === lang.nom) textActual = p.innerText; });
-                });
+                if(containerTxt) {
+                    containerTxt.querySelectorAll('.text-line').forEach(p => { if(p.dataset.lang === lang.nom) textActual = p.innerText; });
+                }
                 
                 const div = document.createElement('div');
                 const lbl = document.createElement('label');
@@ -700,13 +691,15 @@
                 div.appendChild(lbl); div.appendChild(inp); containerInputs.appendChild(div);
             });
 
-            const primerInput = containerInputs.querySelector('input');
-            if(primerInput) {
-                const val = primerInput.value;
-                document.getElementById('input-arasaac').value = val;
-                document.getElementById('input-wiki').value = val;
-                document.getElementById('input-open').value = val;
+            // Set inputs de cerca (agafem el primer text que trobem que no estigui buit)
+            const inputs = containerInputs.querySelectorAll('input');
+            let val = "";
+            for(let i=0; i<inputs.length; i++) {
+                if(inputs[i].value) { val = inputs[i].value; break; }
             }
+            document.getElementById('input-arasaac').value = val;
+            document.getElementById('input-wiki').value = val;
+            document.getElementById('input-open').value = val;
 
             document.getElementById('modal-edicio').style.display = 'flex';
             canviarPestanya('tab-arasaac'); buscarArasaacModal();
@@ -751,6 +744,7 @@
         }
         async function buscarArasaacModal() {
             const q = document.getElementById('input-arasaac').value;
+            // Fem servir cerca 'ca' per defecte al modal per simplificar, o podríem usar la variable global
             renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/ca/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac');
         }
         async function buscarWikiImages() {
