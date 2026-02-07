@@ -154,11 +154,8 @@
         }
         .mode-standard .text-line {
             font-size: var(--mida-font-base);
-            /* Intentem que no trenqui la línia si és curt */
-            white-space: nowrap; 
+            white-space: nowrap; /* Intentar mantenir en una línia */
         }
-        /* Si es fa molt llarg i surt del contenidor, permetem trencar */
-        @media print { .mode-standard .text-line { white-space: normal; } }
         
         /* Separador visual */
         .mode-standard .text-line:not(:last-child)::after {
@@ -207,6 +204,10 @@
             }
             /* Ocultar revers si mode standard */
             .mode-standard + #contenidor-revers-wrapper { display: none !important; }
+            
+            .mode-targeta-front .text-container { display: none !important; }
+            /* Permetre que el text trenqui línia al imprimir si és molt llarg en mode standard */
+            .mode-standard .text-line { white-space: normal; }
         }
 
         @media screen and (max-width: 850px) {
@@ -283,7 +284,7 @@
         </div>
 
         <div class="grup-input">
-            <label>Llista de paraules en Català (separa-les per comes):</label>
+            <label>Llista de paraules en Català (separa-les en comes):</label>
             <textarea id="llista-paraules" placeholder="Ex: maduixa, plàtan, llimona..."></textarea>
         </div>
 
@@ -360,8 +361,6 @@
     </div>
 
     <script>
-        // CONFIGURACIÓ IDIOMES I SUPORT ARASAAC
-        // 'arasaac: true' vol dir que ARASAAC té la traducció nativa. 'false' vol dir que hem de traduir via API.
         const llistatIdiomes = [
             { codi: 'ca', nom: 'Català', RTL: false, arasaac: true },
             { codi: 'es', nom: 'Castellà', RTL: false, arasaac: true },
@@ -370,7 +369,7 @@
             { codi: 'it', nom: 'Italià', RTL: false, arasaac: true },
             { codi: 'pt', nom: 'Portuguès', RTL: false, arasaac: true },
             { codi: 'de', nom: 'Alemany', RTL: false, arasaac: true },
-            { codi: 'uk', nom: 'Ucraïnès', RTL: false, arasaac: false }, // ARASAAC no sol tenir UK
+            { codi: 'uk', nom: 'Ucraïnès', RTL: false, arasaac: false },
             { codi: 'ro', nom: 'Romanès', RTL: false, arasaac: true },
             { codi: 'ru', nom: 'Rus', RTL: false, arasaac: true },
             { codi: 'ar', nom: 'Àrab', RTL: true, arasaac: true },
@@ -414,7 +413,7 @@
             const mode = document.getElementById('selector-mode').value;
             const msg = document.getElementById('msg-limit');
             limitSeleccio = (mode === 'standard') ? 2 : 5;
-            msg.innerText = mode === 'standard' ? "Mode 'Imatge + Text': Màxim 2 idiomes." : "Mode 'Targeta': Màxim 5 idiomes.";
+            msg.innerText = mode === 'standard' ? "Mode 'Imatge + Text': Màxim 2 idiomes." : "Mode 'Targeta (Doble Cara)': Màxim 5 idiomes.";
             
             const checked = document.querySelectorAll('.opcio-idioma input:checked');
             if (checked.length > limitSeleccio) {
@@ -443,12 +442,9 @@
             return llista;
         }
 
-        // --- TRADUCTOR ---
         async function traduirExternament(text, codiDesti) {
             if (codiDesti === 'ca') return text; 
             try {
-                // Utilitzem MyMemory, però si falle, no posarà coses rares com Chirlas si traduïm des de l'Anglès
-                // PERÒ per ser segurs, primer confiem en ARASAAC si podem. Si no, API.
                 const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=ca|${codiDesti}`);
                 const data = await res.json();
                 if(data.responseData && data.responseData.translatedText) {
@@ -458,14 +454,12 @@
             } catch (e) { return text; }
         }
 
-        // GENERACIÓ
         async function generarDocument() {
             const titol = document.getElementById('titol-doc').value || "Sense títol";
             const curs = document.getElementById('curs').value;
             const textParaules = document.getElementById('llista-paraules').value;
             const mode = document.getElementById('selector-mode').value;
             
-            // UI Update
             document.getElementById('titol-resultat').innerText = titol;
             document.getElementById('titol-resultat-back').innerText = titol;
             const cursEl = document.getElementById('curs-resultat');
@@ -500,15 +494,13 @@
             if (!textParaules.trim()) return; 
             const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
             
-            // PROCESSAMENT
             for (let i = 0; i < llista.length; i++) {
-                let paraulaBase = llista[i]; // Català
-                
-                // Creem estructura inicial (placeholder mentre carrega)
+                let paraulaBase = llista[i];
                 let textos = {};
-                idiomesActius.forEach(l => textos[l.nom] = "...");
+                
+                // INICIALITZACIÓ IMMEDIATA (SOLUCIÓ DEL PROBLEMA "TEXT BUIT")
+                idiomesActius.forEach(l => textos[l.nom] = paraulaBase);
 
-                // DOM
                 const divFront = crearTargetaDOM(i, 'front', textos, idiomesActius);
                 contenidor.appendChild(divFront);
 
@@ -517,14 +509,12 @@
                     contenidorRevers.appendChild(divBack);
                 }
                 
-                // CRIDA INTEL·LIGENT (ARASAAC + TRADUCCIÓ)
                 processarParaulaSmart(paraulaBase, i, idiomesActius);
             }
             actualitzarEstils();
         }
 
         async function processarParaulaSmart(paraula, index, idiomes) {
-            // 1. Busquem l'ID a ARASAAC (en Català)
             try {
                 const rSearch = await fetch(`https://api.arasaac.org/api/pictograms/ca/search/${encodeURIComponent(paraula)}`);
                 const dSearch = await rSearch.json();
@@ -534,55 +524,40 @@
                     const imgSrc = `https://static.arasaac.org/pictograms/${idPic}/${idPic}_500.png`;
                     actualitzarImatges(index, imgSrc, "1");
 
-                    // 2. Obtenim detalls per veure si tenim traduccions oficials
                     const rDetalls = await fetch(`https://api.arasaac.org/api/pictograms/${idPic}`);
-                    const dDetalls = await rDetalls.json(); // Aquí hi ha les keywords en molts idiomes
+                    const dDetalls = await rDetalls.json();
 
-                    // 3. Omplim els textos
                     for (let lang of idiomes) {
                         let textFinal = "";
                         
-                        // CAS A: És Català (ja el tenim)
                         if (lang.codi === 'ca') {
                             textFinal = paraula.charAt(0).toUpperCase() + paraula.slice(1);
                         }
-                        // CAS B: ARASAAC té l'idioma oficialment
                         else if (lang.arasaac) {
-                            // Busquem a keywords
-                            // Nota: dDetalls.keywords és un array d'objectes. Volem el primer match.
-                            /* Estructura keywords: [{keyword: "cat", locale: "en"}, ...] */
                             const match = dDetalls.keywords.find(k => k.locale === lang.codi);
                             if (match) {
                                 textFinal = match.keyword;
                                 textFinal = textFinal.charAt(0).toUpperCase() + textFinal.slice(1);
                             } else {
-                                // Fallback a traductor si ARASAAC diu que suporta però no té aquesta paraula
                                 textFinal = await traduirExternament(paraula, lang.codi);
                             }
                         }
-                        // CAS C: ARASAAC no suporta (Urdú, Panjabi...) -> TRADUIR DES DE L'ANGLÈS
                         else {
-                            // Truc: Agafem la paraula en Anglès d'ARASAAC per tenir millor traducció
                             const matchEn = dDetalls.keywords.find(k => k.locale === 'en');
-                            const baseText = matchEn ? matchEn.keyword : paraula; // Si no tenim EN, usem CA
+                            const baseText = matchEn ? matchEn.keyword : paraula;
                             textFinal = await traduirExternament(baseText, lang.codi);
-                            // Capitalitzem
                             textFinal = textFinal.charAt(0).toUpperCase() + textFinal.slice(1);
                         }
-
                         actualitzarText(index, lang.nom, textFinal);
                     }
 
                 } else {
-                    // No trobat a ARASAAC
                     actualitzarImatges(index, "https://static.arasaac.org/images/no_results.png", "0.3");
-                    // Intentem traduir igualment el text base
                     for (let lang of idiomes) {
                         let t = await traduirExternament(paraula, lang.codi);
                         actualitzarText(index, lang.nom, t);
                     }
                 }
-
             } catch (e) { console.error(e); }
         }
 
@@ -658,7 +633,6 @@
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
         }
 
-        // MODAL
         function obrirModal(el) {
             elementEditant = el;
             const index = el.dataset.index;
@@ -667,16 +641,14 @@
             containerInputs.innerHTML = '';
             
             idiomesActius.forEach(lang => {
-                const containerTxt = document.getElementById(`txtcont-${index}-front`);
+                const containerTxt = document.getElementById(`txtcont-${index}-front`) || document.getElementById(`txtcont-${index}-back`);
                 let textActual = "";
-                // Busquem el text, però compte que al front pot estar amagat si és mode targeta
-                // millor mirar al back si estem en mode targeta, o al front si standard
-                let fontText = document.getElementById(`txtcont-${index}-back`) || document.getElementById(`txtcont-${index}-front`);
+                if(containerTxt) {
+                    containerTxt.querySelectorAll('.text-line').forEach(p => {
+                        if(p.dataset.lang === lang.nom) textActual = p.innerText;
+                    });
+                }
                 
-                fontText.querySelectorAll('.text-line').forEach(p => {
-                    if(p.dataset.lang === lang.nom) textActual = p.innerText;
-                });
-
                 const div = document.createElement('div');
                 const lbl = document.createElement('label');
                 lbl.innerText = lang.nom;
@@ -690,7 +662,6 @@
                 div.appendChild(lbl); div.appendChild(inp); containerInputs.appendChild(div);
             });
 
-            // Set Inputs cerca
             const primerInput = containerInputs.querySelector('input');
             if(primerInput) {
                 const val = primerInput.value;
