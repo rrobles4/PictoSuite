@@ -7,9 +7,9 @@
     <meta name="author" content="Rafa Robles Fontanet">
     <meta name="copyright" content="Rafa Robles Fontanet 2026">
     <meta name="license" content="CC BY-NC-SA 4.0">
-    <meta name="description" content="Generador de pictogrames i targetes flashcards per a l'escola.">
+    <meta name="description" content="Generador de pictogrames plurilingüe i targetes flashcards.">
 
-    <title>Generador de Pictogrames</title>
+    <title>Generador de Pictogrames Plurilingüe</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@400;700&family=Fredoka:wght@400;600&family=Indie+Flower&family=Patrick+Hand&family=Roboto&display=swap" rel="stylesheet">
     
@@ -51,6 +51,17 @@
             border-radius: 8px; font-size: 16px; box-sizing: border-box;
         }
 
+        /* CHECKBOXES IDIOMES */
+        .selector-idiomes-wrapper {
+            border: 2px solid #ddd; border-radius: 8px; padding: 10px;
+            max-height: 150px; overflow-y: auto; background: #fafafa;
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 5px;
+        }
+        .opcio-idioma { display: flex; align-items: center; gap: 5px; font-size: 0.85em; cursor: pointer; }
+        .opcio-idioma input { width: auto; cursor: pointer; }
+        
+        .limit-info { font-size: 0.8em; color: var(--color-principal); margin-top: 5px; font-style: italic; }
+
         /* ESTIL BOTÓ LOGO */
         .input-logo-wrapper {
             border: 2px dashed #ccc; padding: 8px; border-radius: 8px; 
@@ -88,7 +99,6 @@
         /* --- ZONA D'IMPRESSIÓ --- */
         #zona-impressio {
             background-color: white; 
-            /* Marge superior de la PRIMERA PÀGINA */
             padding: 15mm; 
             min-height: 297mm; width: 210mm; 
             margin: 0 auto; box-shadow: 0 0 10px rgba(0,0,0,0.1); 
@@ -100,8 +110,7 @@
             grid-template-columns: 120px 1fr 120px; 
             align-items: center;
             margin-bottom: 15px; border-bottom: 2px solid #eee; padding-bottom: 10px;
-            height: 70px; /* ALÇADA FIXA PER ASSEGURAR COINCIDÈNCIA */
-            overflow: hidden;
+            height: 70px; overflow: hidden;
         }
         .logo-escola { height: 100%; width: auto; max-height: 60px; object-fit: contain; display: none; }
         
@@ -114,60 +123,53 @@
         .graella {
             display: grid; 
             grid-template-columns: repeat(var(--num-columnes), 1fr); 
-            gap: 15px; 
-            width: 100%;
+            gap: 15px; width: 100%;
         }
 
-        /* CONFIGURACIÓ ESPECIAL PER AL REVERS (PÀGINA 2) */
+        /* REVERS */
         .zona-revers {
-            display: none; /* Per defecte amagat */
-            margin-top: 50px;
-            border-top: 2px dashed #ccc;
-            padding-top: 20px;
+            display: none; margin-top: 50px; border-top: 2px dashed #ccc; padding-top: 20px;
         }
 
         /* --- DISSENY DE LA TARGETA --- */
         .pictograma {
-            border: 3px solid #000; 
-            border-radius: 15px; 
-            background: white; 
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: space-between; 
-            aspect-ratio: 0.85; 
-            padding: 10px;
-            cursor: grab; 
-            break-inside: avoid; page-break-inside: avoid;
-            box-sizing: border-box;
-            position: relative;
+            border: 3px solid #000; border-radius: 15px; background: white; 
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
+            aspect-ratio: 0.85; padding: 10px; cursor: grab; 
+            break-inside: avoid; page-break-inside: avoid; box-sizing: border-box; position: relative;
         }
-        
         .pictograma:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .pictograma.dragging { opacity: 0.4; border: 3px dashed #999; background: #eee; }
 
         .pictograma img {
-            width: 100%; height: 70%; object-fit: contain; pointer-events: none;
+            width: 100%; height: 65%; object-fit: contain; pointer-events: none;
         }
 
-        .pictograma p {
-            margin: 0; width: 100%; text-align: center;
-            font-size: calc(var(--mida-font-base) * (1 + (5 - var(--num-columnes)) * 0.25));
-            font-family: var(--tipus-font); 
-            color: var(--color-font);
-            line-height: 1.1;
-            font-weight: bold;
-            height: 30%;
-            display: flex; align-items: center; justify-content: center;
+        .text-container {
+            height: 35%; width: 100%; display: flex; flex-direction: column; 
+            align-items: center; justify-content: center; text-align: center;
         }
 
-        /* --- MODS TARGETA (FLASHCARD) --- */
-        /* Davant: Només Imatge */
-        .mode-targeta-front .pictograma img { height: 100%; }
-        .mode-targeta-front .pictograma p { display: none; }
+        .text-line {
+            font-family: var(--tipus-font); color: var(--color-font);
+            line-height: 1.1; font-weight: bold; width: 100%;
+            word-wrap: break-word;
+        }
 
-        /* Darrere: Només Text */
+        /* Modes de Visualització */
+        /* STANDARD (DAVANT) */
+        .mode-targeta-front .pictograma img { height: 65%; }
+        /* Si hi ha 2 idiomes al davant, ajustem mida */
+        .multi-lang-front .text-line { font-size: calc(var(--mida-font-base) * 0.85); }
+        .single-lang-front .text-line { font-size: var(--mida-font-base); }
+
+        /* TARGETA (DARRERE) */
         .mode-targeta-back .pictograma img { display: none; }
-        .mode-targeta-back .pictograma p { height: 100%; font-size: calc(var(--mida-font-base) * 2); } 
-        
+        .mode-targeta-back .text-container { height: 100%; justify-content: center; gap: 10px; }
+        .mode-targeta-back .text-line { font-size: calc(var(--mida-font-base) * 1.5); }
+        /* Si hi ha molts idiomes al darrere, reduir lletra */
+        .many-langs-back .text-line { font-size: var(--mida-font-base); }
+
         /* MODAL */
         #modal-edicio { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
         .modal-contingut { background: white; border-radius: 12px; width: 90%; max-width: 650px; display: flex; flex-direction: column; max-height: 90vh; overflow: hidden; }
@@ -175,8 +177,10 @@
         .tab-btn { flex: 1; padding: 12px; border: none; background: none; cursor: pointer; font-weight: bold; color: #555; border-bottom: 3px solid transparent; }
         .tab-btn.actiu { border-bottom: 3px solid var(--color-principal); color: var(--color-principal); background: white; }
         .modal-body { padding: 25px; overflow-y: auto; }
-        .grup-titol-modal { margin-bottom: 20px; text-align: center; }
-        .nom-editable { width: 100%; font-size: 1.3em; font-weight: bold; text-align: center; border: 2px solid #eee; border-radius: 8px; padding: 8px; }
+        
+        .grup-titol-modal { margin-bottom: 20px; text-align: center; display: flex; flex-direction: column; gap: 10px; }
+        .grup-titol-modal input { text-align: center; font-weight: bold; }
+        
         .cerca-wrapper { display: flex; gap: 8px; margin-bottom: 15px; }
         .btn-cerca-modal { background: var(--color-principal); border-radius: 8px; padding: 10px 20px; font-size: 1em; flex-shrink: 0; color: white; border: none; cursor: pointer; }
         .btn-cerca-wiki { background: var(--color-secundari); }
@@ -185,7 +189,7 @@
         .resultats-grid img { width: 100%; height: 90px; object-fit: contain; border: 1px solid #eee; border-radius: 8px; cursor: pointer; padding: 5px; }
         .resultats-grid img:hover { transform: scale(1.05); border-color: var(--color-principal); background: #f0f8ff; }
 
-        /* --- IMPRESSIÓ NETA I LÒGICA DOBLE CARA --- */
+        /* IMPRESSIÓ */
         @media print {
             @page { size: A4 portrait; margin: 0 !important; }
             body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; }
@@ -193,33 +197,20 @@
             #zona-impressio { padding: 15mm; width: 100%; max-width: 210mm; margin: 0 auto; box-shadow: none; }
             .graella { gap: 8px; }
             .pictograma { border: 3px solid #000; }
-            
-            /* Lògica per Targetes (Flashcards) */
             .zona-revers {
-                
-                /* AQUÍ ESTÀ EL TRUC: */
-                /* Forcem que la 2a pàgina tingui EXACTAMENT el mateix padding superior que el contenidor general */
-                padding-top: 15mm !important; 
-                margin-top: 0 !important;
-                border: none !important;
-                
-                page-break-before: always; 
-                direction: rtl; /* Mode Mirall */
+                display: block !important;
+                padding-top: 15mm !important; margin-top: 0 !important; border: none !important;
+                page-break-before: always; direction: rtl; 
             }
         }
 
-        /* --- ADAPTACIÓ PER A MÒBILS (RESPONSIVE) --- */
         @media screen and (max-width: 850px) {
             .configuracio { width: auto; margin: 10px; padding: 15px; }
             .fila-flex { flex-direction: column; align-items: stretch; gap: 10px; }
             .columna, .control-estil { width: 100%; flex: auto !important; }
-            .barra-estils { flex-direction: column; align-items: stretch; }
             #zona-impressio { width: 100%; padding: 10px; box-sizing: border-box; height: auto; min-height: 50vh; }
             body { padding: 0; background-color: #f0f8ff; }
-            .btn-container { flex-direction: column; }
-            button { padding: 15px; width: 100%; font-size: 1.1em; }
             .graella { gap: 5px; }
-            .modal-contingut { width: 95%; height: 90vh; max-height: 90vh; }
             .resultats-grid { grid-template-columns: repeat(3, 1fr); }
         }
     </style>
@@ -227,7 +218,7 @@
 <body>
 
     <div class="configuracio">
-        <h1>Generador de Pictogrames</h1>
+        <h1>Generador de Pictogrames Plurilingüe</h1>
         
         <div class="fila-flex">
             <div class="columna" style="flex: 0.6;">
@@ -239,28 +230,27 @@
             </div>
             <div class="columna" style="flex: 1.5;">
                 <label>Títol:</label>
-                <input type="text" id="titol-doc" placeholder="Ex: El cicle de l'aigua">
+                <input type="text" id="titol-doc" placeholder="Ex: Els animals">
             </div>
             <div class="columna">
                 <label>Curs:</label>
                 <input type="text" id="curs" placeholder="Ex: 3r A">
             </div>
-            <div class="columna" style="flex: 0.5;">
-                <label>Idioma:</label>
-                <select id="idioma">
-                    <option value="ca">Català</option>
-                    <option value="es">Castellano</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
+        </div>
+        
+        <div style="margin-bottom: 20px;">
+            <label>Selecciona els idiomes a mostrar:</label>
+            <div class="selector-idiomes-wrapper" id="contenidor-idiomes">
+                </div>
+            <div id="msg-limit" class="limit-info"></div>
         </div>
 
         <div class="barra-estils">
             <div class="control-estil" style="flex:1;">
                 <label>Mètode</label>
-                <select id="selector-mode" onchange="generarDocument()">
-                    <option value="standard">Imatge + Text</option>
-                    <option value="targeta">Targeta (Doble Cara)</option>
+                <select id="selector-mode" onchange="canviarMode()">
+                    <option value="standard">Imatge + Text (Màx 2 idiomes)</option>
+                    <option value="targeta">Targeta Doble Cara (Màx 5 idiomes)</option>
                 </select>
             </div>
             <div class="control-estil" style="flex:1;">
@@ -290,12 +280,12 @@
         </div>
 
         <div class="grup-input">
-            <label>Llista de paraules (separa-les amb comes):</label>
-            <textarea id="llista-paraules" placeholder="Ex: aigua, torrent, núvol..."></textarea>
+            <label>Llista de paraules (en Català per cercar):</label>
+            <textarea id="llista-paraules" placeholder="Ex: gos, gat, ocell..."></textarea>
         </div>
 
         <div class="btn-container">
-            <button class="btn-generar" onclick="generarDocument()">⚡ Generar</button>
+            <button class="btn-generar" onclick="generarDocument()">⚡ Generar i Traduir</button>
             <button class="btn-imprimir" onclick="window.print()">🖨️ Imprimir</button>
         </div>
 
@@ -353,10 +343,8 @@
                 <button class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar/IA</button>
             </div>
             <div class="modal-body">
-                <div class="grup-titol-modal">
-                    <label>Títol de la targeta</label>
-                    <input type="text" id="nom-editable" class="nom-editable">
-                </div>
+                <div class="grup-titol-modal" id="modal-inputs-idiomes">
+                    </div>
                 <div id="tab-arasaac" class="contingut-tab">
                     <div class="cerca-wrapper"><input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()"><button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca</button></div>
                     <div id="resultats-arasaac" class="resultats-grid"></div>
@@ -383,39 +371,116 @@
     </div>
 
     <script>
-        let idiomaSeleccionat = 'ca';
-        let elementEditant = null;
+        // CONFIGURACIÓ IDIOMES
+        // Codi API ARASAAC: 'null' significa que no està suportat automàticament
+        const llistatIdiomes = [
+            { codi: 'ca', nom: 'Català', RTL: false },
+            { codi: 'es', nom: 'Castellà', RTL: false },
+            { codi: 'en', nom: 'Anglès', RTL: false },
+            { codi: 'fr', nom: 'Francès', RTL: false },
+            { codi: 'it', nom: 'Italià', RTL: false },
+            { codi: 'pt', nom: 'Portuguès', RTL: false },
+            { codi: 'de', nom: 'Alemany', RTL: false },
+            { codi: 'uk', nom: 'Ucraïnès', RTL: false },
+            { codi: 'ro', nom: 'Romanès', RTL: false },
+            { codi: 'ru', nom: 'Rus', RTL: false },
+            { codi: 'ar', nom: 'Àrab', RTL: true },
+            { codi: 'zh', nom: 'Xinès', RTL: false },
+            { codi: null, nom: 'Amazic', RTL: false },
+            { codi: null, nom: 'Urdú', RTL: true },
+            { codi: null, nom: 'Panjabi', RTL: false }
+        ];
 
-        // 1. LOGO
-        function carregarLogo(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) { 
-                    const img = document.getElementById('logo-visual');
-                    const imgBack = document.getElementById('logo-visual-back');
-                    img.src = e.target.result; img.style.display = 'block';
-                    imgBack.src = e.target.result; imgBack.style.display = 'block';
-                    const wrp = document.getElementById('wrapper-logo');
-                    wrp.classList.add('feteservir'); wrp.innerHTML = "✅ Logo Carregat";
-                }
-                reader.readAsDataURL(input.files[0]);
+        let elementEditant = null;
+        let limitSeleccio = 2; // Per defecte (Mode Estàndard)
+
+        // INICIALITZACIÓ
+        window.onload = function() {
+            generarSelectorIdiomes();
+            canviarMode();
+        };
+
+        function generarSelectorIdiomes() {
+            const cont = document.getElementById('contenidor-idiomes');
+            llistatIdiomes.forEach(lang => {
+                const div = document.createElement('div');
+                div.className = 'opcio-idioma';
+                
+                const chk = document.createElement('input');
+                chk.type = 'checkbox';
+                chk.value = lang.codi || lang.nom; // Si és null, usem el nom com a ID
+                chk.dataset.nom = lang.nom;
+                chk.dataset.rtl = lang.RTL;
+                
+                // Per defecte Català marcat
+                if (lang.codi === 'ca') chk.checked = true;
+
+                // Event listener per al límit
+                chk.addEventListener('change', controlarLimit);
+
+                const lbl = document.createElement('span');
+                lbl.innerText = lang.nom;
+                lbl.onclick = () => { chk.checked = !chk.checked; controlarLimit({target: chk}); };
+
+                div.appendChild(chk);
+                div.appendChild(lbl);
+                cont.appendChild(div);
+            });
+        }
+
+        function canviarMode() {
+            const mode = document.getElementById('selector-mode').value;
+            const msg = document.getElementById('msg-limit');
+            
+            if (mode === 'standard') {
+                limitSeleccio = 2;
+                msg.innerText = "Mode 'Imatge + Text': Màxim 2 idiomes.";
+            } else {
+                limitSeleccio = 5;
+                msg.innerText = "Mode 'Targeta': Màxim 5 idiomes.";
+            }
+            
+            // Revalidar seleccions actuals
+            const checked = document.querySelectorAll('.opcio-idioma input:checked');
+            if (checked.length > limitSeleccio) {
+                alert(`Has canviat de mode i tens massa idiomes seleccionats. Es desmarcaran els sobrants.`);
+                for(let i=limitSeleccio; i<checked.length; i++) checked[i].checked = false;
             }
         }
 
-        // 2. GENERACIÓ
+        function controlarLimit(e) {
+            const checked = document.querySelectorAll('.opcio-idioma input:checked');
+            if (checked.length > limitSeleccio) {
+                e.target.checked = false;
+                alert(`En aquest mode només pots seleccionar ${limitSeleccio} idiomes.`);
+            }
+        }
+
+        function obtenirIdiomesSeleccionats() {
+            const checked = document.querySelectorAll('.opcio-idioma input:checked');
+            const llista = [];
+            checked.forEach(c => {
+                llista.push({
+                    codi: c.value === c.dataset.nom ? null : c.value, // Recuperem null si era null
+                    nom: c.dataset.nom,
+                    rtl: c.dataset.rtl === 'true'
+                });
+            });
+            return llista;
+        }
+
+        // GENERACIÓ
         async function generarDocument() {
             const titol = document.getElementById('titol-doc').value || "Sense títol";
             const curs = document.getElementById('curs').value;
             const textParaules = document.getElementById('llista-paraules').value;
             const mode = document.getElementById('selector-mode').value;
-            idiomaSeleccionat = document.getElementById('idioma').value;
-
+            
+            // Actualitzar capçaleres
             document.getElementById('titol-resultat').innerText = titol;
             document.getElementById('titol-resultat-back').innerText = titol;
-            
             const cursEl = document.getElementById('curs-resultat');
             const cursElBack = document.getElementById('curs-resultat-back');
-
             if (curs.trim()) { 
                 cursEl.innerText = curs; cursEl.style.display='block'; 
                 cursElBack.innerText = curs; cursElBack.style.display='block';
@@ -429,35 +494,58 @@
 
             contenidor.innerHTML = '';
             contenidorRevers.innerHTML = '';
-            
+
+            const idiomesActius = obtenirIdiomesSeleccionats();
+            if (idiomesActius.length === 0) return alert("Selecciona com a mínim un idioma!");
+
+            // Configuració visual segons mode
             if (mode === 'targeta') {
                 wrapperRevers.style.display = 'block';
                 contenidor.classList.add('mode-targeta-front');
                 contenidorRevers.classList.add('mode-targeta-back');
+                
+                // Classe per ajustar mida font si hi ha molts idiomes
+                if(idiomesActius.length > 3) contenidorRevers.classList.add('many-langs-back');
+                else contenidorRevers.classList.remove('many-langs-back');
+
             } else {
                 wrapperRevers.style.display = 'none';
                 contenidor.classList.remove('mode-targeta-front');
                 contenidorRevers.classList.remove('mode-targeta-back');
+                
+                if(idiomesActius.length > 1) contenidor.classList.add('multi-lang-front');
+                else contenidor.classList.remove('multi-lang-front');
             }
 
             if (!textParaules.trim()) return; 
             const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
             
             for (let i = 0; i < llista.length; i++) {
-                let paraula = llista[i];
-                const divFront = crearElementTargeta(paraula, i, 'front');
+                let paraulaBase = llista[i]; // Paraula escrita per l'usuari (assumim català per cercar)
+                
+                // Creem estructura de dades per a aquest pictograma
+                // Guardem la paraula base per a tots els idiomes inicialment, després traduïm
+                let textos = {};
+                idiomesActius.forEach(lang => {
+                    textos[lang.nom] = (lang.codi === 'ca') ? paraulaBase : "..."; 
+                });
+
+                // Crear Elements DOM
+                const divFront = crearTargetaDOM(i, 'front', textos, idiomesActius);
                 contenidor.appendChild(divFront);
 
                 if (mode === 'targeta') {
-                    const divBack = crearElementTargeta(paraula, i, 'back');
+                    const divBack = crearTargetaDOM(i, 'back', textos, idiomesActius);
                     contenidorRevers.appendChild(divBack);
                 }
-                buscarArasaacAuto(paraula, i);
+                
+                // Cridem API per imatge i traduccions
+                processarPictograma(paraulaBase, i, idiomesActius);
             }
             actualitzarEstils();
         }
 
-        function crearElementTargeta(paraula, index, tipus) {
+        function crearTargetaDOM(index, tipus, textos, idiomes) {
             const div = document.createElement('div');
             div.className = 'pictograma';
             div.draggable = true; 
@@ -471,58 +559,112 @@
             img.id = `img-${index}-${tipus}`; 
             img.src = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png'; 
             
-            const p = document.createElement('p');
-            p.id = `text-${index}-${tipus}`;
-            p.innerText = paraula;
+            const textContainer = document.createElement('div');
+            textContainer.className = 'text-container';
+            textContainer.id = `txtcont-${index}-${tipus}`;
+
+            // Creem una línia per cada idioma
+            idiomes.forEach(lang => {
+                const p = document.createElement('div');
+                p.className = 'text-line';
+                p.innerText = textos[lang.nom];
+                p.dataset.lang = lang.nom; // Per identificar-lo després
+                if(lang.rtl) p.style.direction = 'rtl';
+                
+                // En mode Standard (front), si hi ha 2 idiomes, posem un separador visual (opcional)
+                // Però aquí ho fem simple: div block. CSS s'encarrega.
+                textContainer.appendChild(p);
+            });
 
             div.appendChild(img);
-            div.appendChild(p);
+            div.appendChild(textContainer);
             return div;
         }
 
-        // DRAG & DROP
-        [document.getElementById('contenidor-picts'), document.getElementById('contenidor-revers')].forEach(cont => {
-            cont.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                const dragging = document.querySelector('.dragging');
-                if(!dragging) return;
-                const siblings = [...cont.querySelectorAll('.pictograma:not(.dragging)')];
-                let closest = null; let minDistance = Infinity;
-                siblings.forEach(sibling => {
-                    const box = sibling.getBoundingClientRect();
-                    const dx = e.clientX - (box.left + box.width / 2);
-                    const dy = e.clientY - (box.top + box.height / 2);
-                    const d = Math.sqrt(dx*dx + dy*dy);
-                    if (d < minDistance) { minDistance = d; closest = sibling; }
-                });
-                if (closest) {
-                    const box = closest.getBoundingClientRect();
-                    if(e.clientX > box.left + box.width/2) cont.insertBefore(dragging, closest.nextSibling);
-                    else cont.insertBefore(dragging, closest);
-                } else cont.appendChild(dragging);
-            });
-        });
-
-        // FUNCIONS ESTIL I API
-        async function buscarArasaacAuto(text, index) {
+        async function processarPictograma(textCerca, index, idiomesDesti) {
             try {
-                const r = await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(text)}`);
+                // 1. Cercar ID del pictograma (en català per defecte o l'idioma base de la interfície)
+                const r = await fetch(`https://api.arasaac.org/api/pictograms/ca/search/${encodeURIComponent(textCerca)}`);
                 const d = await r.json();
-                let src = "https://static.arasaac.org/images/no_results.png";
-                let opacitat = "0.3";
+                
                 if(d.length) {
-                    src = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_500.png`;
-                    opacitat = "1";
+                    const idPic = d[0]._id;
+                    const imgSrc = `https://static.arasaac.org/pictograms/${idPic}/${idPic}_500.png`;
+                    actualitzarImatges(index, imgSrc, "1");
+
+                    // 2. Obtenir detalls (traduccions)
+                    // ARASAAC retorna keywords en tots els idiomes suportats al endpoint de detalls
+                    const rDetalls = await fetch(`https://api.arasaac.org/api/pictograms/${idPic}`);
+                    const dDetalls = await rDetalls.json();
+
+                    // 3. Mapejar traduccions
+                    idiomesDesti.forEach(lang => {
+                        let textTraduit = textCerca; // Fallback
+                        
+                        if (lang.codi) {
+                            // Buscar en l'array de keywords
+                            // dDetalls.keywords és un array d'objectes { keyword, locale, type... }
+                            // A vegades ARASAAC no torna tots els idiomes.
+                            // Per assegurar, fem fetch específic si cal, però el endpoint general sol tenir-ho tot.
+                            // Nota: API v1 usa 'keywords'. 
+                            
+                            const keywordsLocale = dDetalls.keywords.filter(k => k.locale === lang.codi);
+                            if (keywordsLocale.length > 0) {
+                                textTraduit = keywordsLocale[0].keyword;
+                            } else {
+                                // Si no troba traducció (ex: Ucraïnès a vegades falta), deixem original o avis
+                                if(lang.codi !== 'ca') textTraduit = "(Editar)";
+                            }
+                        } else {
+                            // Idiomes no suportats (Amazic, Urdu...)
+                            textTraduit = "(Editar)";
+                        }
+
+                        actualitzarText(index, lang.nom, textTraduit);
+                    });
+
+                } else {
+                    actualitzarImatges(index, "https://static.arasaac.org/images/no_results.png", "0.3");
                 }
-                actualitzarImatgeTargeta(index, src, opacitat);
-            } catch(e){}
+            } catch(e) {
+                console.error(e);
+            }
         }
 
-        function actualitzarImatgeTargeta(index, src, opacitat) {
-            const imgFront = document.getElementById(`img-${index}-front`);
-            const imgBack = document.getElementById(`img-${index}-back`);
-            if(imgFront) { imgFront.src = src; imgFront.style.opacity = opacitat; }
-            if(imgBack) { imgBack.src = src; } 
+        function actualitzarImatges(index, src, opacitat) {
+            const f = document.getElementById(`img-${index}-front`);
+            const b = document.getElementById(`img-${index}-back`);
+            if(f) { f.src=src; f.style.opacity=opacitat; }
+            if(b) { b.src=src; }
+        }
+
+        function actualitzarText(index, nomIdioma, text) {
+            // Actualitzar tant al front com al back
+            ['front', 'back'].forEach(tipus => {
+                const container = document.getElementById(`txtcont-${index}-${tipus}`);
+                if (container) {
+                    const linies = container.querySelectorAll('.text-line');
+                    linies.forEach(p => {
+                        if (p.dataset.lang === nomIdioma) p.innerText = text;
+                    });
+                }
+            });
+        }
+
+        // FUNCIONS LOGO I ESTILS
+        function carregarLogo(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) { 
+                    const img = document.getElementById('logo-visual');
+                    const imgBack = document.getElementById('logo-visual-back');
+                    img.src = e.target.result; img.style.display = 'block';
+                    imgBack.src = e.target.result; imgBack.style.display = 'block';
+                    document.getElementById('wrapper-logo').classList.add('feteservir');
+                    document.getElementById('wrapper-logo').innerHTML = "✅ Logo Carregat";
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
 
         function actualitzarEstils() {
@@ -532,32 +674,67 @@
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
         }
 
-        // MODALS
+        // MODAL EDICIÓ MILLORAT
         function obrirModal(el) {
             elementEditant = el;
             const index = el.dataset.index;
-            const nom = document.getElementById(`text-${index}-front`).innerText;
-            document.getElementById('nom-editable').value = nom;
-            document.getElementById('input-arasaac').value = nom;
-            document.getElementById('input-wiki').value = nom;
-            document.getElementById('input-open').value = nom;
+            const idiomesActius = obtenirIdiomesSeleccionats();
+            
+            // 1. Generar inputs per a cada idioma
+            const containerInputs = document.getElementById('modal-inputs-idiomes');
+            containerInputs.innerHTML = '';
+            
+            idiomesActius.forEach(lang => {
+                // Recuperar text actual
+                const containerTxt = document.getElementById(`txtcont-${index}-front`);
+                let textActual = "";
+                containerTxt.querySelectorAll('.text-line').forEach(p => {
+                    if(p.dataset.lang === lang.nom) textActual = p.innerText;
+                });
+
+                const div = document.createElement('div');
+                const lbl = document.createElement('label');
+                lbl.innerText = lang.nom + ":";
+                lbl.style.display = "block"; lbl.style.color = "#4a90e2"; lbl.style.fontSize="0.8em";
+                
+                const inp = document.createElement('input');
+                inp.type = "text";
+                inp.value = textActual;
+                inp.dataset.lang = lang.nom;
+                inp.className = "nom-editable"; // Reutilitzem estil
+                if(lang.rtl) inp.style.direction = "rtl";
+
+                div.appendChild(lbl);
+                div.appendChild(inp);
+                containerInputs.appendChild(div);
+            });
+
+            // Preparar cerques (agafem el text del primer idioma com a referència)
+            const textRef = containerInputs.querySelector('input').value;
+            document.getElementById('input-arasaac').value = textRef;
+            document.getElementById('input-wiki').value = textRef;
+            document.getElementById('input-open').value = textRef;
+
             document.getElementById('modal-edicio').style.display = 'flex';
             canviarPestanya('tab-arasaac'); buscarArasaacModal();
         }
-        function tancarModal() { document.getElementById('modal-edicio').style.display = 'none'; elementEditant=null; }
-        
+
         function guardarTancar() {
             if(elementEditant) {
                 const index = elementEditant.dataset.index;
-                const nouText = document.getElementById('nom-editable').value;
-                const txtFront = document.getElementById(`text-${index}-front`);
-                const txtBack = document.getElementById(`text-${index}-back`);
-                if(txtFront) txtFront.innerText = nouText;
-                if(txtBack) txtBack.innerText = nouText;
+                const containerInputs = document.getElementById('modal-inputs-idiomes');
+                const inputs = containerInputs.querySelectorAll('input');
+                
+                inputs.forEach(inp => {
+                    actualitzarText(index, inp.dataset.lang, inp.value);
+                });
             }
             tancarModal();
         }
         
+        function tancarModal() { document.getElementById('modal-edicio').style.display = 'none'; elementEditant=null; }
+        
+        // PESTANYES I CERQUES (IGUAL QUE ABANS)
         function canviarPestanya(id) {
             document.querySelectorAll('.contingut-tab').forEach(e=>e.style.display='none');
             document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('actiu'));
@@ -565,18 +742,14 @@
             const map = {'tab-arasaac':0, 'tab-wiki':1, 'tab-simbols':2, 'tab-pujar':3};
             document.querySelectorAll('.tab-btn')[map[id]].classList.add('actiu');
         }
-        
         function aplicarImatge(src) { 
             if(elementEditant) { 
-                const index = elementEditant.dataset.index;
-                actualitzarImatgeTargeta(index, src, '1');
+                actualitzarImatges(elementEditant.dataset.index, src, '1');
             } 
         }
-
-        // CERQUES
         async function buscarArasaacModal() {
             const q = document.getElementById('input-arasaac').value;
-            renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac');
+            renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/ca/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac');
         }
         async function buscarWikiImages() {
             const q = document.getElementById('input-wiki').value;
@@ -600,6 +773,3 @@
     </script>
 </body>
 </html>
-
-
-
