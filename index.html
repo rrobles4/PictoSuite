@@ -171,10 +171,11 @@
             height: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-evenly; 
+            justify-content: center; /* Centrat vertical global */
             align-items: center;
             padding: 5px;
             box-sizing: border-box;
+            overflow: hidden; /* Important per calcular si surt */
         }
 
         .fila-paraula {
@@ -184,6 +185,8 @@
             font-weight: bold;
             color: var(--color-font);
             line-height: 1.1;
+            /* Ja no posem mida fixa aquí, l'hereta del pare */
+            margin: 2px 0;
         }
 
         /* MODAL */
@@ -311,7 +314,7 @@
                 <input type="text" id="curs" placeholder="Ex: 3r A">
             </div>
             <div class="columna" style="flex: 0.8;">
-                <label>Idioma:</label>
+                <label>Idioma (Cerca ARASAAC):</label>
                 <select id="idioma">
                     <option value="ca">Català</option>
                     <option value="es">Castellano</option>
@@ -372,7 +375,7 @@
         </div>
 
         <div class="instruccions no-print">
-            <strong>💡 Consell:</strong> pots arrossegar les targetes per reordenar-les, i fes clic a sobre de qualsevol imatge (o text del darrere) per editar-la i afegir més paraules en altres idiomes si és necessari.
+            <strong>💡 Consell:</strong> pots arrossegar les targetes per reordenar-les. També pots fer clic a sobre de qualsevol imatge (o text del darrere) per editar-la i afegir més paraules en altres idiomes si és necessari.
         </div>
 
         <p class="no-print" style="text-align:center; color:#e74c3c; font-size:0.85em; margin-top:15px; margin-bottom:0;">
@@ -411,7 +414,7 @@
     </div>
 
     <div class="no-print" style="text-align: center; margin-top: 40px; padding: 20px; font-size: 0.8em; color: #666; border-top: 1px solid #eee;">
-        <p style="margin: 0;">Creat per <b>Rafa Robles Fontanet</b></p>
+        <p style="margin: 0;">Creat per <b>Rafa Robles Fontanet</b> | <b>Escola Pau Picasso</b></p>
         <p style="margin: 5px 0;">
             <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2; text-decoration: none;">
                 <img alt="Llicència de Creative Commons" style="border-width:0; vertical-align: middle;" src="https://i.creativecommons.org/l/by-nc-sa/4.0/80x15.png" />
@@ -541,11 +544,34 @@
                 if (mode === 'targeta') {
                     const divBack = crearElementTargeta(paraula, i, 'back');
                     contenidorRevers.appendChild(divBack);
+                    // Crida automàtica per ajustar la mida un cop es renderitzi
+                    setTimeout(() => autoMidaText(divBack.querySelector('.contingut-back')), 0);
                 }
                 buscarArasaacAuto(paraula, i);
             }
             actualitzarEstils();
         }
+
+        // --- FUNCIÓ D'AJUSTAMENT AUTOMÀTIC DEL TEXT ---
+        function autoMidaText(container) {
+            if (!container) return;
+            
+            // Comencem amb una mida gran
+            let mida = 60; 
+            container.style.fontSize = mida + 'px';
+            
+            // Bucle: Mentre el text sigui més gran que la caixa, redueix la mida
+            // Controlem tant alçada com amplada (amb scrollHeight/Width)
+            while (
+                (container.scrollWidth > container.clientWidth || 
+                 container.scrollHeight > container.clientHeight) && 
+                mida > 10 // Mínim de seguretat
+            ) {
+                mida--;
+                container.style.fontSize = mida + 'px';
+            }
+        }
+        // ----------------------------------------------
 
         function crearElementTargeta(paraula, index, tipus) {
             const div = document.createElement('div');
@@ -560,7 +586,7 @@
             div.addEventListener('click', () => { if(!div.classList.contains('dragging')) obrirModal(div); });
             div.addEventListener('dragstart', () => { div.classList.add('dragging'); });
             
-            // --- NOVA LÒGICA PER SINCRONITZAR ORDRE ---
+            // --- LÒGICA PER SINCRONITZAR ORDRE ---
             div.addEventListener('dragend', () => { 
                 div.classList.remove('dragging'); 
                 sincronitzarOrdre(div); 
@@ -581,7 +607,7 @@
                 const span = document.createElement('div');
                 span.className = 'fila-paraula';
                 span.innerText = paraula;
-                span.style.fontSize = '3em'; // Inicialment gran
+                // NOTA: Ja no posem fontSize aquí, ho gestiona el contenidor
                 containerText.appendChild(span);
                 
                 div.appendChild(containerText);
@@ -658,7 +684,6 @@
 
         function actualitzarImatgeTargeta(index, src, opacitat) {
             const imgFront = document.getElementById(`img-${index}-front`);
-            // El revers en mode text no té imatge, no cal actualitzar-lo
             if(imgFront) { imgFront.src = src; imgFront.style.opacity = opacitat; }
         }
 
@@ -667,6 +692,11 @@
             doc.setProperty('--tipus-font', document.getElementById('selector-font').value);
             doc.setProperty('--mida-font-base', document.getElementById('selector-mida').value + 'px');
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
+            
+            // Re-ajustar textos al canviar columnes (per si de cas)
+            if(document.getElementById('selector-mode').value === 'targeta') {
+                document.querySelectorAll('.contingut-back').forEach(el => autoMidaText(el));
+            }
         }
 
         // MODALS
@@ -741,20 +771,16 @@
                     if(txtBack) {
                         txtBack.innerHTML = ''; 
                         
-                        const num = nousTextos.length;
-                        let mida = "3em"; 
-                        if (num === 2) mida = "2.5em";
-                        if (num === 3) mida = "2em";
-                        if (num === 4) mida = "1.6em";
-                        if (num >= 5) mida = "1.3em"; 
-
+                        // Generem les files sense mida fixa
                         nousTextos.forEach(t => {
                             const divLinia = document.createElement('div');
                             divLinia.className = 'fila-paraula';
                             divLinia.innerText = t;
-                            divLinia.style.fontSize = mida;
                             txtBack.appendChild(divLinia);
                         });
+                        
+                        // Ajust automàtic immediat
+                        autoMidaText(txtBack);
                     }
                 }
             }
@@ -788,7 +814,6 @@
             
             divRes.innerHTML = "<p style='text-align:center'>⏳ Traduint...</p>";
             
-            // LLISTA D'IDIOMES ACTUALITZADA
             const langs = [
                 {code:'es', nom:'Castellà'},
                 {code:'en', nom:'Anglès'},
@@ -860,5 +885,3 @@
     </script>
 </body>
 </html>
-
-
