@@ -578,13 +578,26 @@
     </div>
 
     <div class="footer-credits no-print">
-        <p style="margin: 0;">Creat per <b>Rafa Robles Fontanet</b></p>
-        <p style="margin: 5px 0;">
-            <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2; text-decoration: none;">
-                Llicència Creative Commons BY-NC-SA 4.0
-            </a>
+        <p style="margin: 0; font-weight: bold; color: #333;">
+            © <span id="any-actual"></span> PictoJocs - Creat per Rafa Robles Fontanet.
+        </p>
+        <p style="margin: 2px 0; font-size: 0.9em;">
+            Tots els drets reservats. Prohibida la còpia o modificació d'aquest software sense permís.
+        </p>
+        
+        <hr style="margin: 10px auto; width: 50%; opacity: 0.3;">
+
+        <p style="margin: 5px 0; font-size: 0.8em; color: #666;">
+            Els símbols pictogràfics utilitzats són propietat del Govern d'Aragó i han estat creats per Sergio Palao per a 
+            <a href="http://www.arasaac.org" target="_blank" style="color: #4a90e2; text-decoration: none;">ARASAAC</a> 
+            (http://www.arasaac.org), que els distribueix sota llicència 
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2;">CC (BY-NC-SA)</a>.
         </p>
     </div>
+
+    <script>
+        document.getElementById('any-actual').innerText = new Date().getFullYear();
+    </script>
 
     <div id="modal-edicio">
         <div class="modal-contingut">
@@ -1129,3 +1142,4 @@
     </script>
 </body>
 </html>
+
