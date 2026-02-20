@@ -349,7 +349,6 @@
             font-family: var(--tipus-font); font-weight: bold;
             color: var(--color-font); line-height: 1.1; margin: 2px 0;
             
-            /* Això garanteix que les paraules extremadament llargues no sobresurtin */
             overflow-wrap: anywhere;
             word-break: break-word;
             hyphens: auto;
@@ -364,14 +363,9 @@
         .modal-body { padding: 25px; overflow-y: auto; }
         .grup-titol-modal { margin-bottom: 20px; text-align: center; }
         
-        /* ESTILS DINÀMICS MODAL - CORRECCIÓ FILA/COLUMNA */
         .inputs-container-modal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; justify-content: center; }
         .input-text-modal { font-size: 1.1em; text-align: center; border: 2px solid #ddd; padding: 8px; border-radius: 6px; box-sizing: border-box; }
-        
-        /* 2 Paraules: Una fila (48% cadascun) */
         .dues-paraules .input-text-modal { width: 48%; }
-        
-        /* 5 Paraules: Dues files (s'ajusten amb flex) */
         .cinc-paraules .input-text-modal { width: 30%; flex-grow: 1; }
         
         .cerca-wrapper { display: flex; gap: 8px; margin-bottom: 15px; }
@@ -391,9 +385,13 @@
         .copy-hint { font-size: 0.8em; color: #27ae60; opacity: 0; transition: 0.2s;}
         .item-traduccio:hover .copy-hint { opacity: 1; }
 
-        /* Estils Color Editor */
+        /* Estils Color Editor i Eines */
         .btn-color-dibuix { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
         .btn-color-dibuix:hover { transform: scale(1.1); }
+        
+        .btn-tool { background: #fff; border: 1px solid #ccc; font-size: 1.2em; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: 0.2s; }
+        .btn-tool:hover { background: #f0f8ff; border-color: var(--color-principal); }
+        .btn-tool.actiu { background: #e8f8f5; border: 2px solid var(--color-accio); box-shadow: 0 0 5px rgba(39,174,96,0.3); }
 
         /* --- IMPRESSIÓ NETA --- */
         @media print {
@@ -643,21 +641,31 @@
 
                 <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
                     <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                        
                         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px;">
                             <label style="font-size:0.8em;">Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
                             <label style="font-size:0.8em;">X: <input type="range" id="ed-x" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
                             <label style="font-size:0.8em;">Y: <input type="range" id="ed-y" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
                         </div>
-                        <div style="display:flex; gap:10px; margin-bottom:5px; align-items:center;">
-                            <span style="font-size:0.9em; color:#555;">🎨 Dibuixa:</span>
-                            <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
+
+                        <div style="display:flex; gap:8px; margin-bottom:5px; align-items:center; flex-wrap:wrap; justify-content:center;">
+                            <span style="font-size:0.9em; color:#555; font-weight:bold;">Eina:</span>
+                            <button id="tool-freehand" class="btn-tool actiu" onclick="setTool('freehand')" title="Dibuix Lliure">〰️</button>
+                            <button id="tool-rect" class="btn-tool" onclick="setTool('rect')" title="Quadrat">⬛</button>
+                            <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
+                            <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
+                            
+                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div> <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
                             <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
                             <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
                             <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
-                            <button style="background:#95a5a6; border:none; padding:5px 10px; border-radius:5px; color:white; cursor:pointer;" onclick="clearDrawings()">Desfer dibuixos</button>
+                            <button class="btn-color-dibuix" style="background:#000000" onclick="setDrawColor('#000000')"></button>
+                            
+                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div> <button style="background:#95a5a6; border:none; padding:8px 12px; border-radius:5px; color:white; cursor:pointer; font-weight:bold;" onclick="clearDrawings()">Desfer dibuixos</button>
                         </div>
-                        <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white;"></canvas>
-                        <button onclick="aplicarEdicioImatge()" style="background:var(--color-accio); color:white; font-weight:bold; padding:10px 20px; border-radius:50px; border:none; margin-top:10px; cursor:pointer;">✅ Aplicar aquesta imatge</button>
+                        
+                        <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white; cursor:crosshair;"></canvas>
+                        
                     </div>
                 </div>
 
@@ -688,6 +696,10 @@
         let currentDrawings = [];
         let isDrawing = false;
         let drawColor = '#e74c3c';
+        
+        // Eines Canvas
+        let currentTool = 'freehand';
+        let startX, startY, currentX, currentY;
 
         window.onload = function() {
             document.getElementById('any-actual').innerText = new Date().getFullYear();
@@ -705,14 +717,14 @@
             editorCanvas = document.getElementById('canvasEditor');
             if(editorCanvas) {
                 editorCtx = editorCanvas.getContext('2d');
-                editorCanvas.addEventListener('mousedown', startDrawing);
-                editorCanvas.addEventListener('mousemove', draw);
-                window.addEventListener('mouseup', stopDrawing);
+                editorCanvas.addEventListener('mousedown', startDrawingCanvas);
+                editorCanvas.addEventListener('mousemove', drawCanvas);
+                window.addEventListener('mouseup', stopDrawingCanvas);
                 
                 // Suport tàctil per dibuixar amb el dit
-                editorCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDrawing(e.touches[0]); }, {passive: false});
-                editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); draw(e.touches[0]); }, {passive: false});
-                window.addEventListener('touchend', stopDrawing);
+                editorCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDrawingCanvas(e); }, {passive: false});
+                editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
+                window.addEventListener('touchend', stopDrawingCanvas);
             }
         };
 
@@ -959,7 +971,7 @@
             div.className = 'pictograma';
             div.draggable = true; 
             div.dataset.index = index; 
-            div.dataset.original = paraula; // Molt important per recordar edicions
+            div.dataset.original = paraula; 
             
             div.addEventListener('click', () => { if(!div.classList.contains('dragging')) obrirModal(div); });
             div.addEventListener('dragstart', () => { div.classList.add('dragging'); });
@@ -1027,14 +1039,12 @@
             });
         });
 
-        // FUNCIÓ ACTUALITZADA: Assegura que el text no sobresurt mai
         function autoMidaText(container) {
             if (!container) return;
             let mida = 60; 
             container.style.fontSize = mida + 'px';
             container.style.lineHeight = '1.1';
             
-            // Rebaixa la mida fins a un mínim de 8px perquè càpiga
             while ((container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) && mida > 8) {
                 mida--; 
                 container.style.fontSize = mida + 'px';
@@ -1077,7 +1087,6 @@
             }
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
             
-            // Timeout necessari perquè el navegador renderitzi el nou tamany abans de calcular els textos
             setTimeout(() => {
                 const mode = document.getElementById('selector-mode').value;
                 if(mode === 'targeta') document.querySelectorAll('.contingut-back').forEach(el => autoMidaText(el));
@@ -1096,7 +1105,6 @@
             let maxInputs = 2; 
             let classeLayout = "dues-paraules";
 
-            // Configuració files/columnes del modal (No tocar com m'has demanat)
             if (mode === 'targeta' || mode === 'memory') {
                 maxInputs = 5; 
                 classeLayout = "cinc-paraules";
@@ -1143,7 +1151,6 @@
             if(paraulaCerca) buscarArasaacModal();
         }
 
-        // ESBORRAR TARGETA (Botó vermell)
         function eliminarTargeta() {
             if(!elementEditant) return;
             if(confirm("Segur que vols eliminar aquesta targeta? Això la traurà de la llista de paraules.")) {
@@ -1155,13 +1162,19 @@
                     llista.splice(idx, 1);
                     document.getElementById('llista-paraules').value = llista.join(', ');
                     tancarModal();
-                    generarDocument(); // Regenera tot sense la paraula
+                    generarDocument(); 
                 }
             }
         }
 
+        // ES GUARDEN ELS CANVIS (TANT DE TEXT COM DE DIBUIX)
         function guardarTancar() {
             if(elementEditant) {
+                // SI SOM A LA PESTANYA DEL CANVAS, APLIQUEM LA IMATGE AUTOMÀTICAMENT
+                if (document.getElementById('tab-dibuix').style.display === 'block') {
+                    aplicarEdicioImatge(false); // Fals perquè no canviï de pestanya visualment, només apliqui la info.
+                }
+
                 const mode = document.getElementById('selector-mode').value;
                 const index = elementEditant.dataset.index;
                 const original = elementEditant.dataset.original;
@@ -1174,7 +1187,6 @@
                 let htmlFinal = nousTextos.map(t => `<div class="fila-paraula">${t}</div>`).join('');
                 if(htmlFinal === "") htmlFinal = `<div class="fila-paraula">&nbsp;</div>`;
 
-                // Desa l'edició a la memòria perquè al donar-li a Generar no s'esborri
                 let currentImgUrl = null;
                 if (mode === 'domino') {
                     currentImgUrl = elementEditant.querySelector('img').src;
@@ -1190,7 +1202,6 @@
                     imgUrl: currentImgUrl
                 };
 
-                // Actualitzem DOM
                 if (mode === 'domino') {
                     const tDiv = elementEditant.querySelector('.text-domino');
                     tDiv.innerHTML = htmlFinal; autoMidaText(tDiv);
@@ -1244,26 +1255,65 @@
             } 
         }
 
-        /* --- FUNCIONS DE L'EDITOR CANVAS (NOU) --- */
+        /* --- FUNCIONS DE L'EDITOR CANVAS AMB FORMES --- */
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu'));
+            document.getElementById('tool-' + tool).classList.add('actiu');
+        }
+
         function setDrawColor(c) { drawColor = c; }
         function clearDrawings() { currentDrawings = []; drawEditorCanvas(); }
         
-        function startDrawing(e) {
-            isDrawing = true;
+        function getMousePos(e) {
             const rect = editorCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            currentDrawings.push({ color: drawColor, points: [{x, y}] });
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
         }
-        function draw(e) {
+
+        function startDrawingCanvas(e) {
+            isDrawing = true;
+            const pos = getMousePos(e);
+            startX = pos.x; startY = pos.y;
+            currentX = pos.x; currentY = pos.y;
+
+            if (currentTool === 'freehand') {
+                currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] });
+            }
+        }
+        
+        function drawCanvas(e) {
             if(!isDrawing) return;
-            const rect = editorCanvas.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            currentDrawings[currentDrawings.length-1].points.push({x, y});
+            const pos = getMousePos(e);
+            currentX = pos.x; currentY = pos.y;
+
+            if (currentTool === 'freehand') {
+                currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY});
+            }
             drawEditorCanvas();
         }
-        function stopDrawing() { isDrawing = false; }
+
+        function stopDrawingCanvas() {
+            if(!isDrawing) return;
+            isDrawing = false;
+            
+            if (currentTool !== 'freehand') {
+                // Guarda la forma nomes si hi ha hagut algun moviment (evita clics accidentals)
+                if (startX !== currentX || startY !== currentY) {
+                    currentDrawings.push({ 
+                        type: currentTool, 
+                        color: drawColor, 
+                        start: {x: startX, y: startY}, 
+                        end: {x: currentX, y: currentY} 
+                    });
+                }
+            }
+            drawEditorCanvas();
+        }
         
         function obrirTabEdicio() {
             canviarPestanya('tab-dibuix');
@@ -1290,11 +1340,26 @@
                     document.getElementById('ed-x').value = 0;
                     document.getElementById('ed-y').value = 0;
                     currentDrawings = [];
+                    setTool('freehand'); // Per defecte dibuix lliure
                     drawEditorCanvas();
                 };
             }
         }
         
+        function drawArrow(ctx, fromx, fromy, tox, toy) {
+            var headlen = 15; 
+            var dx = tox - fromx;
+            var dy = toy - fromy;
+            var angle = Math.atan2(dy, dx);
+            ctx.beginPath();
+            ctx.moveTo(fromx, fromy);
+            ctx.lineTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+            ctx.moveTo(tox, toy);
+            ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+            ctx.stroke();
+        }
+
         function drawEditorCanvas() {
             editorCtx.clearRect(0, 0, 300, 300);
             
@@ -1313,19 +1378,50 @@
             }
             editorCtx.restore();
             
-            editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; editorCtx.lineWidth = 4;
-            currentDrawings.forEach(stroke => {
-                editorCtx.strokeStyle = stroke.color;
-                editorCtx.beginPath();
-                stroke.points.forEach((p, i) => { if(i===0) editorCtx.moveTo(p.x, p.y); else editorCtx.lineTo(p.x, p.y); });
-                editorCtx.stroke();
+            editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; 
+            
+            // Dibuixar totes les figures guardades
+            currentDrawings.forEach(shape => {
+                editorCtx.strokeStyle = shape.color;
+                editorCtx.lineWidth = 4;
+                if (shape.type === 'freehand') {
+                    editorCtx.beginPath();
+                    shape.points.forEach((p, i) => { if(i===0) editorCtx.moveTo(p.x, p.y); else editorCtx.lineTo(p.x, p.y); });
+                    editorCtx.stroke();
+                } else if (shape.type === 'rect') {
+                    editorCtx.strokeRect(shape.start.x, shape.start.y, shape.end.x - shape.start.x, shape.end.y - shape.start.y);
+                } else if (shape.type === 'circle') {
+                    editorCtx.beginPath();
+                    let r = Math.sqrt(Math.pow(shape.end.x - shape.start.x, 2) + Math.pow(shape.end.y - shape.start.y, 2));
+                    editorCtx.arc(shape.start.x, shape.start.y, r, 0, 2 * Math.PI);
+                    editorCtx.stroke();
+                } else if (shape.type === 'arrow') {
+                    drawArrow(editorCtx, shape.start.x, shape.start.y, shape.end.x, shape.end.y);
+                }
             });
+
+            // Dibuixar la previsualització de la figura actual (mentre arrossegues el dit)
+            if(isDrawing && currentTool !== 'freehand') {
+                editorCtx.strokeStyle = drawColor;
+                editorCtx.lineWidth = 4;
+                if(currentTool === 'rect') {
+                    editorCtx.strokeRect(startX, startY, currentX - startX, currentY - startY);
+                } else if(currentTool === 'circle') {
+                    editorCtx.beginPath();
+                    let r = Math.sqrt(Math.pow(currentX - startX, 2) + Math.pow(currentY - startY, 2));
+                    editorCtx.arc(startX, startY, r, 0, 2 * Math.PI);
+                    editorCtx.stroke();
+                } else if(currentTool === 'arrow') {
+                    drawArrow(editorCtx, startX, startY, currentX, currentY);
+                }
+            }
         }
         
-        function aplicarEdicioImatge() {
+        // Ara la funció demana un paràmetre (canviarTab) per evitar que salti la pestanya si ho fem des de "Fet!"
+        function aplicarEdicioImatge(canviarTab = true) {
             const dataUrl = editorCanvas.toDataURL('image/png');
             aplicarImatge(dataUrl);
-            canviarPestanya('tab-arasaac'); 
+            if(canviarTab) canviarPestanya('tab-arasaac'); 
         }
 
         /* --- APIS EXTERNES --- */
