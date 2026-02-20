@@ -10,7 +10,7 @@
     <style>
         /* --- ESTILS GENERALS --- */
         :root {
-            --color-fons: #e0f7fa; /* Blau cel suau */
+            --color-fons: #e0f7fa; 
             --color-principal: #4a90e2;
             --color-secundari: #f39c12; 
             --color-accio: #27ae60;
@@ -28,25 +28,18 @@
             
             /* DISSENY DE FONS (ESTIL ESCOLAR) */
             background-color: #fdfbf7;
-            /* Patró de quadricula escolar suau */
             background-image: 
                 linear-gradient(#e1e1e1 1px, transparent 1px),
                 linear-gradient(90deg, #e1e1e1 1px, transparent 1px);
             background-size: 20px 20px;
-            
-            /* SI VOLS POSAR UNA IMATGE DE FONS (Nens jugant, etc.):
-               1. Guarda la imatge a la carpeta com 'fons.jpg'
-               2. Descomenta (treu els /* i * /) de la línia de sota:
-            */
-            /* background-image: url('fons.jpg'); background-size: cover; */
         }
 
         /* --- CONFIGURACIÓ (NO PRINT) --- */
         .configuracio {
-            background-color: rgba(255, 255, 255, 0.95); /* Blanc quasi opac */
+            background-color: rgba(255, 255, 255, 0.95); 
             padding: 25px; 
             border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Ombra més maca */
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15); 
             max-width: 950px;
             margin: 0 auto 20px auto; 
             border-left: 12px solid var(--color-principal);
@@ -74,13 +67,12 @@
         .header-app h1 { 
             margin: 0; 
             color: #2c3e50; 
-            font-size: 3.5em; /* Títol més gran */
+            font-size: 3.5em; 
             letter-spacing: 1px; 
             line-height: 1; 
-            font-family: 'Fredoka', sans-serif; /* Font més divertida pel títol */
+            font-family: 'Fredoka', sans-serif; 
         }
         
-        /* Logo Pictojocs més gran */
         .logo-pictojocs { height: 90px; width: auto; object-fit: contain; }
 
         .subtitol-descripcio {
@@ -118,16 +110,16 @@
         }
         .btn-contacte:hover { transform: scale(1.05); background-color: #000; }
 
-        /* Footer/Crèdits llegibles */
+        /* Footer/Crèdits */
         .footer-credits {
             text-align: center; 
             margin-top: 40px; 
             padding: 15px; 
             font-size: 0.85em; 
             color: #444; 
-            background-color: rgba(255,255,255,0.8); /* Fons semi-transparent */
+            background-color: rgba(255,255,255,0.8); 
             border-radius: 10px;
-            max-width: 500px;
+            max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
@@ -356,6 +348,11 @@
             text-align: center; width: 100%;
             font-family: var(--tipus-font); font-weight: bold;
             color: var(--color-font); line-height: 1.1; margin: 2px 0;
+            
+            /* Això garanteix que les paraules extremadament llargues no sobresurtin */
+            overflow-wrap: anywhere;
+            word-break: break-word;
+            hyphens: auto;
         }
 
         /* MODAL */
@@ -367,9 +364,14 @@
         .modal-body { padding: 25px; overflow-y: auto; }
         .grup-titol-modal { margin-bottom: 20px; text-align: center; }
         
+        /* ESTILS DINÀMICS MODAL - CORRECCIÓ FILA/COLUMNA */
         .inputs-container-modal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; justify-content: center; }
         .input-text-modal { font-size: 1.1em; text-align: center; border: 2px solid #ddd; padding: 8px; border-radius: 6px; box-sizing: border-box; }
+        
+        /* 2 Paraules: Una fila (48% cadascun) */
         .dues-paraules .input-text-modal { width: 48%; }
+        
+        /* 5 Paraules: Dues files (s'ajusten amb flex) */
         .cinc-paraules .input-text-modal { width: 30%; flex-grow: 1; }
         
         .cerca-wrapper { display: flex; gap: 8px; margin-bottom: 15px; }
@@ -388,6 +390,10 @@
         .trad-text { font-size: 1.1em; color: #333; }
         .copy-hint { font-size: 0.8em; color: #27ae60; opacity: 0; transition: 0.2s;}
         .item-traduccio:hover .copy-hint { opacity: 1; }
+
+        /* Estils Color Editor */
+        .btn-color-dibuix { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; }
+        .btn-color-dibuix:hover { transform: scale(1.1); }
 
         /* --- IMPRESSIÓ NETA --- */
         @media print {
@@ -423,11 +429,10 @@
         const RUTA_LOGO_PICTOJOCS = "https://github.com/rrobles4/pictojocs/blob/main/logo%20PictoJocs.png?raw=true"; 
         
         // --- CONFIGURACIÓ DEL EMAIL PER SUGGERIMENTS ---
-        // Canvia aquest email pel teu si vols rebre els missatges
         const EMAIL_CONTACTE = "rrobles4@xtec.cat"; 
     </script>
 
-    <div class="configuracio">
+    <div class="configuracio no-print">
         <div class="header-app">
             <div class="titol-principal-wrapper">
                 <img id="app-logo-header" class="logo-pictojocs" src="" alt="PictoJocs Logo">
@@ -477,7 +482,8 @@
                 </select>
             </div>
             <div class="control-estil" style="flex:1;">
-                <label>Jocs</label> <select id="selector-mode" onchange="canviarMode()">
+                <label>Jocs</label>
+                <select id="selector-mode" onchange="canviarMode()">
                     <option value="standard">Imatge + Text</option>
                     <option value="targeta">Targeta (Doble Cara)</option>
                     <option value="memory">Memory</option>
@@ -584,20 +590,14 @@
         <p style="margin: 2px 0; font-size: 0.9em;">
             Tots els drets reservats. Prohibida la còpia o modificació d'aquest software sense permís.
         </p>
-        
         <hr style="margin: 10px auto; width: 50%; opacity: 0.3;">
-
         <p style="margin: 5px 0; font-size: 0.8em; color: #666;">
             Els símbols pictogràfics utilitzats són propietat del Govern d'Aragó i han estat creats per Sergio Palao per a 
-            <a href="http://www.arasaac.org" target="_blank" style="color: #4a90e2; text-decoration: none;">ARASAAC</a> 
-            (http://www.arasaac.org), que els distribueix sota llicència 
+            <a href="http://www.arasaac.org" target="_blank" style="color: #4a90e2; text-decoration: none;">ARASAAC</a>, 
+            que els distribueix sota llicència 
             <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2;">CC (BY-NC-SA)</a>.
         </p>
     </div>
-
-    <script>
-        document.getElementById('any-actual').innerText = new Date().getFullYear();
-    </script>
 
     <div id="modal-edicio">
         <div class="modal-contingut">
@@ -607,37 +607,68 @@
                 <button class="tab-btn" onclick="canviarPestanya('tab-wiki')">📷 Wiki</button>
                 <button class="tab-btn" onclick="canviarPestanya('tab-simbols')">✒️ Símbols</button>
                 <button class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar/IA</button>
+                <button class="tab-btn" onclick="obrirTabEdicio()">🎨 Editar</button>
             </div>
             <div class="modal-body">
                 <div class="grup-titol-modal">
                     <label style="margin-bottom:10px;">Editar Text:</label>
                     <div id="camps-text" class="inputs-container-modal"></div>
                 </div>
+                
                 <div id="tab-arasaac" class="contingut-tab">
                     <div class="cerca-wrapper"><input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()"><button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca</button></div>
                     <div id="resultats-arasaac" class="resultats-grid"></div>
                 </div>
+                
                 <div id="tab-traductor" class="contingut-tab" style="display:none;">
                     <div class="cerca-wrapper"><button class="btn-cerca-modal btn-cerca-trad" onclick="traduirParaula()" style="width:100%">🌍 Traduir</button></div>
                     <div id="resultats-traductor" class="grid-traduccions"></div>
                 </div>
+                
                 <div id="tab-wiki" class="contingut-tab" style="display:none;">
                     <div class="cerca-wrapper"><input id="input-wiki" onkeyup="if(event.key==='Enter') buscarWikiImages()"><button class="btn-cerca-modal btn-cerca-wiki" onclick="buscarWikiImages()">📷 Cerca</button></div>
                     <div id="resultats-wiki" class="resultats-grid"></div>
                 </div>
+                
                 <div id="tab-simbols" class="contingut-tab" style="display:none;">
                     <div class="cerca-wrapper"><input id="input-open" onkeyup="if(event.key==='Enter') buscarOpenSymbols()"><button class="btn-cerca-modal btn-cerca-open" onclick="buscarOpenSymbols()">✒️ Cerca</button></div>
                     <div id="resultats-open" class="resultats-grid"></div>
                 </div>
+                
                 <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
                     <p>Puja una imatge pròpia:</p><input type="file" accept="image/*" onchange="pujarImatge(this)">
-                    <hr style="margin:20px0; border:0; border-top:1px solid #eee;">
+                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
                     <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">🎨 Generar amb IA</button>
                 </div>
+
+                <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px;">
+                            <label style="font-size:0.8em;">Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em;">X: <input type="range" id="ed-x" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em;">Y: <input type="range" id="ed-y" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
+                        </div>
+                        <div style="display:flex; gap:10px; margin-bottom:5px; align-items:center;">
+                            <span style="font-size:0.9em; color:#555;">🎨 Dibuixa:</span>
+                            <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
+                            <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
+                            <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
+                            <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
+                            <button style="background:#95a5a6; border:none; padding:5px 10px; border-radius:5px; color:white; cursor:pointer;" onclick="clearDrawings()">Desfer dibuixos</button>
+                        </div>
+                        <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white;"></canvas>
+                        <button onclick="aplicarEdicioImatge()" style="background:var(--color-accio); color:white; font-weight:bold; padding:10px 20px; border-radius:50px; border:none; margin-top:10px; cursor:pointer;">✅ Aplicar aquesta imatge</button>
+                    </div>
+                </div>
+
             </div>
-            <div style="padding:15px;background:#f9f9f9;text-align:right;">
-                <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex;">✅ Fet</button>
-                <button onclick="tancarModal()" style="background:#999;display:inline-flex;">Tancar</button>
+            <div style="padding:15px;background:#f9f9f9; display:flex; justify-content:space-between; align-items:center;">
+                <button onclick="eliminarTargeta()" style="background:#e74c3c; color:white; display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold;">🗑️ Eliminar targeta</button>
+                
+                <div style="display:flex; gap:10px;">
+                    <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex;">✅ Fet</button>
+                    <button onclick="tancarModal()" style="background:#999;display:inline-flex;">Tancar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -648,19 +679,40 @@
         let elementEditant = null;
         let dadesDomino = []; 
         let globalSchoolLogoSrc = ''; 
+        let memoriaEdicions = {}; // Cervell per recordar edicions
 
-        // INICIALITZAR LOGO PERMANENT I EMAIL
+        // Variables de l'Editor d'Imatges (Canvas)
+        let editorCanvas, editorCtx;
+        let editorImgObj = new Image();
+        editorImgObj.crossOrigin = "Anonymous"; // Permet exportar imatges descarregades
+        let currentDrawings = [];
+        let isDrawing = false;
+        let drawColor = '#e74c3c';
+
         window.onload = function() {
+            document.getElementById('any-actual').innerText = new Date().getFullYear();
             if (typeof RUTA_LOGO_PICTOJOCS !== 'undefined' && RUTA_LOGO_PICTOJOCS.trim() !== '') {
                 document.getElementById('app-logo-header').src = RUTA_LOGO_PICTOJOCS;
                 document.getElementById('print-mini-logo').src = RUTA_LOGO_PICTOJOCS;
                 document.getElementById('print-mini-logo-back').src = RUTA_LOGO_PICTOJOCS;
             }
-            
-            // Configurar el botó de correu
             const btnEmail = document.getElementById('btn-email');
             if(btnEmail && typeof EMAIL_CONTACTE !== 'undefined') {
                 btnEmail.href = `mailto:${EMAIL_CONTACTE}?subject=Suggeriment PictoJocs`;
+            }
+
+            // Iniciar Canvas Editor
+            editorCanvas = document.getElementById('canvasEditor');
+            if(editorCanvas) {
+                editorCtx = editorCanvas.getContext('2d');
+                editorCanvas.addEventListener('mousedown', startDrawing);
+                editorCanvas.addEventListener('mousemove', draw);
+                window.addEventListener('mouseup', stopDrawing);
+                
+                // Suport tàctil per dibuixar amb el dit
+                editorCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDrawing(e.touches[0]); }, {passive: false});
+                editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); draw(e.touches[0]); }, {passive: false});
+                window.addEventListener('touchend', stopDrawing);
             }
         };
 
@@ -740,7 +792,11 @@
             const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
             
             if (dadesDomino.length === 0 || dadesDomino.length !== llista.length) {
-                dadesDomino = llista.map(p => ({ txt: p, img: null })); 
+                dadesDomino = llista.map(p => {
+                    let mem = memoriaEdicions[p];
+                    if (mem) return { txt: mem.htmlFinal, imgUrl: mem.imgUrl, isHtml: true };
+                    return { txt: p, imgUrl: null, isHtml: false };
+                }); 
             }
 
             if (mode === 'targeta') { 
@@ -749,11 +805,19 @@
                 contenidorRevers.classList.add('mode-targeta-back');
                 
                 llista.forEach((paraula, i) => {
-                    contenidor.appendChild(crearElementTargeta(paraula, i, 'front'));
+                    let mem = memoriaEdicions[paraula];
+                    const divFront = crearElementTargeta(paraula, i, 'front');
                     const divBack = crearElementTargeta(paraula, i, 'back');
+                    
+                    if (mem) {
+                        divFront.querySelector('img').src = mem.imgUrl;
+                        divFront.querySelector('img').style.opacity = '1';
+                        divBack.querySelector('.contingut-back').innerHTML = mem.htmlFinal;
+                    } else {
+                        buscarArasaacAuto(paraula, i);
+                    }
+                    contenidor.appendChild(divFront);
                     contenidorRevers.appendChild(divBack);
-                    setTimeout(() => autoMidaText(divBack.querySelector('.contingut-back')), 0);
-                    buscarArasaacAuto(paraula, i);
                 });
 
             } else if (mode === 'memory') {
@@ -761,24 +825,29 @@
                 contenidor.classList.add('mode-memory-front');
                 
                 llista.forEach((paraula, i) => {
+                    let mem = memoriaEdicions[paraula];
+                    
                     const fitxaImg = crearElementTargeta(paraula, i, 'front');
                     fitxaImg.classList.add('nomes-img');
-                    contenidor.appendChild(fitxaImg);
-
+                    
                     const fitxaText = crearElementTargeta(paraula, i, 'front');
                     fitxaText.classList.add('nomes-text');
                     const pText = fitxaText.querySelector('p');
                     pText.id = `text-memory-${i}`; 
+
+                    if (mem) {
+                        fitxaImg.querySelector('img').src = mem.imgUrl;
+                        fitxaImg.querySelector('img').style.opacity = '1';
+                        pText.innerHTML = mem.htmlFinal;
+                    } else {
+                        buscarArasaacAuto(paraula, i); 
+                    }
+
+                    contenidor.appendChild(fitxaImg);
                     contenidor.appendChild(fitxaText);
-
                     contenidorRevers.appendChild(crearElementReversLogoPictojocs());
                     contenidorRevers.appendChild(crearElementReversLogoPictojocs());
-
-                    buscarArasaacAuto(paraula, i); 
                 });
-                setTimeout(() => {
-                    document.querySelectorAll('.nomes-text p').forEach(el => autoMidaText(el));
-                }, 50);
 
             } else if (mode === 'domino') {
                 contenidor.classList.add('mode-domino');
@@ -796,6 +865,7 @@
                     img.id = `img-${i}-domino`;
                     if(dadesDomino[i] && dadesDomino[i].imgUrl) {
                         img.src = dadesDomino[i].imgUrl;
+                        img.style.opacity = '1';
                     } else {
                         img.src = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png';
                         buscarArasaacDomino(paraulaOriginal, i); 
@@ -806,7 +876,11 @@
 
                     const divText = document.createElement('div');
                     divText.className = 'text-domino';
-                    divText.innerHTML = `<span class="fila-paraula">${textMostrar}</span>`;
+                    if (dadesDomino[i] && dadesDomino[i].isHtml) {
+                        divText.innerHTML = dadesDomino[i].txt;
+                    } else {
+                        divText.innerHTML = `<span class="fila-paraula">${textMostrar}</span>`;
+                    }
 
                     div.appendChild(img);
                     div.appendChild(separador);
@@ -818,13 +892,20 @@
                     div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
                     
                     contenidor.appendChild(div);
-                    setTimeout(() => autoMidaText(divText), 0);
                 }
 
             } else {
                 llista.forEach((paraula, i) => {
-                    contenidor.appendChild(crearElementTargeta(paraula, i, 'front'));
-                    buscarArasaacAuto(paraula, i);
+                    let mem = memoriaEdicions[paraula];
+                    const targeta = crearElementTargeta(paraula, i, 'front');
+                    if(mem) {
+                        targeta.querySelector('img').src = mem.imgUrl;
+                        targeta.querySelector('img').style.opacity = '1';
+                        targeta.querySelector('p').innerHTML = mem.htmlFinal;
+                    } else {
+                        buscarArasaacAuto(paraula, i);
+                    }
+                    contenidor.appendChild(targeta);
                 });
             }
             actualitzarEstils();
@@ -849,7 +930,7 @@
 
             fitxes.forEach((f, index) => {
                 const img = f.querySelector('img').src;
-                const txt = f.querySelector('.text-domino').innerText;
+                const txt = f.querySelector('.text-domino').innerHTML;
                 actualImages.push(img);
                 actualTexts.push(txt);
             });
@@ -861,7 +942,8 @@
             for(let i=0; i<actualImages.length; i++) {
                 dadesDomino.push({
                     imgUrl: actualImages[i],
-                    txt: actualTexts[i]
+                    txt: actualTexts[i],
+                    isHtml: true
                 });
             }
             generarDocument();
@@ -875,7 +957,9 @@
         function crearElementTargeta(paraula, index, tipus) {
             const div = document.createElement('div');
             div.className = 'pictograma';
-            div.draggable = true; div.dataset.index = index; 
+            div.draggable = true; 
+            div.dataset.index = index; 
+            div.dataset.original = paraula; // Molt important per recordar edicions
             
             div.addEventListener('click', () => { if(!div.classList.contains('dragging')) obrirModal(div); });
             div.addEventListener('dragstart', () => { div.classList.add('dragging'); });
@@ -943,11 +1027,17 @@
             });
         });
 
+        // FUNCIÓ ACTUALITZADA: Assegura que el text no sobresurt mai
         function autoMidaText(container) {
             if (!container) return;
-            let mida = 60; container.style.fontSize = mida + 'px';
-            while ((container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) && mida > 10) {
-                mida--; container.style.fontSize = mida + 'px';
+            let mida = 60; 
+            container.style.fontSize = mida + 'px';
+            container.style.lineHeight = '1.1';
+            
+            // Rebaixa la mida fins a un mínim de 8px perquè càpiga
+            while ((container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) && mida > 8) {
+                mida--; 
+                container.style.fontSize = mida + 'px';
             }
         }
 
@@ -966,7 +1056,7 @@
                 const d = await r.json();
                 let src = d.length ? `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_500.png` : "https://static.arasaac.org/images/no_results.png";
                 const imgEl = document.getElementById(`img-${index}-domino`);
-                if(imgEl) imgEl.src = src;
+                if(imgEl) { imgEl.src = src; imgEl.style.opacity = '1'; }
                 if(dadesDomino[index]) dadesDomino[index].imgUrl = src;
             } catch(e){}
         }
@@ -981,17 +1071,20 @@
             doc.setProperty('--tipus-font', document.getElementById('selector-font').value);
             const paper = document.getElementById('mida-paper').value;
             if (paper === 'a3') {
-                doc.setProperty('--width-paper', '297mm');
-                doc.setProperty('--height-paper', '420mm');
+                doc.setProperty('--width-paper', '297mm'); doc.setProperty('--height-paper', '420mm');
             } else {
-                doc.setProperty('--width-paper', '210mm');
-                doc.setProperty('--height-paper', '297mm');
+                doc.setProperty('--width-paper', '210mm'); doc.setProperty('--height-paper', '297mm');
             }
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
             
-            if(document.getElementById('selector-mode').value === 'targeta') document.querySelectorAll('.contingut-back').forEach(el => autoMidaText(el));
-            if(document.getElementById('selector-mode').value === 'memory') document.querySelectorAll('.nomes-text p').forEach(el => autoMidaText(el));
-            if(document.getElementById('selector-mode').value === 'domino') document.querySelectorAll('.text-domino').forEach(el => autoMidaText(el));
+            // Timeout necessari perquè el navegador renderitzi el nou tamany abans de calcular els textos
+            setTimeout(() => {
+                const mode = document.getElementById('selector-mode').value;
+                if(mode === 'targeta') document.querySelectorAll('.contingut-back').forEach(el => autoMidaText(el));
+                else if(mode === 'memory') document.querySelectorAll('.nomes-text p').forEach(el => autoMidaText(el));
+                else if(mode === 'domino') document.querySelectorAll('.text-domino').forEach(el => autoMidaText(el));
+                else document.querySelectorAll('.pictograma p').forEach(el => autoMidaText(el));
+            }, 100);
         }
 
         function obrirModal(el) {
@@ -1003,6 +1096,7 @@
             let maxInputs = 2; 
             let classeLayout = "dues-paraules";
 
+            // Configuració files/columnes del modal (No tocar com m'has demanat)
             if (mode === 'targeta' || mode === 'memory') {
                 maxInputs = 5; 
                 classeLayout = "cinc-paraules";
@@ -1016,11 +1110,8 @@
             } else if (mode === 'targeta') {
                 containerTxt = document.getElementById(`text-${index}-back`);
             } else if (mode === 'memory') {
-                 if (el.classList.contains('nomes-text')) {
-                    containerTxt = el.querySelector('p');
-                 } else {
-                    containerTxt = el.querySelector('p');
-                 }
+                 if (el.classList.contains('nomes-text')) { containerTxt = el.querySelector('p'); } 
+                 else { containerTxt = el.querySelector('p'); }
             } else {
                 containerTxt = el.querySelector('p');
             }
@@ -1052,10 +1143,28 @@
             if(paraulaCerca) buscarArasaacModal();
         }
 
+        // ESBORRAR TARGETA (Botó vermell)
+        function eliminarTargeta() {
+            if(!elementEditant) return;
+            if(confirm("Segur que vols eliminar aquesta targeta? Això la traurà de la llista de paraules.")) {
+                const original = elementEditant.dataset.original;
+                let llista = document.getElementById('llista-paraules').value.split(',').map(p=>p.trim()).filter(p=>p!=='');
+                
+                const idx = llista.indexOf(original);
+                if(idx > -1) {
+                    llista.splice(idx, 1);
+                    document.getElementById('llista-paraules').value = llista.join(', ');
+                    tancarModal();
+                    generarDocument(); // Regenera tot sense la paraula
+                }
+            }
+        }
+
         function guardarTancar() {
             if(elementEditant) {
                 const mode = document.getElementById('selector-mode').value;
                 const index = elementEditant.dataset.index;
+                const original = elementEditant.dataset.original;
                 
                 let nousTextos = [];
                 document.querySelectorAll('.input-text-modal').forEach(inp => {
@@ -1065,10 +1174,27 @@
                 let htmlFinal = nousTextos.map(t => `<div class="fila-paraula">${t}</div>`).join('');
                 if(htmlFinal === "") htmlFinal = `<div class="fila-paraula">&nbsp;</div>`;
 
+                // Desa l'edició a la memòria perquè al donar-li a Generar no s'esborri
+                let currentImgUrl = null;
+                if (mode === 'domino') {
+                    currentImgUrl = elementEditant.querySelector('img').src;
+                } else if (mode === 'memory') {
+                    const imgCard = document.querySelector(`.mode-memory-front .nomes-img[data-index="${index}"]`);
+                    if (imgCard) currentImgUrl = imgCard.querySelector('img').src;
+                } else {
+                    currentImgUrl = elementEditant.querySelector('img') ? elementEditant.querySelector('img').src : null;
+                }
+                
+                memoriaEdicions[original] = {
+                    htmlFinal: htmlFinal,
+                    imgUrl: currentImgUrl
+                };
+
+                // Actualitzem DOM
                 if (mode === 'domino') {
                     const tDiv = elementEditant.querySelector('.text-domino');
                     tDiv.innerHTML = htmlFinal; autoMidaText(tDiv);
-                    if(dadesDomino[index]) dadesDomino[index].txt = nousTextos.join(' ');
+                    if(dadesDomino[index]) { dadesDomino[index].txt = htmlFinal; dadesDomino[index].isHtml = true; }
                 } else if (mode === 'targeta') {
                     const tBack = document.getElementById(`text-${index}-back`);
                     tBack.innerHTML = htmlFinal; autoMidaText(tBack);
@@ -1076,14 +1202,13 @@
                     if(elementEditant.classList.contains('nomes-text')) {
                         const p = elementEditant.querySelector('p');
                         p.innerHTML = htmlFinal; autoMidaText(p);
-                    }
-                    else {
+                    } else {
                         const p = elementEditant.querySelector('p');
                         if(p) p.innerHTML = htmlFinal;
                     }
                 } else { 
                     const p = elementEditant.querySelector('p');
-                    p.innerHTML = htmlFinal; 
+                    p.innerHTML = htmlFinal; autoMidaText(p);
                 }
             }
             tancarModal();
@@ -1108,6 +1233,9 @@
                 } else if (mode === 'memory') {
                     if (elementEditant.classList.contains('nomes-img')) {
                          elementEditant.querySelector('img').src = src;
+                    } else {
+                         const imgCard = document.querySelector(`.mode-memory-front .nomes-img[data-index="${index}"]`);
+                         if(imgCard) imgCard.querySelector('img').src = src;
                     }
                 } else {
                     const img = document.getElementById(`img-${index}-front`);
@@ -1116,6 +1244,91 @@
             } 
         }
 
+        /* --- FUNCIONS DE L'EDITOR CANVAS (NOU) --- */
+        function setDrawColor(c) { drawColor = c; }
+        function clearDrawings() { currentDrawings = []; drawEditorCanvas(); }
+        
+        function startDrawing(e) {
+            isDrawing = true;
+            const rect = editorCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            currentDrawings.push({ color: drawColor, points: [{x, y}] });
+        }
+        function draw(e) {
+            if(!isDrawing) return;
+            const rect = editorCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            currentDrawings[currentDrawings.length-1].points.push({x, y});
+            drawEditorCanvas();
+        }
+        function stopDrawing() { isDrawing = false; }
+        
+        function obrirTabEdicio() {
+            canviarPestanya('tab-dibuix');
+            let currentSrc = '';
+            const mode = document.getElementById('selector-mode').value;
+            if (mode === 'domino') {
+                currentSrc = elementEditant.querySelector('img').src;
+            } else if (mode === 'memory') {
+                if (elementEditant.classList.contains('nomes-img')) { currentSrc = elementEditant.querySelector('img').src; }
+                else {
+                    const index = elementEditant.dataset.index;
+                    const imgCard = document.querySelector(`.mode-memory-front .nomes-img[data-index="${index}"]`);
+                    if(imgCard) currentSrc = imgCard.querySelector('img').src;
+                }
+            } else {
+                const img = elementEditant.querySelector('img');
+                if(img) currentSrc = img.src;
+            }
+            
+            if(currentSrc) {
+                editorImgObj.src = currentSrc;
+                editorImgObj.onload = () => {
+                    document.getElementById('ed-scale').value = 1;
+                    document.getElementById('ed-x').value = 0;
+                    document.getElementById('ed-y').value = 0;
+                    currentDrawings = [];
+                    drawEditorCanvas();
+                };
+            }
+        }
+        
+        function drawEditorCanvas() {
+            editorCtx.clearRect(0, 0, 300, 300);
+            
+            const scale = parseFloat(document.getElementById('ed-scale').value);
+            const dx = parseFloat(document.getElementById('ed-x').value);
+            const dy = parseFloat(document.getElementById('ed-y').value);
+            
+            editorCtx.save();
+            editorCtx.translate(150 + dx, 150 + dy);
+            editorCtx.scale(scale, scale);
+            if (editorImgObj.src) {
+                const aspect = editorImgObj.width / editorImgObj.height;
+                let w = 280, h = 280;
+                if (aspect > 1) h = w / aspect; else w = h * aspect;
+                editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h);
+            }
+            editorCtx.restore();
+            
+            editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; editorCtx.lineWidth = 4;
+            currentDrawings.forEach(stroke => {
+                editorCtx.strokeStyle = stroke.color;
+                editorCtx.beginPath();
+                stroke.points.forEach((p, i) => { if(i===0) editorCtx.moveTo(p.x, p.y); else editorCtx.lineTo(p.x, p.y); });
+                editorCtx.stroke();
+            });
+        }
+        
+        function aplicarEdicioImatge() {
+            const dataUrl = editorCanvas.toDataURL('image/png');
+            aplicarImatge(dataUrl);
+            canviarPestanya('tab-arasaac'); 
+        }
+
+        /* --- APIS EXTERNES --- */
         async function traduirParaula() {
             const word = document.getElementById('input-modal-0').value;
             const divRes = document.getElementById('resultats-traductor');
@@ -1142,4 +1355,3 @@
     </script>
 </body>
 </html>
-
