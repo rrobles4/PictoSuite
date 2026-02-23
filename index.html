@@ -183,7 +183,7 @@
         
         .curs-print-wrapper { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
         
-        /* LOGO IMPRESSIÓ: Reduït a 70px com demanaves */
+        /* LOGO IMPRESSIÓ: 70px */
         .big-logo-print { height: 70px; width: auto; opacity: 1; }
         .curs-print { font-size: 1.2em; font-weight: bold; color: #555; text-align: right; margin-top: 5px;}
 
@@ -300,13 +300,19 @@
         
         .input-text-modal { font-size: 1.1em; text-align: center; border: 2px solid #ddd; padding: 8px; border-radius: 6px; box-sizing: border-box; }
         
+        /* FIX ESTRICTE COLUMNES: Dues a la primera fila, tres a la segona per defecte (50% i 33%) */
         .dues-paraules .input-text-modal { width: 48%; }
-        .cinc-paraules .input-text-modal { width: 48%; margin-bottom: 5px; }
+        
+        .cinc-paraules .input-text-modal:nth-child(1),
+        .cinc-paraules .input-text-modal:nth-child(2) { 
+            width: calc(50% - 6px); 
+        }
+        .cinc-paraules .input-text-modal:nth-child(n+3) { 
+            width: calc(33.33% - 8px); 
+        }
         
         .cerca-wrapper { display: flex; gap: 8px; margin-bottom: 15px; }
         .btn-cerca-modal { background: var(--color-principal); border-radius: 8px; padding: 10px 20px; font-size: 1em; flex-shrink: 0; color: white; border: none; cursor: pointer; }
-        .btn-cerca-wiki { background: var(--color-secundari); }
-        .btn-cerca-open { background: #333; }
         .btn-cerca-trad { background: #8e44ad; }
         .resultats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); gap: 10px; margin-top: 15px; }
         .resultats-grid img { width: 100%; height: 90px; object-fit: contain; border: 1px solid #eee; border-radius: 8px; cursor: pointer; padding: 5px; }
@@ -568,8 +574,6 @@
             <div class="modal-tabs">
                 <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 ARASAAC</button>
                 <button class="tab-btn" onclick="canviarPestanya('tab-traductor')">🌍 Traductor</button>
-                <button class="tab-btn" onclick="canviarPestanya('tab-wiki')">📷 Wiki</button>
-                <button class="tab-btn" onclick="canviarPestanya('tab-simbols')">✒️ Símbols</button>
                 <button class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar/IA</button>
                 <button class="tab-btn" onclick="obrirTabEdicio()">🎨 Editar</button>
             </div>
@@ -586,17 +590,9 @@
                     <div class="cerca-wrapper"><button class="btn-cerca-modal btn-cerca-trad" onclick="traduirParaula()" style="width:100%">🌍 Traduir</button></div>
                     <div id="resultats-traductor" class="grid-traduccions"></div>
                 </div>
-                <div id="tab-wiki" class="contingut-tab" style="display:none;">
-                    <div class="cerca-wrapper"><input id="input-wiki" onkeyup="if(event.key==='Enter') buscarWikiImages()"><button class="btn-cerca-modal btn-cerca-wiki" onclick="buscarWikiImages()">📷 Cerca</button></div>
-                    <div id="resultats-wiki" class="resultats-grid"></div>
-                </div>
-                <div id="tab-simbols" class="contingut-tab" style="display:none;">
-                    <div class="cerca-wrapper"><input id="input-open" onkeyup="if(event.key==='Enter') buscarOpenSymbols()"><button class="btn-cerca-modal btn-cerca-open" onclick="buscarOpenSymbols()">✒️ Cerca</button></div>
-                    <div id="resultats-open" class="resultats-grid"></div>
-                </div>
                 <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
                     <p>Puja una imatge pròpia:</p><input type="file" accept="image/*" onchange="pujarImatge(this)">
-                    <hr style="margin:20px0; border:0; border-top:1px solid #eee;">
+                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
                     <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">🎨 Generar amb IA</button>
                 </div>
                 
@@ -1474,8 +1470,6 @@
         }
         function copiarText(t) { navigator.clipboard.writeText(t); const o = document.getElementById('toast'); o.style.display='block'; setTimeout(()=>o.style.display='none', 2000); }
         async function buscarArasaacModal() { const q=document.getElementById('input-arasaac').value; renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac'); }
-        async function buscarWikiImages() { const q=document.getElementById('input-wiki').value; const r=await fetch(`https://ca.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrnamespace=0&gsrlimit=10&prop=pageimages&piprop=thumbnail&pithumbsize=300&format=json&origin=*`).then(res=>res.json()); renderResultats(r.query?.pages ? Object.values(r.query.pages).filter(p=>p.thumbnail).map(p=>p.thumbnail.source) : [], 'resultats-wiki'); }
-        async function buscarOpenSymbols() { const q=document.getElementById('input-open').value; const d=await fetch(`https://www.opensymbols.org/api/v1/symbols/search?q=${encodeURIComponent(q)}`).then(r=>r.json()); renderResultats(d.slice(0,12).map(x=>x.image_url), 'resultats-open'); }
         function renderResultats(u,d) { const div=document.getElementById(d); div.innerHTML=''; u.forEach(url=>{const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i);}); }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
     </script>
