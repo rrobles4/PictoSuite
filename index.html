@@ -122,7 +122,8 @@
         .btn-generar { background-color: var(--color-principal); flex: 2; }
         .btn-imprimir { background-color: var(--color-accio); flex: 1; }
         .btn-ia { background-color: #f5b041; flex: 1; }
-        .btn-domino { background-color: var(--color-secundari); flex: 2; display: none; animation: popIn 0.3s ease; }
+        /* Botó dominó en color lila suau */
+        .btn-domino { background-color: #c39bd3; flex: 2; display: none; animation: popIn 0.3s ease; }
         @keyframes popIn { from {transform: scale(0.8); opacity: 0;} to {transform: scale(1); opacity: 1;} }
 
         .instruccions { background-color: #e8f6f3; border: 1px solid #a2d9ce; color: #16a085; padding: 8px; border-radius: 8px; margin-top: 15px; font-size: 0.9em; text-align: center; }
@@ -216,8 +217,6 @@
         .text-traduit { font-weight: bold; font-size: 22px; text-transform: uppercase; color: #000; }
         .text-alumne { font-size: 16px; color: #666; font-style: italic; margin-top: 2px; font-weight: normal; text-transform: none;}
         
-        .btn-settings { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; transition: transform 0.2s; z-index: 100; }
-        .btn-settings:hover { transform: scale(1.1); }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--color-principal); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left:10px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -317,11 +316,11 @@
 
     <div id="view-pictojocs">
         <div class="configuracio no-print">
-            <button class="btn-settings" onclick="obrirSettings()" title="Mode IA Avançat">🤖</button>
             
             <div class="projecte-controls">
-                <div style="flex-grow: 1; text-align: left;">
+                <div style="flex-grow: 1; text-align: left; display: flex; gap: 10px;">
                     <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ Anar a PictoTraductor</button>
+                    <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 </div>
                 <button class="btn-mini" onclick="desarProjecte()">💾 Desar Projecte</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Carregar Projecte</button>
@@ -487,10 +486,10 @@
 
     <div id="view-pictotraductor" style="display: none;">
         <div class="configuracio no-print">
-            <button class="btn-settings" onclick="obrirSettings()" title="Mode IA Avançat">🤖</button>
             
-            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px;">
+            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 10px;">
                 <button class="btn-nav-app" style="background:#4a90e2;" onclick="switchAppView('pictojocs')">🔙 Anar a PictoJocs</button>
+                <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
             </div>
 
             <div class="header-app">
@@ -1044,7 +1043,7 @@
         function obrirModalPromptIA() {
             const apiKey = localStorage.getItem('gemini_api_key');
             if (!apiKey) {
-                alert("⚠️ Encara no has afegit la teva clau API!\n\nPer utilitzar aquest mètode intel·ligent, clica a la icona del robot (🤖) de dalt a la dreta i enganxa-hi la teva clau gratuïta de Google Gemini.");
+                alert("⚠️ Encara no has afegit la teva clau API!\n\nPer utilitzar aquest mètode intel·ligent, clica a la icona '🤖 Configuració IA' de dalt a la dreta i enganxa-hi la teva clau gratuïta de Google Gemini.");
                 return;
             }
             document.getElementById('ia-prompt-text').value = '';
