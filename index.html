@@ -21,7 +21,6 @@
             --width-paper: 210mm;
             --height-paper: 297mm;
             
-            /* Variables de color per la targeta */
             --targeta-bg: #ffffff;
             --targeta-border: #000000;
             --targeta-text: #000000;
@@ -37,7 +36,6 @@
             background-size: 20px 20px;
         }
 
-        /* --- CONFIGURACIÓ (NO PRINT) --- */
         .configuracio {
             background-color: white; padding: 20px; border-radius: 15px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 950px;
@@ -45,7 +43,7 @@
             position: relative;
         }
 
-        /* Projecte Controls */
+        /* Projecte Controls (Amb botó de navegació a PictoTraductor) */
         .projecte-controls {
             display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px;
         }
@@ -56,7 +54,6 @@
         }
         .btn-mini:hover { background: #d5dbdb; }
 
-        /* Header amb Logo APP */
         .header-app {
             display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px;
         }
@@ -92,7 +89,6 @@
         }
         .control-estil { display: flex; flex-direction: column; min-width: 90px; }
         
-        /* Contenidor de colors */
         .colors-container {
             flex: 1.2; border-left: 2px solid #d1d9e6; padding-left: 15px;
             display: flex; flex-direction: column;
@@ -374,6 +370,9 @@
     <div class="configuracio no-print">
         
         <div class="projecte-controls">
+            <div style="flex-grow: 1; text-align: left;">
+                <button class="btn-mini" style="background:#8e44ad; color:white; border:none; padding: 8px 15px; font-size: 1em;" onclick="window.location.href='comunicador.html'">🗣️ Anar a PictoTraductor</button>
+            </div>
             <button class="btn-mini" onclick="desarProjecte()">💾 Desar Projecte</button>
             <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Carregar Projecte</button>
             <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
@@ -651,7 +650,7 @@
         let currentTool = 'freehand';
         let startX, startY, currentX, currentY;
         
-        // Variables per moure dibuixos
+        // Drag variables per a les formes
         let isDraggingShape = false;
         let draggedShapeIndex = -1;
         let lastMouseX = 0;
@@ -1312,7 +1311,7 @@
             } 
         }
 
-        /* --- FUNCIONS DE L'EDITOR CANVAS (AMB MOVIMENT DE DIBUIXOS) --- */
+        /* --- FUNCIONS DE L'EDITOR CANVAS (AMB MOVIMENT) --- */
         function setTool(tool) {
             currentTool = tool;
             document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu'));
@@ -1335,35 +1334,32 @@
             return { x: clientX - rect.left, y: clientY - rect.top };
         }
 
-        function getShapePath(shape) {
-            let p = new Path2D();
+        function buildPath(ctx, shape) {
+            ctx.beginPath();
             if (shape.type === 'freehand') {
-                shape.points.forEach((pt, i) => { if(i===0) p.moveTo(pt.x, p.y); else p.lineTo(pt.x, p.y); });
+                shape.points.forEach((p, i) => { if(i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
             } else if (shape.type === 'rect') {
-                p.rect(shape.start.x, shape.start.y, shape.end.x - shape.start.x, shape.end.y - shape.start.y);
+                ctx.rect(shape.start.x, shape.start.y, shape.end.x - shape.start.x, shape.end.y - shape.start.y);
             } else if (shape.type === 'circle') {
                 let r = Math.sqrt(Math.pow(shape.end.x - shape.start.x, 2) + Math.pow(shape.end.y - shape.start.y, 2));
-                p.arc(shape.start.x, shape.start.y, r, 0, 2 * Math.PI);
+                ctx.arc(shape.start.x, shape.start.y, r, 0, 2 * Math.PI);
             } else if (shape.type === 'arrow') {
-                let headlen = 15; 
-                let dx = shape.end.x - shape.start.x; 
-                let dy = shape.end.y - shape.start.y; 
-                let angle = Math.atan2(dy, dx);
-                p.moveTo(shape.start.x, shape.start.y); p.lineTo(shape.end.x, shape.end.y);
-                p.lineTo(shape.end.x - headlen * Math.cos(angle - Math.PI / 6), shape.end.y - headlen * Math.sin(angle - Math.PI / 6));
-                p.moveTo(shape.end.x, shape.end.y);
-                p.lineTo(shape.end.x - headlen * Math.cos(angle + Math.PI / 6), shape.end.y - headlen * Math.sin(angle + Math.PI / 6));
+                let headlen = 15; let dx = shape.end.x - shape.start.x; let dy = shape.end.y - shape.start.y; let angle = Math.atan2(dy, dx);
+                ctx.moveTo(shape.start.x, shape.start.y); ctx.lineTo(shape.end.x, shape.end.y);
+                ctx.lineTo(shape.end.x - headlen * Math.cos(angle - Math.PI / 6), shape.end.y - headlen * Math.sin(angle - Math.PI / 6));
+                ctx.moveTo(shape.end.x, shape.end.y);
+                ctx.lineTo(shape.end.x - headlen * Math.cos(angle + Math.PI / 6), shape.end.y - headlen * Math.sin(angle + Math.PI / 6));
             } else if (shape.type === 'cross') {
-                p.moveTo(shape.start.x, shape.start.y); p.lineTo(shape.end.x, shape.end.y);
-                p.moveTo(shape.end.x, shape.start.y); p.lineTo(shape.start.x, shape.end.y);
+                ctx.moveTo(shape.start.x, shape.start.y); ctx.lineTo(shape.end.x, shape.end.y);
+                ctx.moveTo(shape.end.x, shape.start.y); ctx.lineTo(shape.start.x, shape.end.y);
             }
-            return p;
         }
 
         function getHitShapeIndex(x, y) {
-            editorCtx.lineWidth = 15; // Marge d'error per agafar-ho bé
+            editorCtx.lineWidth = 15; 
             for (let i = currentDrawings.length - 1; i >= 0; i--) {
-                if (editorCtx.isPointInStroke(getShapePath(currentDrawings[i]), x, y)) return i;
+                buildPath(editorCtx, currentDrawings[i]);
+                if (editorCtx.isPointInStroke(x, y)) return i;
             }
             return -1;
         }
@@ -1371,40 +1367,30 @@
         function startDrawingCanvas(e) {
             const pos = getMousePos(e);
             let hitIdx = getHitShapeIndex(pos.x, pos.y);
-            
             if (hitIdx !== -1) {
-                isDraggingShape = true;
-                draggedShapeIndex = hitIdx;
-                lastMouseX = pos.x; lastMouseY = pos.y;
+                isDraggingShape = true; draggedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y;
             } else {
-                isDrawing = true;
-                startX = pos.x; startY = pos.y;
-                currentX = pos.x; currentY = pos.y;
-                if (currentTool === 'freehand') {
-                    currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] });
-                }
+                isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y;
+                if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] });
             }
         }
-        
+
         function drawCanvas(e) {
             const pos = getMousePos(e);
             if (isDraggingShape) {
                 let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY;
                 let shape = currentDrawings[draggedShapeIndex];
-                if (shape.type === 'freehand') {
-                    shape.points.forEach(pt => { pt.x += dx; pt.y += dy; });
-                } else {
-                    shape.start.x += dx; shape.start.y += dy;
-                    shape.end.x += dx; shape.end.y += dy;
-                }
+                if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; });
+                else { shape.start.x += dx; shape.start.y += dy; shape.end.x += dx; shape.end.y += dy; }
                 lastMouseX = pos.x; lastMouseY = pos.y;
                 drawEditorCanvas();
             } else if (isDrawing) {
                 currentX = pos.x; currentY = pos.y;
-                if (currentTool === 'freehand') {
-                    currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY});
-                }
+                if (currentTool === 'freehand') currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY});
                 drawEditorCanvas();
+            } else {
+                let hitIdx = getHitShapeIndex(pos.x, pos.y);
+                editorCanvas.style.cursor = hitIdx !== -1 ? 'pointer' : 'crosshair';
             }
         }
 
@@ -1413,10 +1399,8 @@
                 isDraggingShape = false; draggedShapeIndex = -1;
             } else if (isDrawing) {
                 isDrawing = false;
-                if (currentTool !== 'freehand') {
-                    if (startX !== currentX || startY !== currentY) {
-                        currentDrawings.push({ type: currentTool, color: drawColor, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} });
-                    }
+                if (currentTool !== 'freehand' && (startX !== currentX || startY !== currentY)) {
+                    currentDrawings.push({ type: currentTool, color: drawColor, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} });
                 }
                 drawEditorCanvas();
             }
@@ -1441,13 +1425,13 @@
             }
             
             if(currentSrc) {
+                if (currentSrc.indexOf('static.arasaac.org') !== -1 && currentSrc.indexOf('?') === -1) {
+                    currentSrc += '?c=' + new Date().getTime();
+                }
                 editorImgObj.onload = () => {
-                    document.getElementById('ed-scale').value = 1;
-                    document.getElementById('ed-x').value = 0;
-                    document.getElementById('ed-y').value = 0;
-                    currentDrawings = [];
-                    setTool('freehand'); 
-                    drawEditorCanvas();
+                    document.getElementById('ed-scale').value = 1; document.getElementById('ed-x').value = 0; document.getElementById('ed-y').value = 0;
+                    currentDrawings = []; setTool('freehand'); drawEditorCanvas();
+                    editorImgObj.onload = null;
                 };
                 editorImgObj.src = currentSrc;
                 if(editorImgObj.complete) editorImgObj.onload();
@@ -1456,16 +1440,13 @@
 
         function drawEditorCanvas() {
             editorCtx.clearRect(0, 0, 300, 300);
-            const scale = parseFloat(document.getElementById('ed-scale').value);
-            const dx = parseFloat(document.getElementById('ed-x').value);
-            const dy = parseFloat(document.getElementById('ed-y').value);
+            const scale = parseFloat(document.getElementById('ed-scale').value); const dx = parseFloat(document.getElementById('ed-x').value); const dy = parseFloat(document.getElementById('ed-y').value);
             
             editorCtx.save();
             editorCtx.translate(150 + dx, 150 + dy);
             editorCtx.scale(scale, scale);
             if (editorImgObj.src) {
-                const aspect = editorImgObj.width / editorImgObj.height;
-                let w = 280, h = 280;
+                const aspect = editorImgObj.width / editorImgObj.height; let w = 280, h = 280;
                 if (aspect > 1) h = w / aspect; else w = h * aspect;
                 editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h);
             }
@@ -1474,16 +1455,16 @@
             editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; 
             
             currentDrawings.forEach(shape => {
-                editorCtx.strokeStyle = shape.color;
-                editorCtx.lineWidth = 4;
-                editorCtx.stroke(getShapePath(shape));
+                editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4;
+                buildPath(editorCtx, shape);
+                editorCtx.stroke();
             });
 
             if(isDrawing && currentTool !== 'freehand') {
-                editorCtx.strokeStyle = drawColor;
-                editorCtx.lineWidth = 4;
+                editorCtx.strokeStyle = drawColor; editorCtx.lineWidth = 4;
                 let tempShape = { type: currentTool, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} };
-                editorCtx.stroke(getShapePath(tempShape));
+                buildPath(editorCtx, tempShape);
+                editorCtx.stroke();
             }
         }
         
