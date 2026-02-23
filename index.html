@@ -326,13 +326,9 @@
         .copy-hint { font-size: 0.8em; color: #27ae60; opacity: 0; transition: 0.2s;}
         .item-traduccio:hover .copy-hint { opacity: 1; }
 
-        .toolbar-dibuix {
-            display: flex; gap: 8px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; justify-content: center;
-        }
-        @media (min-width: 600px) {
-            .toolbar-dibuix { flex-wrap: nowrap; }
-        }
-
+        /* Estils Color Editor Canvas PictoJocs (Actualitzats) */
+        .toolbar-dibuix { display: flex; gap: 8px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        @media (min-width: 600px) { .toolbar-dibuix { flex-wrap: nowrap; } }
         .btn-color-dibuix { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; flex-shrink: 0;}
         .btn-color-dibuix:hover { transform: scale(1.1); }
         .btn-tool { background: #fff; border: 1px solid #ccc; font-size: 1.2em; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: 0.2s; flex-shrink: 0;}
@@ -592,7 +588,7 @@
                 </div>
                 <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
                     <p>Puja una imatge pròpia:</p><input type="file" accept="image/*" onchange="pujarImatge(this)">
-                    <hr style="margin:20px0; border:0; border-top:1px solid #eee;">
+                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
                     <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">🎨 Generar amb IA</button>
                 </div>
                 
@@ -607,9 +603,10 @@
                         <div class="toolbar-dibuix">
                             <span style="font-size:0.9em; color:#555; font-weight:bold;">Eina:</span>
                             <button id="tool-freehand" class="btn-tool actiu" onclick="setTool('freehand')" title="Dibuix Lliure">〰️</button>
-                            <button id="tool-rect" class="btn-tool" onclick="setTool('rect')" title="Quadrat">⬛</button>
+                            <button id="tool-rect" class="btn-tool" onclick="setTool('rect')" title="Quadrat">🔲</button>
                             <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
                             <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
+                            <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
                             
                             <div style="width:2px; height:20px; background:#ccc; margin:0 2px;"></div> 
                             
@@ -631,8 +628,8 @@
             <div style="padding:15px;background:#f9f9f9; display:flex; justify-content:space-between; align-items:center;">
                 <button onclick="eliminarTargeta()" style="background:#e74c3c; color:white; display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold;">🗑️ Eliminar targeta</button>
                 <div style="display:flex; gap:10px;">
-                    <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex;">✅ Fet</button>
-                    <button onclick="tancarModalSenseGuardar()" style="background:#999;display:inline-flex;">Cancel·lar</button>
+                    <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold; color:white;">✅ Fet</button>
+                    <button onclick="tancarModalSenseGuardar()" style="background:#999;display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold; color:white;">Cancel·lar</button>
                 </div>
             </div>
         </div>
@@ -1103,17 +1100,14 @@
             }, 100);
         }
 
-        // NOVA FUNCIÓ: Escalat independent per a cada paraula perquè aprofiti el màxim d'espai
         function autoMidaText(container) {
             if (!container) return;
             const files = container.querySelectorAll('.fila-paraula');
             
             if (files.length > 0) {
                 let sizes = [];
-                // Es desactiva el salt de línia temporalment per mesurar l'amplada real de la paraula
                 files.forEach(fila => fila.style.whiteSpace = 'nowrap');
                 
-                // 1. Escalar cada paraula per separat perquè ocupi l'amplada màxima de la targeta
                 files.forEach((fila, idx) => {
                     let mida = 60; 
                     fila.style.fontSize = mida + 'px'; 
@@ -1126,10 +1120,8 @@
                     sizes.push(mida);
                 });
 
-                // Es restaura perquè pugui fer salts de línia si cal
                 files.forEach(fila => fila.style.whiteSpace = 'normal');
 
-                // 2. Si un cop maximitzades l'alçada total se surt de la targeta, es redueixen totes de forma proporcional
                 while (container.scrollHeight > container.clientHeight) {
                     let reduced = false;
                     files.forEach((fila, idx) => {
@@ -1428,6 +1420,15 @@
             ctx.stroke();
         }
 
+        function drawCross(ctx, x1, y1, x2, y2) {
+            ctx.beginPath();
+            ctx.moveTo(x1, y1);
+            ctx.lineTo(x2, y2);
+            ctx.moveTo(x2, y1);
+            ctx.lineTo(x1, y2);
+            ctx.stroke();
+        }
+
         function drawEditorCanvas() {
             editorCtx.clearRect(0, 0, 300, 300);
             
@@ -1464,6 +1465,8 @@
                     editorCtx.stroke();
                 } else if (shape.type === 'arrow') {
                     drawArrow(editorCtx, shape.start.x, shape.start.y, shape.end.x, shape.end.y);
+                } else if (shape.type === 'cross') {
+                    drawCross(editorCtx, shape.start.x, shape.start.y, shape.end.x, shape.end.y);
                 }
             });
 
@@ -1479,6 +1482,8 @@
                     editorCtx.stroke();
                 } else if(currentTool === 'arrow') {
                     drawArrow(editorCtx, startX, startY, currentX, currentY);
+                } else if (currentTool === 'cross') {
+                    drawCross(editorCtx, startX, startY, currentX, currentY);
                 }
             }
         }
@@ -1508,6 +1513,8 @@
         }
         function copiarText(t) { navigator.clipboard.writeText(t); const o = document.getElementById('toast'); o.style.display='block'; setTimeout(()=>o.style.display='none', 2000); }
         async function buscarArasaacModal() { const q=document.getElementById('input-arasaac').value; renderResultats(await fetch(`https://api.arasaac.org/api/pictograms/${idiomaSeleccionat}/search/${encodeURIComponent(q)}`).then(r=>r.json()).then(d=>d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`)), 'resultats-arasaac'); }
+        async function buscarWikiImages() { const q=document.getElementById('input-wiki').value; const r=await fetch(`https://ca.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${encodeURIComponent(q)}&gsrnamespace=0&gsrlimit=10&prop=pageimages&piprop=thumbnail&pithumbsize=300&format=json&origin=*`).then(res=>res.json()); renderResultats(r.query?.pages ? Object.values(r.query.pages).filter(p=>p.thumbnail).map(p=>p.thumbnail.source) : [], 'resultats-wiki'); }
+        async function buscarOpenSymbols() { const q=document.getElementById('input-open').value; const d=await fetch(`https://www.opensymbols.org/api/v1/symbols/search?q=${encodeURIComponent(q)}`).then(r=>r.json()); renderResultats(d.slice(0,12).map(x=>x.image_url), 'resultats-open'); }
         function renderResultats(u,d) { const div=document.getElementById(d); div.innerHTML=''; u.forEach(url=>{const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i);}); }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
     </script>
