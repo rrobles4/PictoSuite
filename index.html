@@ -183,8 +183,8 @@
         
         .curs-print-wrapper { display: flex; flex-direction: column; align-items: flex-end; justify-content: center; }
         
-        /* LOGO IMPRESSIÓ MÉS GRAN */
-        .big-logo-print { height: 90px; width: auto; opacity: 1; }
+        /* LOGO IMPRESSIÓ: Reduït a 70px com demanaves */
+        .big-logo-print { height: 70px; width: auto; opacity: 1; }
         .curs-print { font-size: 1.2em; font-weight: bold; color: #555; text-align: right; margin-top: 5px;}
 
         .graella { display: grid; grid-template-columns: repeat(var(--num-columnes), 1fr); gap: 15px; width: 100%; }
@@ -272,16 +272,16 @@
         .mode-domino .pictograma p { display: none; } 
         .fila-paraula { text-align: center; width: 100%; font-family: var(--tipus-font); font-weight: bold; color: inherit; line-height: 1.1; margin: 2px 0; }
 
-        /* SUGGERIMENTS RECUPERATS */
+        /* SUGGERIMENTS: Reestructurats a l'ample i amb els inputs en fila */
         .seccio-suggeriments {
-            margin: 40px auto 20px auto; max-width: 600px; text-align: center;
+            margin: 40px auto 20px auto; max-width: 850px; text-align: center;
             background-color: #fff; padding: 25px; border-radius: 15px;
             border: 2px dashed #4a90e2; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
         .seccio-suggeriments h3 { margin-top: 0; color: #2c3e50; }
         .seccio-suggeriments p { color: #666; margin-bottom: 15px; }
 
-        /* FOOTER / CRÈDITS RECUPERATS */
+        /* FOOTER / CRÈDITS */
         .footer-credits {
             text-align: center; margin-top: 20px; padding: 15px; font-size: 0.85em; 
             color: #444; background-color: rgba(255,255,255,0.8); border-radius: 10px;
@@ -300,7 +300,6 @@
         
         .input-text-modal { font-size: 1.1em; text-align: center; border: 2px solid #ddd; padding: 8px; border-radius: 6px; box-sizing: border-box; }
         
-        /* FIx de columnes: SEMPRE DOS PER FILA en Targeta i Memory */
         .dues-paraules .input-text-modal { width: 48%; }
         .cinc-paraules .input-text-modal { width: 48%; margin-bottom: 5px; }
         
@@ -321,7 +320,6 @@
         .copy-hint { font-size: 0.8em; color: #27ae60; opacity: 0; transition: 0.2s;}
         .item-traduccio:hover .copy-hint { opacity: 1; }
 
-        /* Eines de Dibuix (En línia i compactes) */
         .toolbar-dibuix {
             display: flex; gap: 8px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; justify-content: center;
         }
@@ -347,9 +345,9 @@
             .mode-domino .pictograma { border: 3px solid var(--targeta-border); }
             .separador-domino { -webkit-print-color-adjust: exact; background-color: var(--targeta-border) !important; }
             
-            /* S'assegura que el logo s'imprimeix gran */
+            /* Logo impressió: exactament 70px com a pantalla */
             .header-print { height: auto; padding-bottom: 5px; }
-            .big-logo-print { height: 90px; }
+            .big-logo-print { height: 70px; }
         }
 
         @media screen and (max-width: 850px) {
@@ -539,11 +537,13 @@
     <div class="seccio-suggeriments no-print">
         <h3>Tens alguna suggerència?</h3>
         <p>Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
-        <div style="display:flex; flex-direction:column; gap:10px; max-width:400px; margin:0 auto;">
-            <input type="email" id="sugg-email" placeholder="El teu correu electrònic">
-            <input type="text" id="sugg-assumpte" placeholder="Assumpte">
-            <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="min-height:80px; resize:vertical;"></textarea>
-            <button onclick="enviarSuggeriment()" class="btn-contacte" style="justify-content:center;">✉️ Envia'm un missatge</button>
+        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
+            <div style="display:flex; gap:10px; width:100%;">
+                <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;">
+                <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;">
+            </div>
+            <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%; min-height:80px; resize:vertical; box-sizing:border-box;"></textarea>
+            <button onclick="enviarSuggeriment()" class="btn-contacte" style="align-self: center; justify-content:center;">✉️ Envia'm un missatge</button>
         </div>
     </div>
 
@@ -650,7 +650,7 @@
         let dadesDomino = []; 
         let globalSchoolLogoSrc = ''; 
         let memoriaEdicions = {}; 
-        let imgOriginalSrcOnOpen = ''; // Serveix per cancel·lar edició
+        let imgOriginalSrcOnOpen = ''; 
 
         // Variables Canvas
         let editorCanvas, editorCtx;
@@ -683,7 +683,6 @@
             }
         };
 
-        // Enviar Suggeriment
         function enviarSuggeriment() {
             const email = document.getElementById('sugg-email').value;
             const subject = document.getElementById('sugg-assumpte').value;
@@ -692,7 +691,6 @@
             window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(finalBody)}`;
         }
 
-        // Projectes JSON
         function desarProjecte() {
             const data = {
                 titol: document.getElementById('titol-doc').value,
@@ -1126,14 +1124,12 @@
             let maxInputs = 2; 
             let classeLayout = "dues-paraules";
 
-            // Fix per sempre: Dos espais d'amplada (48%) fins a omplir els 5
             if (mode === 'targeta' || mode === 'memory') {
                 maxInputs = 5; classeLayout = "cinc-paraules";
             } else {
                 maxInputs = 2; classeLayout = "dues-paraules";
             }
 
-            // Guardar Imatge Original per si fem "Cancel·lar"
             let imgTarget = elementEditant.querySelector('img');
             if (mode === 'memory') {
                 if (elementEditant.classList.contains('nomes-img')) {
@@ -1248,7 +1244,6 @@
         }
 
         function tancarModalSenseGuardar() { 
-            // Revertim la imatge si s'havia canviat visualment abans de cancel·lar
             if(elementEditant && imgOriginalSrcOnOpen) {
                  const index = elementEditant.dataset.index;
                  const mode = document.getElementById('selector-mode').value;
