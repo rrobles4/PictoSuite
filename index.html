@@ -592,7 +592,7 @@
                 </div>
                 <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
                     <p>Puja una imatge pròpia:</p><input type="file" accept="image/*" onchange="pujarImatge(this)">
-                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
+                    <hr style="margin:20px0; border:0; border-top:1px solid #eee;">
                     <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">🎨 Generar amb IA</button>
                 </div>
                 
@@ -1103,11 +1103,49 @@
             }, 100);
         }
 
+        // NOVA FUNCIÓ: Escalat independent per a cada paraula perquè aprofiti el màxim d'espai
         function autoMidaText(container) {
             if (!container) return;
-            let mida = 60; container.style.fontSize = mida + 'px'; container.style.lineHeight = '1.1';
-            while ((container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) && mida > 8) {
-                mida--; container.style.fontSize = mida + 'px';
+            const files = container.querySelectorAll('.fila-paraula');
+            
+            if (files.length > 0) {
+                let sizes = [];
+                // Es desactiva el salt de línia temporalment per mesurar l'amplada real de la paraula
+                files.forEach(fila => fila.style.whiteSpace = 'nowrap');
+                
+                // 1. Escalar cada paraula per separat perquè ocupi l'amplada màxima de la targeta
+                files.forEach((fila, idx) => {
+                    let mida = 60; 
+                    fila.style.fontSize = mida + 'px'; 
+                    fila.style.lineHeight = '1.1';
+                    
+                    while (fila.scrollWidth > container.clientWidth && mida > 8) {
+                        mida--; 
+                        fila.style.fontSize = mida + 'px';
+                    }
+                    sizes.push(mida);
+                });
+
+                // Es restaura perquè pugui fer salts de línia si cal
+                files.forEach(fila => fila.style.whiteSpace = 'normal');
+
+                // 2. Si un cop maximitzades l'alçada total se surt de la targeta, es redueixen totes de forma proporcional
+                while (container.scrollHeight > container.clientHeight) {
+                    let reduced = false;
+                    files.forEach((fila, idx) => {
+                        if (sizes[idx] > 8) {
+                            sizes[idx]--;
+                            fila.style.fontSize = sizes[idx] + 'px';
+                            reduced = true;
+                        }
+                    });
+                    if (!reduced) break;
+                }
+            } else {
+                let mida = 60; container.style.fontSize = mida + 'px'; container.style.lineHeight = '1.1';
+                while ((container.scrollWidth > container.clientWidth || container.scrollHeight > container.clientHeight) && mida > 8) {
+                    mida--; container.style.fontSize = mida + 'px';
+                }
             }
         }
 
