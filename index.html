@@ -344,54 +344,55 @@
                     <label>Idioma:</label>
                     <select id="idioma">
                         <option value="ca">Català</option>
-                        <option value="es">Castellà</option>
-                        <option value="en">Anglès</option>
-                        <option value="fr">Francès</option>
-                        <option value="de">Alemany</option>
-                        <option value="it">Italià</option>
-                        <option value="pt">Portuguès</option>
-                        <option value="nl">Neerlandès</option>
-                        <option value="ro">Romanès</option>
-                        <option value="pl">Polonès</option>
-                        <option value="uk">Ucraïnès</option>
-                        <option value="ru">Rus</option>
-                        <option value="bg">Búlgar</option>
-                        <option value="ar">Àrab</option>
-                        <option value="zh">Xinès</option>
-                        <option value="fa">Persa</option>
-                        <option value="he">Hebreu</option>
-                        <option value="el">Grec</option>
-                        <option value="eu">Basc</option>
-                        <option value="gl">Gallec</option>
-                        <option value="val">Valencià</option>
-                        <option value="cs">Txec</option>
-                        <option value="sk">Eslovac</option>
-                        <option value="sl">Eslovè</option>
-                        <option value="hr">Croat</option>
-                        <option value="sr">Serbi</option>
-                        <option value="mk">Macedoni</option>
-                        <option value="sq">Albanès</option>
-                        <option value="hu">Hongarès</option>
-                        <option value="da">Danès</option>
-                        <option value="sv">Suec</option>
-                        <option value="fi">Finlandès</option>
-                        <option value="et">Estonià</option>
-                        <option value="lt">Lituà</option>
-                        <option value="lv">Letó</option>
-                        <option value="ko">Coreà</option>
+                        <option value="es">Castellà (Español)</option>
+                        <option value="en">Anglès (English)</option>
+                        <option value="fr">Francès (Français)</option>
+                        <option value="de">Alemany (Deutsch)</option>
+                        <option value="it">Italià (Italiano)</option>
+                        <option value="pt">Portuguès (Português)</option>
+                        <option value="nl">Neerlandès (Nederlands)</option>
+                        <option value="ro">Romanès (Română)</option>
+                        <option value="pl">Polonès (Polski)</option>
+                        <option value="uk">Ucraïnès (Українська)</option>
+                        <option value="ru">Rus (Русский)</option>
+                        <option value="bg">Búlgar (Български)</option>
+                        <option value="ar">Àrab (العربية)</option>
+                        <option value="zh">Xinès (中文)</option>
+                        <option value="fa">Persa (فارسی)</option>
+                        <option value="he">Hebreu (עברית)</option>
+                        <option value="el">Grec (Ελληνικά)</option>
+                        <option value="eu">Basc (Euskara)</option>
+                        <option value="gl">Gallec (Galego)</option>
+                        <option value="val">Valencià (Valencià)</option>
+                        <option value="cs">Txec (Čeština)</option>
+                        <option value="sk">Eslovac (Slovenčina)</option>
+                        <option value="sl">Eslovè (Slovenščina)</option>
+                        <option value="hr">Croat (Hrvatski)</option>
+                        <option value="sr">Serbi (Српски)</option>
+                        <option value="mk">Macedoni (Македонски)</option>
+                        <option value="sq">Albanès (Shqip)</option>
+                        <option value="hu">Hongarès (Magyar)</option>
+                        <option value="da">Danès (Dansk)</option>
+                        <option value="sv">Suec (Svenska)</option>
+                        <option value="fi">Finlandès (Suomi)</option>
+                        <option value="et">Estonià (Eesti)</option>
+                        <option value="lt">Lituà (Lietuvių)</option>
+                        <option value="lv">Letó (Latviešu)</option>
+                        <option value="ko">Coreà (한국어)</option>
+                        <option value="ur">Urdu (اردو)</option>
                     </select>
                 </div>
             </div>
 
             <div class="barra-estils">
-                <div class="control-estil">
+                <div class="control-estil" style="flex:1;">
                     <label>Mida Paper</label>
                     <select id="mida-paper" onchange="actualitzarEstils()">
                         <option value="a4">A4</option>
                         <option value="a3">A3</option>
                     </select>
                 </div>
-                <div class="control-estil">
+                <div class="control-estil" style="flex:1;">
                     <label>Columnes</label>
                     <select id="selector-columnes" onchange="actualitzarEstils()">
                         <option value="1">1 (Gegant)</option>
@@ -401,7 +402,7 @@
                         <option value="5">5 (Petita)</option>
                     </select>
                 </div>
-                <div class="control-estil">
+                <div class="control-estil" style="flex:1;">
                     <label>Font</label>
                     <select id="selector-font" onchange="actualitzarEstils()">
                         <option value="'Arial', sans-serif">Arial</option>
@@ -509,60 +510,84 @@
                         <label id="label-idioma-traductor" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">El teu idioma:</label>
                         <select id="idioma-input" onchange="canviarIdiomaUI()">
                             <option value="ca">Català</option>
-                            <option value="es">Castellà</option>
-                            <option value="en">Anglès</option>
-                            <option value="fr">Francès</option>
-                            <option value="de">Alemany</option>
-                            <option value="it">Italià</option>
-                            <option value="pt">Portuguès</option>
-                            <option value="nl">Neerlandès</option>
-                            <option value="ro">Romanès</option>
-                            <option value="pl">Polonès</option>
-                            <option value="uk">Ucraïnès</option>
-                            <option value="ru">Rus</option>
-                            <option value="bg">Búlgar</option>
-                            <option value="ar">Àrab</option>
-                            <option value="zh">Xinès</option>
-                            <option value="fa">Persa</option>
-                            <option value="he">Hebreu</option>
-                            <option value="el">Grec</option>
-                            <option value="eu">Basc</option>
-                            <option value="gl">Gallec</option>
-                            <option value="val">Valencià</option>
-                            <option value="cs">Txec</option>
-                            <option value="sk">Eslovac</option>
-                            <option value="sl">Eslovè</option>
-                            <option value="hr">Croat</option>
-                            <option value="sr">Serbi</option>
-                            <option value="mk">Macedoni</option>
-                            <option value="sq">Albanès</option>
-                            <option value="hu">Hongarès</option>
-                            <option value="da">Danès</option>
-                            <option value="sv">Suec</option>
-                            <option value="fi">Finlandès</option>
-                            <option value="et">Estonià</option>
-                            <option value="lt">Lituà</option>
-                            <option value="lv">Letó</option>
-                            <option value="ko">Coreà</option>
-                            <option value="ur">Urdu</option>
+                            <option value="es">Castellà (Español)</option>
+                            <option value="en">Anglès (English)</option>
+                            <option value="fr">Francès (Français)</option>
+                            <option value="de">Alemany (Deutsch)</option>
+                            <option value="it">Italià (Italiano)</option>
+                            <option value="pt">Portuguès (Português)</option>
+                            <option value="nl">Neerlandès (Nederlands)</option>
+                            <option value="ro">Romanès (Română)</option>
+                            <option value="pl">Polonès (Polski)</option>
+                            <option value="uk">Ucraïnès (Українська)</option>
+                            <option value="ru">Rus (Русский)</option>
+                            <option value="bg">Búlgar (Български)</option>
+                            <option value="ar">Àrab (العربية)</option>
+                            <option value="zh">Xinès (中文)</option>
+                            <option value="fa">Persa (فارسی)</option>
+                            <option value="he">Hebreu (עברית)</option>
+                            <option value="el">Grec (Ελληνικά)</option>
+                            <option value="eu">Basc (Euskara)</option>
+                            <option value="gl">Gallec (Galego)</option>
+                            <option value="val">Valencià (Valencià)</option>
+                            <option value="cs">Txec (Čeština)</option>
+                            <option value="sk">Eslovac (Slovenčina)</option>
+                            <option value="sl">Eslovè (Slovenščina)</option>
+                            <option value="hr">Croat (Hrvatski)</option>
+                            <option value="sr">Serbi (Српски)</option>
+                            <option value="mk">Macedoni (Македонски)</option>
+                            <option value="sq">Albanès (Shqip)</option>
+                            <option value="hu">Hongarès (Magyar)</option>
+                            <option value="da">Danès (Dansk)</option>
+                            <option value="sv">Suec (Svenska)</option>
+                            <option value="fi">Finlandès (Suomi)</option>
+                            <option value="et">Estonià (Eesti)</option>
+                            <option value="lt">Lituà (Lietuvių)</option>
+                            <option value="lv">Letó (Latviešu)</option>
+                            <option value="ko">Coreà (한국어)</option>
+                            <option value="ur">Urdu (اردو)</option>
                         </select>
                     </div>
                     <div style="display:flex; flex-direction:column; align-items:center;">
                         <label id="label-idioma-desti" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">Tradueix a:</label>
                         <select id="idioma-desti">
                             <option value="ca" selected>Català</option>
-                            <option value="es">Castellà</option>
-                            <option value="en">Anglès</option>
-                            <option value="fr">Francès</option>
-                            <option value="de">Alemany</option>
-                            <option value="it">Italià</option>
-                            <option value="pt">Portuguès</option>
-                            <option value="ro">Romanès</option>
-                            <option value="uk">Ucraïnès</option>
-                            <option value="ru">Rus</option>
-                            <option value="ar">Àrab</option>
-                            <option value="zh">Xinès</option>
-                            <option value="ur">Urdu</option>
+                            <option value="es">Castellà (Español)</option>
+                            <option value="en">Anglès (English)</option>
+                            <option value="fr">Francès (Français)</option>
+                            <option value="de">Alemany (Deutsch)</option>
+                            <option value="it">Italià (Italiano)</option>
+                            <option value="pt">Portuguès (Português)</option>
+                            <option value="nl">Neerlandès (Nederlands)</option>
+                            <option value="ro">Romanès (Română)</option>
+                            <option value="pl">Polonès (Polski)</option>
+                            <option value="uk">Ucraïnès (Українська)</option>
+                            <option value="ru">Rus (Русский)</option>
+                            <option value="bg">Búlgar (Български)</option>
+                            <option value="ar">Àrab (العربية)</option>
+                            <option value="zh">Xinès (中文)</option>
+                            <option value="fa">Persa (فارسی)</option>
+                            <option value="he">Hebreu (עברית)</option>
+                            <option value="el">Grec (Ελληνικά)</option>
+                            <option value="eu">Basc (Euskara)</option>
+                            <option value="gl">Gallec (Galego)</option>
+                            <option value="val">Valencià (Valencià)</option>
+                            <option value="cs">Txec (Čeština)</option>
+                            <option value="sk">Eslovac (Slovenčina)</option>
+                            <option value="sl">Eslovè (Slovenščina)</option>
+                            <option value="hr">Croat (Hrvatski)</option>
+                            <option value="sr">Serbi (Српски)</option>
+                            <option value="mk">Macedoni (Македонски)</option>
+                            <option value="sq">Albanès (Shqip)</option>
+                            <option value="hu">Hongarès (Magyar)</option>
+                            <option value="da">Danès (Dansk)</option>
+                            <option value="sv">Suec (Svenska)</option>
+                            <option value="fi">Finlandès (Suomi)</option>
+                            <option value="et">Estonià (Eesti)</option>
+                            <option value="lt">Lituà (Lietuvių)</option>
+                            <option value="lv">Letó (Latviešu)</option>
+                            <option value="ko">Coreà (한국어)</option>
+                            <option value="ur">Urdu (اردو)</option>
                         </select>
                     </div>
                 </div>
@@ -903,7 +928,7 @@
         }
 
         // ==========================================
-        // LÒGICA PICTOJOCS
+        // LÒGICA PICTOJOCS (Intacta)
         // ==========================================
         function desarProjecte() {
             const data = {
@@ -1275,7 +1300,7 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
             }
 
             let textKilled = fraseTraduida.toLowerCase().replace("si us plau", "").replace("por favor", ""); const paraules = textKilled.split(/\s+/);
-            const paraulesOriginals = frase.split(/\s+/); // Intenta emparellar
+            const paraulesOriginals = frase.split(/\s+/); 
 
             for (let i=0; i<paraules.length; i++) {
                 let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (stopWords.has(pNeta)) continue; 
