@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PictoJocs & PictoTraductor</title>
-
+    <title>PictoJocs & PictoXat</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@400;700&family=Fredoka:wght@400;600&family=Indie+Flower&family=Patrick+Hand&family=Roboto&family=Comic+Neue:wght@400;700&family=Schoolbell&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-
+    
     <style>
         /* --- ESTILS GENERALS COMPARTITS --- */
         :root {
@@ -20,7 +20,7 @@
             --num-columnes: 3;
             --width-paper: 210mm;
             --height-paper: 297mm;
-
+            
             --targeta-bg: #ffffff;
             --targeta-border: #000000;
             --targeta-text: #000000;
@@ -43,35 +43,34 @@
             position: relative;
         }
 
-        /* --- NAVEGACIÓ ENTRE APPS (BOTONS MÉS PETITS) --- */
-        /* --- NAVEGACIÓ ENTRE APPS --- */
+        /* --- NAVEGACIÓ ENTRE APPS (BOTONS PETITS) --- */
         .projecte-controls {
-            display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px; align-items: center;
+            display: flex; justify-content: flex-end; gap: 8px; margin-bottom: 5px; align-items: center;
         }
         .btn-nav-app {
-            background: #8e44ad; color: white; border: none; padding: 6px 12px; font-size: 0.9em; 
-            border-radius: 8px; cursor: pointer; font-weight: bold; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            background: #8e44ad; color: white; border: none; padding: 5px 10px; font-size: 0.9em; 
+            border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
         .btn-nav-app:hover { transform: scale(1.05); }
 
         .btn-mini {
-            background: #ecf0f1; border: 1px solid #bdc3c7; padding: 6px 10px; border-radius: 8px; 
+            background: #ecf0f1; border: 1px solid #bdc3c7; padding: 5px 10px; border-radius: 6px; 
             cursor: pointer; font-size: 0.85em; font-weight: bold; color: #333; 
             display: flex; align-items: center; gap: 5px; transition: 0.2s;
         }
         .btn-mini:hover { background: #d5dbdb; }
 
-        /* HEADER I LOGO (MÉS GRANS) */
+        /* HEADER I LOGO (MÉS GRANS I SEPARATS DELS BOTONS) */
         .header-app {
-            display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; text-align: center;
+            display: flex; align-items: center; justify-content: center; gap: 15px; margin-top: 25px; margin-bottom: 20px; text-align: center;
         }
-        .header-app h1 { margin: 0; color: #2c3e50; font-size: 2.6em; letter-spacing: 1px; }
-        .logo-pictojocs { height: 85px; width: auto; }
+        .header-app h1 { margin: 0; color: #2c3e50; font-size: 3em; letter-spacing: 1px; }
+        .logo-pictojocs { height: 95px; width: auto; }
 
         .fila-flex { display: flex; gap: 20px; margin-bottom: 15px; align-items: flex-end; }
         .columna { flex: 1; }
         label { display: block; margin-bottom: 5px; font-weight: bold; color: #555; font-size: 0.9em; }
-
+        
         input[type="text"], input[type="email"], select, textarea {
             width: 100%; padding: 10px; border: 2px solid #ddd;
             border-radius: 8px; font-size: 16px; box-sizing: border-box;
@@ -90,20 +89,7 @@
             background: #eef2f7; padding: 15px; border-radius: 8px; margin-bottom: 15px;
             border: 1px solid #d1d9e6; display: flex; gap: 15px; align-items: stretch; justify-content: space-between; flex-wrap: wrap;
         }
-        .control-estil { display: flex; flex-direction: column; min-width: 90px; }
-
-        .colors-container {
-            flex: 1.2; border-left: 2px solid #d1d9e6; padding-left: 15px; display: flex; flex-direction: column;
-        }
-        .colors-title {
-            text-align: center; font-size: 0.85em; font-weight: bold; color: #555; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-bottom: 8px;
-        }
-        .color-inputs-wrapper { display: flex; gap: 12px; align-items: center; justify-content: space-around; }
-        .color-item { display: flex; flex-direction: column; align-items: center; gap: 3px; }
-        .color-item input[type="color"] {
-            width: 35px; height: 35px; padding: 0; border: none; background: none; border-radius: 6px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .color-item label { font-size: 0.75em; margin: 0; color: #666; font-weight: normal;}
+        .control-estil { display: flex; flex-direction: column; min-width: 90px; flex: 1;}
 
         .layout-metode-paraules { display: flex; gap: 20px; margin-bottom: 15px; align-items: stretch; }
         .panell-metode {
@@ -114,7 +100,7 @@
         .panell-metode select { font-size: 1.1em; border-color: var(--color-secundari); border-width: 2px; cursor: pointer; font-weight: bold; color: #333; }
         .panell-paraules { flex: 0.65; display: flex; flex-direction: column; }
         .panell-paraules textarea { flex-grow: 1; min-height: 80px; resize: vertical; }
-
+        
         .btn-container { display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap;}
         button {
             border: none; padding: 12px 25px; font-size: 16px; border-radius: 50px;
@@ -195,10 +181,10 @@
         .mode-domino .pictograma p { display: none; } 
         .fila-paraula { text-align: center; width: 100%; font-family: var(--tipus-font); font-weight: bold; color: inherit; line-height: 1.1; margin: 2px 0; }
 
-        /* --- DISSENYS PICTOTRADUCTOR --- */
+        /* --- DISSENYS PICTOXAT --- */
         .descripcio-traductor { color: #666; margin: 0 auto 25px auto; font-size: 1.1em; text-align: center; max-width: 800px;}
-        .controls-traductor { display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center; margin-bottom: 20px; background: #eef2f7; padding: 20px; border-radius: 10px; border: 1px solid #d1d9e6; max-width: 700px; margin: 0 auto 20px auto; }
-        .controls-traductor select { padding: 12px 20px; border-radius: 8px; border: 2px solid #ddd; font-size: 16px; cursor: pointer; font-weight: bold; color: #333; width: 100%; max-width: 300px; }
+        .controls-traductor { display: flex; flex-direction: column; gap: 15px; justify-content: center; align-items: center; margin-bottom: 20px; background: #eef2f7; padding: 20px; border-radius: 10px; border: 1px solid #d1d9e6; max-width: 750px; margin: 0 auto 20px auto; }
+        .controls-traductor select { padding: 10px 15px; border-radius: 8px; border: 2px solid #ddd; font-size: 15px; cursor: pointer; font-weight: bold; color: #333; width: 100%; min-width: 200px; }
         .caixa-escriptura { width: 100%; display: flex; flex-direction: column; gap: 10px; }
         .caixa-escriptura textarea { width: 100%; box-sizing: border-box; font-size: 1.3em; padding: 15px; border: 2px solid #ddd; border-radius: 10px; min-height: 80px; resize: vertical; text-align: center; }
         .botons-accio { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; }
@@ -207,17 +193,18 @@
         .btn-trad { background-color: var(--color-principal); flex: 1; min-width: 200px; }
         .btn-mic-trad:active, .btn-trad:active { transform: scale(0.98); }
         .btn-mic-trad.escoltant { background-color: #27ae60; animation: pulse 1.5s infinite; }
-
+        
         .traduccio-literal-box { font-size: 1.2em; color: #2c3e50; margin: 15px auto; padding: 15px; background: #e8f8f5; border-radius: 10px; border: 1px dashed #27ae60; display: none; width: 80%; text-align: center; }
         .frase-pictos { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; min-height: 200px; padding: 20px; border-radius: 15px; align-items: stretch; }
-
-        /* Ajustos Targeta per Traductor */
+        
         #view-pictotraductor .pictograma { width: 180px; cursor: pointer; }
         #view-pictotraductor .imatge-box { height: 60%; }
         #view-pictotraductor .pictograma p { height: 38%; }
         .text-traduit { font-weight: bold; font-size: 22px; text-transform: uppercase; color: #000; }
         .text-alumne { font-size: 16px; color: #666; font-style: italic; margin-top: 2px; font-weight: normal; text-transform: none;}
-
+        
+        .btn-settings { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; transition: transform 0.2s; z-index: 100; }
+        .btn-settings:hover { transform: scale(1.1); }
         .loader { border: 4px solid #f3f3f3; border-top: 4px solid var(--color-principal); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; display: inline-block; vertical-align: middle; margin-left:10px;}
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
@@ -242,12 +229,12 @@
         .modal-body { padding: 25px; overflow-y: auto; }
         .grup-titol-modal { margin-bottom: 20px; text-align: center; }
         .inputs-container-modal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 15px; justify-content: center; }
-
+        
         .input-text-modal { font-size: 1.1em; text-align: center; border: 2px solid #ddd; padding: 8px; border-radius: 6px; box-sizing: border-box; }
         .dues-paraules .input-text-modal { width: 48%; }
         .cinc-paraules .input-text-modal:nth-child(1), .cinc-paraules .input-text-modal:nth-child(2) { width: calc(50% - 6px); }
         .cinc-paraules .input-text-modal:nth-child(n+3) { width: calc(33.33% - 8px); }
-
+        
         /* FIX HORITZONTAL COLORS */
         .color-palette { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 15px; }
         .color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; transition: 0.2s; box-sizing: border-box; padding: 0;}
@@ -271,12 +258,16 @@
         /* EDITOR DE DIBUIX COMPACTE */
         .toolbar-dibuix { display: flex; gap: 8px; margin-bottom: 5px; align-items: center; flex-wrap: wrap; justify-content: center; }
         @media (min-width: 600px) { .toolbar-dibuix { flex-wrap: nowrap; } }
-
+        
         .btn-color-dibuix { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3); cursor: pointer; flex-shrink: 0; box-sizing: border-box; padding: 0;}
         .btn-color-dibuix:hover { transform: scale(1.1); }
         .btn-tool { background: #fff; border: 1px solid #ccc; font-size: 1.2em; border-radius: 5px; padding: 5px 10px; cursor: pointer; transition: 0.2s; flex-shrink: 0; }
         .btn-tool:hover { background: #f0f8ff; border-color: var(--color-principal); }
         .btn-tool.actiu { background: #e8f8f5; border: 2px solid var(--color-accio); box-shadow: 0 0 5px rgba(39,174,96,0.3); }
+
+        /* MULTI-CHECKBOX TRADUCTOR */
+        .caixa-idiomes-check { max-height: 150px; overflow-y: auto; border: 2px solid #eee; padding: 10px; border-radius: 8px; margin-bottom: 10px; display: grid; grid-template-columns: 1fr 1fr; gap: 5px; text-align: left; background: #fafafa; }
+        .caixa-idiomes-check label { margin: 0; font-weight: normal; font-size: 0.9em; display:flex; align-items:center; gap:5px; cursor:pointer;}
 
         /* --- IMPRESSIÓ NETA --- */
         @media print {
@@ -284,7 +275,7 @@
             body { background: white; padding: 0; margin: 0; -webkit-print-color-adjust: exact; background-image: none; }
             .configuracio, .no-print, #modal-edicio, #modal-settings, #modal-prompt-ia, .avis-impressio { display: none !important; }
             #zona-impressio { margin: 0 auto; box-shadow: none; padding: 10mm; display: block !important; }
-            #view-pictotraductor .frase-pictos { display: none !important; } /* S'amaga a la impressió */
+            #view-pictotraductor .frase-pictos { display: none !important; } 
             .graella { gap: 5px; }
             .pictograma { border: 2px solid var(--targeta-border); } 
             .zona-revers { padding-top: 15mm !important; margin-top: 0 !important; border: none !important; page-break-before: always; direction: rtl; }
@@ -317,14 +308,14 @@
 
     <div id="view-pictojocs">
         <div class="configuracio no-print">
-
+            
             <div class="projecte-controls">
-                <div style="flex-grow: 1; text-align: left; display: flex; gap: 10px;">
-                    <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ Anar a PictoTraductor</button>
+                <div style="flex-grow: 1; text-align: left; display: flex; gap: 8px;">
+                    <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ PictoXat</button>
                     <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 </div>
-                <button class="btn-mini" onclick="desarProjecte()">💾 Desar Projecte</button>
-                <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Carregar Projecte</button>
+                <button class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
+                <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
                 <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
             </div>
 
@@ -332,7 +323,7 @@
                 <img id="app-logo-header" class="logo-pictojocs" src="" alt="PictoJocs Logo">
                 <h1>PictoJocs</h1>
             </div>
-
+            
             <div class="fila-flex">
                 <div class="columna" style="flex: 0.6;">
                     <label>Logo Escola:</label>
@@ -352,55 +343,55 @@
                 <div class="columna" style="flex: 0.8;">
                     <label>Idioma:</label>
                     <select id="idioma">
-                        <option value="ca">Català (Català)</option>
-                        <option value="es">Castellà (Español)</option>
-                        <option value="en">Anglès (English)</option>
-                        <option value="fr">Francès (Français)</option>
-                        <option value="de">Alemany (Deutsch)</option>
-                        <option value="it">Italià (Italiano)</option>
-                        <option value="pt">Portuguès (Português)</option>
-                        <option value="nl">Neerlandès (Nederlands)</option>
-                        <option value="ro">Romanès (Română)</option>
-                        <option value="pl">Polonès (Polski)</option>
-                        <option value="uk">Ucraïnès (Українська)</option>
-                        <option value="ru">Rus (Русский)</option>
-                        <option value="bg">Búlgar (Български)</option>
-                        <option value="ar">Àrab (العربية)</option>
-                        <option value="zh">Xinès (中文)</option>
-                        <option value="fa">Persa (فارسی)</option>
-                        <option value="he">Hebreu (עברית)</option>
-                        <option value="el">Grec (Ελληνικά)</option>
-                        <option value="eu">Basc (Euskara)</option>
-                        <option value="gl">Gallec (Galego)</option>
-                        <option value="val">Valencià (Valencià)</option>
-                        <option value="cs">Txec (Čeština)</option>
-                        <option value="sk">Eslovac (Slovenčina)</option>
-                        <option value="sl">Eslovè (Slovenščina)</option>
-                        <option value="hr">Croat (Hrvatski)</option>
-                        <option value="sr">Serbi (Српски)</option>
-                        <option value="mk">Macedoni (Македонски)</option>
-                        <option value="sq">Albanès (Shqip)</option>
-                        <option value="hu">Hongarès (Magyar)</option>
-                        <option value="da">Danès (Dansk)</option>
-                        <option value="sv">Suec (Svenska)</option>
-                        <option value="fi">Finlandès (Suomi)</option>
-                        <option value="et">Estonià (Eesti)</option>
-                        <option value="lt">Lituà (Lietuvių)</option>
-                        <option value="lv">Letó (Latviešu)</option>
-                        <option value="ko">Coreà (한국어)</option>
+                        <option value="ca">Català</option>
+                        <option value="es">Castellà</option>
+                        <option value="en">Anglès</option>
+                        <option value="fr">Francès</option>
+                        <option value="de">Alemany</option>
+                        <option value="it">Italià</option>
+                        <option value="pt">Portuguès</option>
+                        <option value="nl">Neerlandès</option>
+                        <option value="ro">Romanès</option>
+                        <option value="pl">Polonès</option>
+                        <option value="uk">Ucraïnès</option>
+                        <option value="ru">Rus</option>
+                        <option value="bg">Búlgar</option>
+                        <option value="ar">Àrab</option>
+                        <option value="zh">Xinès</option>
+                        <option value="fa">Persa</option>
+                        <option value="he">Hebreu</option>
+                        <option value="el">Grec</option>
+                        <option value="eu">Basc</option>
+                        <option value="gl">Gallec</option>
+                        <option value="val">Valencià</option>
+                        <option value="cs">Txec</option>
+                        <option value="sk">Eslovac</option>
+                        <option value="sl">Eslovè</option>
+                        <option value="hr">Croat</option>
+                        <option value="sr">Serbi</option>
+                        <option value="mk">Macedoni</option>
+                        <option value="sq">Albanès</option>
+                        <option value="hu">Hongarès</option>
+                        <option value="da">Danès</option>
+                        <option value="sv">Suec</option>
+                        <option value="fi">Finlandès</option>
+                        <option value="et">Estonià</option>
+                        <option value="lt">Lituà</option>
+                        <option value="lv">Letó</option>
+                        <option value="ko">Coreà</option>
                     </select>
                 </div>
             </div>
 
             <div class="barra-estils">
-                <div class="control-estil" style="flex:1;">
+                <div class="control-estil">
                     <label>Mida Paper</label>
                     <select id="mida-paper" onchange="actualitzarEstils()">
                         <option value="a4">A4</option>
                         <option value="a3">A3</option>
                     </select>
                 </div>
-                <div class="control-estil" style="flex:1;">
+                <div class="control-estil">
                     <label>Columnes</label>
                     <select id="selector-columnes" onchange="actualitzarEstils()">
                         <option value="1">1 (Gegant)</option>
@@ -410,7 +401,7 @@
                         <option value="5">5 (Petita)</option>
                     </select>
                 </div>
-                <div class="control-estil" style="flex:1;">
+                <div class="control-estil">
                     <label>Font</label>
                     <select id="selector-font" onchange="actualitzarEstils()">
                         <option value="'Arial', sans-serif">Arial</option>
@@ -422,24 +413,6 @@
                         <option value="'Dancing Script', cursive">Lligada</option>
                         <option value="'Andika', sans-serif">Lectoescriptura</option>
                     </select>
-                </div>
-
-                <div class="colors-container">
-                    <div class="colors-title">Colors de les targetes</div>
-                    <div class="color-inputs-wrapper">
-                        <div class="color-item">
-                            <input type="color" id="color-bg" value="#ffffff" onchange="actualitzarEstils()" title="Fons de la Targeta">
-                            <label>Fons</label>
-                        </div>
-                        <div class="color-item">
-                            <input type="color" id="color-border" value="#000000" onchange="actualitzarEstils()" title="Marge de la Targeta">
-                            <label>Marge</label>
-                        </div>
-                        <div class="color-item">
-                            <input type="color" id="color-text" value="#000000" onchange="actualitzarEstils()" title="Color de la Lletra">
-                            <label>Lletra</label>
-                        </div>
-                    </div>
                 </div>
             </div>
 
@@ -453,7 +426,7 @@
                         <option value="domino">Dominó</option>
                     </select>
                 </div>
-
+                
                 <div class="panell-paraules">
                     <label>Llista de paraules (separades amb comes):</label>
                     <textarea id="llista-paraules" placeholder="Ex: aigua, torrent, núvol..."></textarea>
@@ -470,7 +443,7 @@
             <div class="instruccions" id="text-instruccions">
                 Consell: Arrossega per reordenar. Fes clic als dibuixos o noms per editar.
             </div>
-
+            
             <div class="avis-impressio" id="avis-impressio">
                 <strong>⚠️ Informació per imprimir:</strong>
                 <ul>
@@ -517,70 +490,86 @@
 
     <div id="view-pictotraductor" style="display: none;">
         <div class="configuracio no-print">
-
-            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 10px;">
+            
+            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 8px;">
                 <button class="btn-nav-app" style="background:#4a90e2;" onclick="switchAppView('pictojocs')">🔙 Anar a PictoJocs</button>
                 <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
             </div>
 
             <div class="header-app">
-                <h1 style="font-size: 2.8em;">🗣️ PictoTraductor</h1>
-                <h1 style="font-size: 2.6em;">🗣️ PictoTraductor</h1>
+                <h1 style="font-size: 3em;">🗣️ PictoXat</h1>
             </div>
-            <p class="descripcio-traductor">
             <p class="descripcio-traductor" id="desc-traductor">
                 Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!
             </p>
 
             <div class="controls-traductor">
-                <div style="display:flex; flex-direction:column; text-align:center; width: 100%; align-items:center;">
-                    <label style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">Escull el teu idioma:</label>
-                    <select id="idioma-input">
-                    <label style="font-size:0.9em; font-weight:bold; margin-bottom:5px;" id="label-idioma-traductor">Escull el teu idioma:</label>
-                    <select id="idioma-input" onchange="canviarIdiomaUI()">
-                        <option value="ca">Català (Català)</option>
-                        <option value="es">Castellà (Español)</option>
-                        <option value="en">Anglès (English)</option>
-                        <option value="fr">Francès (Français)</option>
-                        <option value="de">Alemany (Deutsch)</option>
-                        <option value="it">Italià (Italiano)</option>
-                        <option value="pt">Portuguès (Português)</option>
-                        <option value="nl">Neerlandès (Nederlands)</option>
-                        <option value="ro">Romanès (Română)</option>
-                        <option value="pl">Polonès (Polski)</option>
-                        <option value="uk">Ucraïnès (Українська)</option>
-                        <option value="ru">Rus (Русский)</option>
-                        <option value="bg">Búlgar (Български)</option>
-                        <option value="ar">Àrab (العربية)</option>
-                        <option value="zh">Xinès (中文)</option>
-                        <option value="fa">Persa (فارسی)</option>
-                        <option value="he">Hebreu (עברית)</option>
-                        <option value="el">Grec (Ελληνικά)</option>
-                        <option value="eu">Basc (Euskara)</option>
-                        <option value="gl">Gallec (Galego)</option>
-                        <option value="val">Valencià (Valencià)</option>
-                        <option value="cs">Txec (Čeština)</option>
-                        <option value="sk">Eslovac (Slovenčina)</option>
-                        <option value="sl">Eslovè (Slovenščina)</option>
-                        <option value="hr">Croat (Hrvatski)</option>
-                        <option value="sr">Serbi (Српски)</option>
-                        <option value="mk">Macedoni (Македонски)</option>
-                        <option value="sq">Albanès (Shqip)</option>
-                        <option value="hu">Hongarès (Magyar)</option>
-                        <option value="da">Danès (Dansk)</option>
-                        <option value="sv">Suec (Svenska)</option>
-                        <option value="fi">Finlandès (Suomi)</option>
-                        <option value="et">Estonià (Eesti)</option>
-                        <option value="lt">Lituà (Lietuvių)</option>
-                        <option value="lv">Letó (Latviešu)</option>
-                        <option value="ko">Coreà (한국어)</option>
-                    </select>
+                <div style="display:flex; gap: 15px; width: 100%; justify-content: center; flex-wrap: wrap; margin-bottom: 10px;">
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <label id="label-idioma-traductor" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">El teu idioma:</label>
+                        <select id="idioma-input" onchange="canviarIdiomaUI()">
+                            <option value="ca">Català</option>
+                            <option value="es">Castellà</option>
+                            <option value="en">Anglès</option>
+                            <option value="fr">Francès</option>
+                            <option value="de">Alemany</option>
+                            <option value="it">Italià</option>
+                            <option value="pt">Portuguès</option>
+                            <option value="nl">Neerlandès</option>
+                            <option value="ro">Romanès</option>
+                            <option value="pl">Polonès</option>
+                            <option value="uk">Ucraïnès</option>
+                            <option value="ru">Rus</option>
+                            <option value="bg">Búlgar</option>
+                            <option value="ar">Àrab</option>
+                            <option value="zh">Xinès</option>
+                            <option value="fa">Persa</option>
+                            <option value="he">Hebreu</option>
+                            <option value="el">Grec</option>
+                            <option value="eu">Basc</option>
+                            <option value="gl">Gallec</option>
+                            <option value="val">Valencià</option>
+                            <option value="cs">Txec</option>
+                            <option value="sk">Eslovac</option>
+                            <option value="sl">Eslovè</option>
+                            <option value="hr">Croat</option>
+                            <option value="sr">Serbi</option>
+                            <option value="mk">Macedoni</option>
+                            <option value="sq">Albanès</option>
+                            <option value="hu">Hongarès</option>
+                            <option value="da">Danès</option>
+                            <option value="sv">Suec</option>
+                            <option value="fi">Finlandès</option>
+                            <option value="et">Estonià</option>
+                            <option value="lt">Lituà</option>
+                            <option value="lv">Letó</option>
+                            <option value="ko">Coreà</option>
+                            <option value="ur">Urdu</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center;">
+                        <label id="label-idioma-desti" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">Tradueix a:</label>
+                        <select id="idioma-desti">
+                            <option value="ca" selected>Català</option>
+                            <option value="es">Castellà</option>
+                            <option value="en">Anglès</option>
+                            <option value="fr">Francès</option>
+                            <option value="de">Alemany</option>
+                            <option value="it">Italià</option>
+                            <option value="pt">Portuguès</option>
+                            <option value="ro">Romanès</option>
+                            <option value="uk">Ucraïnès</option>
+                            <option value="ru">Rus</option>
+                            <option value="ar">Àrab</option>
+                            <option value="zh">Xinès</option>
+                            <option value="ur">Urdu</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div class="caixa-escriptura">
                     <textarea id="text-input" placeholder="Escriu la frase aquí o utilitza el micròfon..." onkeyup="if(event.key==='Enter') executarTraduccio()"></textarea>
                     <div class="botons-accio">
-                        <button id="btn-mic" class="btn-mic-trad" onclick="activarMicrofon()">🎤 Parlar</button>
                         <button id="btn-mic-trad" class="btn-mic-trad" onclick="activarMicrofon()">🎤 Parlar</button>
                         <button id="btn-trad" class="btn-trad" onclick="executarTraduccio()">➡️ Traduir</button>
                     </div>
@@ -669,17 +658,62 @@
             <div class="modal-tabs">
                 <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 ARASAAC</button>
                 <button id="tab-btn-traductor" class="tab-btn" onclick="canviarPestanya('tab-traductor')">🌍 Traductor</button>
-                <button id="tab-btn-pujar" class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar/IA</button>
+                <button id="tab-btn-pujar" class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar</button>
+                <button id="tab-btn-ia" class="tab-btn" onclick="canviarPestanya('tab-ia-img')">🤖 IA</button>
                 <button class="tab-btn" onclick="obrirTabEdicio()">🎨 Editar</button>
             </div>
             <div class="modal-body">
                 <div class="grup-titol-modal">
                     <label style="margin-bottom:10px;">Editar Text:</label>
                     <div id="camps-text" class="inputs-container-modal"></div>
+                </div>
+                
+                <div id="tab-arasaac" class="contingut-tab">
+                    <div class="cerca-wrapper"><input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()"><button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca</button></div>
+                    <div id="resultats-arasaac" class="resultats-grid"></div>
+                </div>
+                
+                <div id="tab-traductor" class="contingut-tab" style="display:none;">
+                    <p style="font-size:0.9em; margin-top:0;">Tria els idiomes a traduir per al Text 1:</p>
+                    <div class="caixa-idiomes-check">
+                        <label><input type="checkbox" value="es" class="check-trad" checked> Castellà</label>
+                        <label><input type="checkbox" value="en" class="check-trad" checked> Anglès</label>
+                        <label><input type="checkbox" value="fr" class="check-trad"> Francès</label>
+                        <label><input type="checkbox" value="de" class="check-trad"> Alemany</label>
+                        <label><input type="checkbox" value="it" class="check-trad"> Italià</label>
+                        <label><input type="checkbox" value="pt" class="check-trad"> Portuguès</label>
+                        <label><input type="checkbox" value="nl" class="check-trad"> Neerlandès</label>
+                        <label><input type="checkbox" value="ro" class="check-trad"> Romanès</label>
+                        <label><input type="checkbox" value="pl" class="check-trad"> Polonès</label>
+                        <label><input type="checkbox" value="uk" class="check-trad"> Ucraïnès</label>
+                        <label><input type="checkbox" value="ru" class="check-trad"> Rus</label>
+                        <label><input type="checkbox" value="ar" class="check-trad"> Àrab</label>
+                        <label><input type="checkbox" value="zh" class="check-trad"> Xinès</label>
+                        <label><input type="checkbox" value="ur" class="check-trad"> Urdu</label>
+                    </div>
+                    <div class="cerca-wrapper"><button class="btn-cerca-modal btn-cerca-trad" onclick="traduirParaula()" style="width:100%">🌍 Traduir text 1</button></div>
+                    <div id="resultats-traductor" class="grid-traduccions"></div>
+                </div>
+                
+                <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
+                    <p>Puja una imatge pròpia des del teu ordinador:</p>
+                    <input type="file" accept="image/*" onchange="pujarImatge(this)" style="margin-top:10px;">
+                </div>
 
-                    <div id="modal-colors">
-                        <label style="margin-top:15px;">🎨 Color Fons Targeta:</label>
-                        <div class="color-palette">
+                <div id="tab-ia-img" class="contingut-tab" style="display:none;text-align:center;">
+                    <p style="font-size:0.9em; margin-top:0;">Escriu què vols generar (ex: "un nen bevent aigua d'un got"):</p>
+                    <div class="cerca-wrapper">
+                        <input id="ia-img-prompt" placeholder="Descriu la imatge..." onkeyup="if(event.key==='Enter') generarImatgesIA()">
+                        <button class="btn-cerca-modal" style="background:#f5b041;" onclick="generarImatgesIA()">🎨 Generar</button>
+                    </div>
+                    <div id="resultats-ia-img" class="resultats-grid"></div>
+                </div>
+                
+                <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
+                    
+                    <div id="modal-colors" style="margin-bottom: 20px; background:#fffcf5; padding:10px; border-radius:10px; border:1px dashed #ccc;">
+                        <label style="margin-top:0;">🎨 Color Fons Targeta:</label>
+                        <div class="color-palette" style="margin-bottom:0;">
                             <button class="color-btn" style="background:#ffffff" onclick="setTargetColor('#ffffff')"></button>
                             <button class="color-btn" style="background:#ffe082" onclick="setTargetColor('#ffe082')"></button>
                             <button class="color-btn" style="background:#a5d6a7" onclick="setTargetColor('#a5d6a7')"></button>
@@ -688,25 +722,7 @@
                             <button class="color-btn" style="background:#e1bee7" onclick="setTargetColor('#e1bee7')"></button>
                         </div>
                     </div>
-                </div>
 
-                <div id="tab-arasaac" class="contingut-tab">
-                    <div class="cerca-wrapper"><input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()"><button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca</button></div>
-                    <div id="resultats-arasaac" class="resultats-grid"></div>
-                </div>
-
-                <div id="tab-traductor" class="contingut-tab" style="display:none;">
-                    <div class="cerca-wrapper"><button class="btn-cerca-modal btn-cerca-trad" onclick="traduirParaula()" style="width:100%">🌍 Traduir text 1</button></div>
-                    <div id="resultats-traductor" class="grid-traduccions"></div>
-                </div>
-
-                <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
-                    <p>Puja una imatge pròpia:</p><input type="file" accept="image/*" onchange="pujarImatge(this)">
-                    <hr style="margin:20px 0; border:0; border-top:1px solid #eee;">
-                    <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin:auto;padding:15px;border-radius:50px;">🎨 Generar amb IA</button>
-                </div>
-
-                <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
                     <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
                         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px;">
                             <label style="font-size:0.8em;">Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
@@ -719,17 +735,17 @@
                             <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
                             <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
                             <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
-
+                            
                             <div style="width:2px; height:20px; background:#ccc; margin:0 2px;"></div> 
-
+                            
                             <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
                             <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
                             <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
                             <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
                             <button class="btn-color-dibuix" style="background:#000000" onclick="setDrawColor('#000000')"></button>
-
+                            
                             <div style="width:2px; height:20px; background:#ccc; margin:0 2px;"></div> 
-
+                            
                             <button style="background:#95a5a6; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
                         </div>
                         <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white; cursor:crosshair;"></canvas>
@@ -750,46 +766,46 @@
 
     <script>
         // ==========================================
-        // DICCIONARI UI PICTOTRADUCTOR MULTI-IDIOMA
+        // DICCIONARI UI PICTOXAT MULTI-IDIOMA
         // ==========================================
         const uiDict = {
-            'ca': ["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!", "Escull el teu idioma:", "Escriu la frase aquí o utilitza el micròfon...", "🎤 Parlar", "➡️ Traduir", "👂 Escoltant..."],
-            'es': ["¿Necesitas ayuda y no sabes cómo decirlo? ¡Elige tu idioma y explícalo con pictogramas!", "Elige tu idioma:", "Escribe la frase aquí o usa el micrófono...", "🎤 Hablar", "➡️ Traducir", "👂 Escuchando..."],
-            'en': ["Need help and don't know how to say it? Choose your language and explain it with pictograms!", "Choose your language:", "Type the phrase here or use the microphone...", "🎤 Speak", "➡️ Translate", "👂 Listening..."],
-            'fr': ["Besoin d'aide et vous ne savez pas comment le dire ? Choisissez votre langue et expliquez-le avec des pictogrammes !", "Choisissez votre langue :", "Écrivez la phrase ici ou utilisez le microphone...", "🎤 Parler", "➡️ Traduire", "👂 En écoute..."],
-            'de': ["Brauchst du Hilfe und weißt nicht, wie du es sagen sollst? Wähle deine Sprache und erkläre es mit Piktogrammen!", "Wähle deine Sprache:", "Schreibe den Satz hier oder benutze das Mikrofon...", "🎤 Sprechen", "➡️ Übersetzen", "👂 Höre zu..."],
-            'it': ["Hai bisogno di aiuto e non sai come dirlo? Scegli la tua lingua e spiegalo con i pittogrammi!", "Scegli la tua lingua:", "Scrivi la frase qui o usa il microfono...", "🎤 Parla", "➡️ Traduci", "👂 Ascoltando..."],
-            'pt': ["Precisa de ajuda e não sabe como dizer? Escolha o seu idioma e explique com pictogramas!", "Escolha o seu idioma:", "Escreva a frase aqui ou use o microfone...", "🎤 Falar", "➡️ Traduzir", "👂 Ouvindo..."],
-            'nl': ["Hulp nodig en je weet niet hoe je het moet zeggen? Kies je taal en leg het uit met pictogrammen!", "Kies je taal:", "Typ hier de zin of gebruik de microfoon...", "🎤 Spreken", "➡️ Vertalen", "👂 Luisteren..."],
-            'ro': ["Ai nevoie de ajutor și nu știi cum să spui? Alege limba ta și explică prin pictograme!", "Alege limba:", "Scrie fraza aici sau folosește microfonul...", "🎤 Vorbește", "➡️ Traduce", "👂 Ascult..."],
-            'pl': ["Potrzebujesz pomocy i nie wiesz, jak to powiedzieć? Wybierz swój język i wyjaśnij to za pomocą piktogramów!", "Wybierz swój język:", "Wpisz tu zdanie lub użyj mikrofonu...", "🎤 Mów", "➡️ Tłumacz", "👂 Słucham..."],
-            'uk': ["Потрібна допомога і не знаєте, як це сказати? Виберіть свою мову і поясніть за допомогою піктограм!", "Виберіть свою мову:", "Напишіть фразу тут або скористайтеся мікрофоном...", "🎤 Говорити", "➡️ Перекласти", "👂 Слухаю..."],
-            'ru': ["Нужна помощь и не знаете, как это сказать? Выберите свой язык и объясните с помощью пиктограмм!", "Выберите свой язык:", "Напишите фразу здесь или используйте микрофон...", "🎤 Говорить", "➡️ Перевести", "👂 Слушаю..."],
-            'bg': ["Нуждаете се от помощ и не знаете как да го кажете? Изберете своя език и го обяснете с пиктограми!", "Изберете своя език:", "Напишете фразата тук или използвайте микрофона...", "🎤 Говори", "➡️ Преведи", "👂 Слушам..."],
-            'ar': ["هل تحتاج إلى مساعدة ولا تعرف كيف تقولها؟ اختر لغتك واشرحها باستخدام الرموز التوضيحية!", "اختر لغتك:", "اكتب العبارة هنا أو استخدم الميكروفون...", "🎤 تحدث", "➡️ ترجمة", "👂 أستمع..."],
-            'zh': ["需要帮助不知道怎么说？选择你的语言，用图画解释吧！", "选择你的语言：", "在这里输入句子或使用麦克风...", "🎤 说话", "➡️ 翻译", "👂 听着..."],
-            'fa': ["کمک می خواهید و نمی دانید چگونه بگویید؟ زبان خود را انتخاب کنید و با پیکتوگرام توضیح دهید!", "زبان خود را انتخاب کنید:", "جمله را اینجا بنویسید یا از میکروفون استفاده کنید...", "🎤 صحبت کن", "➡️ ترجمه", "👂 در حال گوش دادن..."],
-            'he': ["צריך עזרה ולא יודע איך להגיד את זה? בחר את השפה שלך והסבר באמצעות סמלים!", "בחר את השפה שלך:", "הקלד את המשפט כאן או השתמש במיקרופון...", "🎤 דבר", "➡️ תרגם", "👂 מקשיב..."],
-            'el': ["Χρειάζεστε βοήθεια και δεν ξέρετε πώς να το πείτε; Επιλέξτε τη γλώσσα σας και εξηγήστε το με εικονογράμματα!", "Επιλέξτε τη γλώσσα σας:", "Γράψτε τη φράση εδώ ή χρησιμοποιήστε το μικρόφωνο...", "🎤 Μιλήστε", "➡️ Μετάφραση", "👂 Ακούω..."],
-            'eu': ["Laguntza behar duzu eta ez dakizu nola esan? Aukeratu zure hizkuntza eta azaldu piktogramekin!", "Aukeratu zure hizkuntza:", "Idatzi esaldia hemen edo erabili mikrofonoa...", "🎤 Hitz egin", "➡️ Itzuli", "👂 Entzuten..."],
-            'gl': ["Necesitas axuda e non sabes como dicilo? Elixe o teu idioma e explícao con pictogramas!", "Elixe o teu idioma:", "Escribe a frase aquí ou usa o micrófono...", "🎤 Falar", "➡️ Traducir", "👂 Escoitando..."],
-            'val': ["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!", "Escull el teu idioma:", "Escriu la frase aquí o utilitza el micròfon...", "🎤 Parlar", "➡️ Traduir", "👂 Escoltant..."],
-            'cs': ["Potřebujete pomoci a nevíte, jak to říct? Vyberte si svůj jazyk a vysvětlete to pomocí piktogramů!", "Vyberte si svůj jazyk:", "Napište sem větu nebo použijte mikrofon...", "🎤 Mluvit", "➡️ Přeložit", "👂 Poslouchám..."],
-            'sk': ["Potrebujete pomôcť a neviete, ako to povedať? Vyberte si svoj jazyk a vysvetlite to pomocou piktogramov!", "Vyberte si svoj jazyk:", "Napíšte sem vetu alebo použite mikrofón...", "🎤 Hovoriť", "➡️ Preložiť", "👂 Počúvam..."],
-            'sl': ["Potrebujete pomoč in ne veste, kako bi to povedali? Izberite svoj jezik in razložite s piktogrami!", "Izberite svoj jezik:", "Tukaj vnesite frazo ali uporabite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Poslušam..."],
-            'hr': ["Potrebna vam je pomoć i ne znate kako to reći? Odaberite svoj jezik i objasnite to pomoću piktograma!", "Odaberite svoj jezik:", "Ovdje napišite izraz ili upotrijebite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Slušam..."],
-            'sr': ["Treba vam pomoć i ne znate kako da to kažete? Izaberite svoj jezik i objasnite pomoću piktograma!", "Izaberite svoj jezik:", "Napišite frazu ovde ili koristite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Slušam..."],
-            'mk': ["Имате потреба од помош и не знаете како да го кажете тоа? Изберете го вашиот јазик и објаснете со пиктограми!", "Изберете го вашиот јазик:", "Напишете ја фразата тука или користете го микрофонот...", "🎤 Зборувај", "➡️ Преведи", "👂 Слушам..."],
-            'sq': ["Keni nevojë për ndihmë dhe nuk dini si ta thoni? Zgjidhni gjuhën tuaj dhe shpjegojeni me piktograme!", "Zgjidhni gjuhën tuaj:", "Shkruani frazën këtu ose përdorni mikrofonin...", "🎤 Flisni", "➡️ Përkthe", "👂 Duke dëgjuar..."],
-            'hu': ["Segítségre van szüksége, és nem tudja, hogyan mondja el? Válassza ki a nyelvét, és magyarázza el piktogramokkal!", "Válassza ki a nyelvét:", "Írja be ide a kifejezést, vagy használja a mikrofont...", "🎤 Beszélj", "➡️ Fordítás", "👂 Figyelek..."],
-            'da': ["Brug for hjælp og ved ikke, hvordan man siger det? Vælg dit sprog og forklar det med piktogrammer!", "Vælg dit sprog:", "Skriv sætningen her eller brug mikrofonen...", "🎤 Tal", "➡️ Oversæt", "👂 Lytter..."],
-            'sv': ["Behöver du hjälp och vet inte hur du ska säga det? Välj ditt språk och förklara det med piktogram!", "Välj ditt språk:", "Skriv frasen här eller använd mikrofonen...", "🎤 Tala", "➡️ Översätt", "👂 Lyssnar..."],
-            'fi': ["Tarvitsetko apua etkä tiedä miten sanoa se? Valitse kielesi ja selitä se kuvamerkeillä!", "Valitse kielesi:", "Kirjoita lause tähän tai käytä mikrofonia...", "🎤 Puhu", "➡️ Käännä", "👂 Kuuntelen..."],
-            'et': ["Vajad abi ja ei tea, kuidas seda öelda? Vali oma keel ja selgita piktogrammidega!", "Vali oma keel:", "Kirjuta fraas siia või kasuta mikrofoni...", "🎤 Räägi", "➡️ Tõlgi", "👂 Kuulan..."],
-            'lt': ["Reikia pagalbos ir nežinote, kaip tai pasakyti? Pasirinkite savo kalbą ir paaiškinkite piktogramomis!", "Pasirinkite savo kalbą:", "Įrašykite frazę čia arba naudokite mikrofoną...", "🎤 Kalbėti", "➡️ Išversti", "👂 Klausau..."],
-            'lv': ["Nepieciešama palīdzība un nezināt, kā to pateikt? Izvēlieties savu valodu un izskaidrojiet to ar piktogrammām!", "Izvēlieties savu valodu:", "Ierakstiet frāzi šeit vai izmantojiet mikrofonu...", "🎤 Runāt", "➡️ Tulkot", "👂 Klausos..."],
-            'ko': ["도움이 필요하지만 어떻게 말해야 할지 모르겠나요? 언어를 선택하고 픽토그램으로 설명해 보세요!", "언어 선택:", "여기에 문장을 입력하거나 마이크를 사용하세요...", "🎤 말하기", "➡️ 번역", "👂 듣는 중..."],
-            'ur': ["مدد کی ضرورت ہے اور نہیں جانتے کہ کیسے کہنا ہے؟ اپنی زبان منتخب کریں اور تصویری علامتوں سے سمجھائیں!", "اپنی زبان منتخب کریں:", "یہاں جملہ لکھیں یا مائیکروفون استعمال کریں...", "🎤 بولیں", "➡️ ترجمہ کریں", "👂 سن رہا ہوں..."]
+            'ca': ["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!", "El teu idioma:", "Tradueix a:", "Escriu la frase aquí o utilitza el micròfon...", "🎤 Parlar", "➡️ Traduir", "👂 Escoltant..."],
+            'es': ["¿Necesitas ayuda y no sabes cómo decirlo? ¡Elige tu idioma y explícalo con pictogramas!", "Tu idioma:", "Traducir a:", "Escribe la frase aquí o usa el micrófono...", "🎤 Hablar", "➡️ Traducir", "👂 Escuchando..."],
+            'en': ["Need help and don't know how to say it? Choose your language and explain it with pictograms!", "Your language:", "Translate to:", "Type the phrase here or use the microphone...", "🎤 Speak", "➡️ Translate", "👂 Listening..."],
+            'fr': ["Besoin d'aide et vous ne savez pas comment le dire ? Choisissez votre langue et expliquez-le avec des pictogrammes !", "Votre langue :", "Traduire en :", "Écrivez la phrase ici ou utilisez le microphone...", "🎤 Parler", "➡️ Traduire", "👂 En écoute..."],
+            'de': ["Brauchst du Hilfe und weißt nicht, wie du es sagen sollst? Wähle deine Sprache und erkläre es mit Piktogrammen!", "Deine Sprache:", "Übersetzen in:", "Schreibe den Satz hier oder benutze das Mikrofon...", "🎤 Sprechen", "➡️ Übersetzen", "👂 Höre zu..."],
+            'it': ["Hai bisogno di aiuto e non sai come dirlo? Scegli la tua lingua e spiegalo con i pittogrammi!", "La tua lingua:", "Traduci in:", "Scrivi la frase qui o usa il microfono...", "🎤 Parla", "➡️ Traduci", "👂 Ascoltando..."],
+            'pt': ["Precisa de ajuda e não sabe como dizer? Escolha o seu idioma e explique com pictogramas!", "Seu idioma:", "Traduzir para:", "Escreva a frase aqui ou use o microfone...", "🎤 Falar", "➡️ Traduzir", "👂 Ouvindo..."],
+            'nl': ["Hulp nodig en je weet niet hoe je het moet zeggen? Kies je taal en leg het uit met pictogrammen!", "Jouw taal:", "Vertaal naar:", "Typ hier de zin of gebruik de microfoon...", "🎤 Spreken", "➡️ Vertalen", "👂 Luisteren..."],
+            'ro': ["Ai nevoie de ajutor și nu știi cum să spui? Alege limba ta și explică prin pictograme!", "Limba ta:", "Traduce în:", "Scrie fraza aici sau folosește microfonul...", "🎤 Vorbește", "➡️ Traduce", "👂 Ascult..."],
+            'pl': ["Potrzebujesz pomocy i nie wiesz, jak to powiedzieć? Wybierz swój język i wyjaśnij to za pomocą piktogramów!", "Twój język:", "Przetłumacz na:", "Wpisz tu zdanie lub użyj mikrofonu...", "🎤 Mów", "➡️ Tłumacz", "👂 Słucham..."],
+            'uk': ["Потрібна допомога і не знаєте, як це сказати? Виберіть свою мову і поясніть за допомогою піктограм!", "Ваша мова:", "Перекласти на:", "Напишіть фразу тут або скористайтеся мікрофоном...", "🎤 Говорити", "➡️ Перекласти", "👂 Слухаю..."],
+            'ru': ["Нужна помощь и не знаете, как это сказать? Выберите свой язык и объясните с помощью пиктограмм!", "Ваш язык:", "Перевести на:", "Напишите фразу здесь или используйте микрофон...", "🎤 Говорить", "➡️ Перевести", "👂 Слушаю..."],
+            'bg': ["Нуждаете се от помощ и не знаете как да го кажете? Изберете своя език и го обяснете с пиктограми!", "Вашият език:", "Превод на:", "Напишете фразата тук или използвайте микрофона...", "🎤 Говори", "➡️ Преведи", "👂 Слушам..."],
+            'ar': ["هل تحتاج إلى مساعدة ولا تعرف كيف تقولها؟ اختر لغتك واشرحها باستخدام الرموز التوضيحية!", "لغتك:", "ترجم إلى:", "اكتب العبارة هنا أو استخدم الميكروفون...", "🎤 تحدث", "➡️ ترجمة", "👂 أستمع..."],
+            'zh': ["需要帮助不知道怎么说？选择你的语言，用图画解释吧！", "你的语言：", "翻译成：", "在这里输入句子或使用麦克风...", "🎤 说话", "➡️ 翻译", "👂 听着..."],
+            'fa': ["کمک می خواهید و نمی دانید چگونه بگویید؟ زبان خود را انتخاب کنید و با پیکتوگرام توضیح دهید!", "زبان شما:", "ترجمه به:", "جمله را اینجا بنویسید یا از میکروفون استفاده کنید...", "🎤 صحبت کن", "➡️ ترجمه", "👂 در حال گوش دادن..."],
+            'he': ["צריך עזרה ולא יודע איך להגיד את זה? בחר את השפה שלך והסבר באמצעות סמלים!", "השפה שלך:", "תרגם ל:", "הקלד את המשפט כאן או השתמש במיקרופון...", "🎤 דבר", "➡️ תרגם", "👂 מקשיב..."],
+            'el': ["Χρειάζεστε βοήθεια και δεν ξέρετε πώς να το πείτε; Επιλέξτε τη γλώσσα σας και εξηγήστε το με εικονογράμματα!", "Η γλώσσα σας:", "Μετάφραση σε:", "Γράψτε τη φράση εδώ ή χρησιμοποιήστε το μικρόφωνο...", "🎤 Μιλήστε", "➡️ Μετάφραση", "👂 Ακούω..."],
+            'eu': ["Laguntza behar duzu eta ez dakizu nola esan? Aukeratu zure hizkuntza eta azaldu piktogramekin!", "Zure hizkuntza:", "Itzuli honetara:", "Idatzi esaldia hemen edo erabili mikrofonoa...", "🎤 Hitz egin", "➡️ Itzuli", "👂 Entzuten..."],
+            'gl': ["Necesitas axuda e non sabes como dicilo? Elixe o teu idioma e explícao con pictogramas!", "O teu idioma:", "Traducir a:", "Escribe a frase aquí ou usa o micrófono...", "🎤 Falar", "➡️ Traducir", "👂 Escoitando..."],
+            'val': ["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!", "El teu idioma:", "Tradueix a:", "Escriu la frase aquí o utilitza el micròfon...", "🎤 Parlar", "➡️ Traduir", "👂 Escoltant..."],
+            'cs': ["Potřebujete pomoci a nevíte, jak to říct? Vyberte si svůj jazyk a vysvětlete to pomocí piktogramů!", "Váš jazyk:", "Přeložit do:", "Napište sem větu nebo použite mikrofon...", "🎤 Mluvit", "➡️ Přeložit", "👂 Poslouchám..."],
+            'sk': ["Potrebujete pomôcť a neviete, ako to povedať? Vyberte si svoj jazyk a vysvetlite to pomocou piktogramov!", "Váš jazyk:", "Preložiť do:", "Napíšte sem vetu alebo použite mikrofón...", "🎤 Hovoriť", "➡️ Preložiť", "👂 Počúvam..."],
+            'sl': ["Potrebujete pomoč in ne veste, kako bi to povedali? Izberite svoj jezik in razložite s piktogrami!", "Vaš jezik:", "Prevedi v:", "Tukaj vnesite frazo ali uporabite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Poslušam..."],
+            'hr': ["Potrebna vam je pomoć i ne znate kako to reći? Odaberite svoj jezik i objasnite to pomoću piktograma!", "Vaš jezik:", "Prevedi na:", "Ovdje napišite izraz ili upotrijebite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Slušam..."],
+            'sr': ["Treba vam pomoć i ne znate kako da to kažete? Izaberite svoj jezik i objasnite pomoću piktograma!", "Tvoj jezik:", "Prevedi na:", "Napišite frazu ovde ili koristite mikrofon...", "🎤 Govori", "➡️ Prevedi", "👂 Slušam..."],
+            'mk': ["Имате потреба од помош и не знаете како да го кажете тоа? Изберете го вашиот јазик и објаснете со пиктограми!", "Вашиот јазик:", "Преведи на:", "Напишете ја фразата тука или користете го микрофонот...", "🎤 Зборувај", "➡️ Преведи", "👂 Слушам..."],
+            'sq': ["Keni nevojë për ndihmë dhe nuk dini si ta thoni? Zgjidhni gjuhën tuaj dhe shpjegojeni me piktograme!", "Gjuha juaj:", "Përkthe në:", "Shkruani frazën këtu ose përdorni mikrofonin...", "🎤 Flisni", "➡️ Përkthe", "👂 Duke dëgjuar..."],
+            'hu': ["Segítségre van szüksége, és nem tudja, hogyan mondja el? Válassza ki a nyelvét, és magyarázza el piktogramokkal!", "Az Ön nyelve:", "Fordítás erre:", "Írja be ide a kifejezést, vagy használja a mikrofont...", "🎤 Beszélj", "➡️ Fordítás", "👂 Figyelek..."],
+            'da': ["Brug for hjælp og ved ikke, hvordan man siger det? Vælg dit sprog og forklar det med piktogrammer!", "Dit sprog:", "Oversæt til:", "Skriv sætningen her eller brug mikrofonen...", "🎤 Tal", "➡️ Oversæt", "👂 Lytter..."],
+            'sv': ["Behöver du hjälp och vet inte hur du ska säga det? Välj ditt språk och förklara det med piktogram!", "Ditt språk:", "Översätt till:", "Skriv frasen här eller använd mikrofonen...", "🎤 Tala", "➡️ Översätt", "👂 Lyssnar..."],
+            'fi': ["Tarvitsetko apua etkä tiedä miten sanoa se? Valitse kielesi ja selitä se kuvamerkeillä!", "Sinun kielesi:", "Käännä kielelle:", "Kirjoita lause tähän tai käytä mikrofonia...", "🎤 Puhu", "➡️ Käännä", "👂 Kuuntelen..."],
+            'et': ["Vajad abi ja ei tea, kuidas seda öelda? Vali oma keel ja selgita piktogrammidega!", "Sinu keel:", "Tõlgi keelde:", "Kirjuta fraas siia või kasuta mikrofoni...", "🎤 Räägi", "➡️ Tõlgi", "👂 Kuulan..."],
+            'lt': ["Reikia pagalbos ir nežinote, kaip tai pasakyti? Pasirinkite savo kalbą ir paaiškinkite piktogramomis!", "Jūsų kalba:", "Išversti į:", "Įrašykite frazę čia arba naudokite mikrofoną...", "🎤 Kalbėti", "➡️ Išversti", "👂 Klausau..."],
+            'lv': ["Nepieciešama palīdzība un nezināt, kā to pateikt? Izvēlieties savu valodu un izskaidrojiet to ar piktogrammām!", "Jūsu valoda:", "Tulkot uz:", "Ierakstiet frāzi šeit vai izmantojiet mikrofonu...", "🎤 Runāt", "➡️ Tulkot", "👂 Klausos..."],
+            'ko': ["도움이 필요하지만 어떻게 말해야 할지 모르겠나요? 언어를 선택하고 픽토그램으로 설명해 보세요!", "사용 언어:", "번역할 언어:", "여기에 문장을 입력하거나 마이크를 사용하세요...", "🎤 말하기", "➡️ 번역", "👂 듣는 중..."],
+            'ur': ["مدد کی ضرورت ہے اور نہیں جانتے کہ کیسے کہنا ہے؟ اپنی زبان منتخب کریں اور تصویری علامتوں سے سمجھائیں!", "آپ کی زبان:", "اس میں ترجمہ کریں:", "یہاں جملہ لکھیں یا مائیکروفون استعمال کریں...", "🎤 بولیں", "➡️ ترجمہ کریں", "👂 سن رہا ہوں..."]
         };
 
         let isListening = false;
@@ -802,16 +818,17 @@
             
             document.getElementById('desc-traductor').innerText = texts[0];
             document.getElementById('label-idioma-traductor').innerText = texts[1];
-            document.getElementById('text-input').placeholder = texts[2];
+            document.getElementById('label-idioma-desti').innerText = texts[2];
+            document.getElementById('text-input').placeholder = texts[3];
             
-            textSpeak = texts[3];
-            textListen = texts[5];
+            textSpeak = texts[4];
+            textListen = texts[6];
             
             if(!isListening) document.getElementById('btn-mic-trad').innerHTML = textSpeak;
             else document.getElementById('btn-mic-trad').innerHTML = textListen;
             
             if(!document.getElementById('btn-trad').disabled) {
-                document.getElementById('btn-trad').innerHTML = texts[4];
+                document.getElementById('btn-trad').innerHTML = texts[5];
             }
         }
 
@@ -819,7 +836,7 @@
         // VARIABLES GLOBALS
         // ==========================================
         let currentView = 'pictojocs'; 
-
+        
         let idiomaSeleccionat = 'ca';
         let elementEditant = null;
         let dadesDomino = []; 
@@ -837,7 +854,7 @@
         let drawColor = '#e74c3c';
         let currentTool = 'freehand';
         let startX, startY, currentX, currentY;
-
+        
         // Variables moviment dibuix
         let isDraggingShape = false;
         let draggedShapeIndex = -1;
@@ -857,7 +874,7 @@
                 editorCanvas.addEventListener('mousedown', startDrawingCanvas);
                 editorCanvas.addEventListener('mousemove', drawCanvas);
                 window.addEventListener('mouseup', stopDrawingCanvas);
-
+                
                 editorCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDrawingCanvas(e); }, {passive: false});
                 editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
                 window.addEventListener('touchend', stopDrawingCanvas);
@@ -871,6 +888,7 @@
             currentView = view;
             document.getElementById('view-pictojocs').style.display = (view === 'pictojocs') ? 'block' : 'none';
             document.getElementById('view-pictotraductor').style.display = (view === 'pictotraductor') ? 'block' : 'none';
+            if (view === 'pictotraductor') canviarIdiomaUI();
         }
 
         // ==========================================
@@ -885,7 +903,7 @@
         }
 
         // ==========================================
-        // LÒGICA PICTOJOCS (Intacta)
+        // LÒGICA PICTOJOCS
         // ==========================================
         function desarProjecte() {
             const data = {
@@ -948,18 +966,13 @@
             const btnMix = document.getElementById('btn-mix');
             const instruccions = document.getElementById('text-instruccions');
             const avisDobleCara = document.getElementById('avis-doble-cara');
-
+            
             if (mode === 'targeta' || mode === 'memory') avisDobleCara.style.display = 'list-item';
             else avisDobleCara.style.display = 'none';
 
             if (mode === 'domino') {
-                btnMix.style.display = 'flex'; instruccions.innerHTML = "Consell: clica a \"Barrejar fitxes\" per reordenar aleatòriament.";
                 btnMix.style.display = 'flex'; 
-            } else if (mode === 'memory') {
-                btnMix.style.display = 'none'; instruccions.innerHTML = "Consell: Es generaran parelles separades. El revers serà el logo de PictoJocs.";
-                btnMix.style.display = 'none'; 
             } else {
-                btnMix.style.display = 'none'; instruccions.innerHTML = "Consell: Arrossega per reordenar. Fes clic als dibuixos o noms per editar.";
                 btnMix.style.display = 'none'; 
             }
             generarDocument();
@@ -974,7 +987,7 @@
 
             document.getElementById('titol-resultat').innerText = titol;
             document.getElementById('titol-resultat-back').innerText = titol;
-
+            
             const cursEl = document.getElementById('curs-resultat');
             const cursElBack = document.getElementById('curs-resultat-back');
             if (curs.trim()) { cursEl.innerText = curs; cursEl.style.display='inline-block'; cursElBack.innerText = curs; cursElBack.style.display='inline-block'; } 
@@ -990,7 +1003,7 @@
 
             if (!textParaules.trim()) return; 
             const llista = textParaules.split(',').map(p=>p.trim()).filter(p=>p!=='');
-
+            
             if (dadesDomino.length === 0 || dadesDomino.length !== llista.length) {
                 dadesDomino = llista.map(p => {
                     let mem = memoriaEdicions[p];
@@ -1086,7 +1099,7 @@
             const elementsOrigen = Array.from(origen.children); const ordreIndex = elementsOrigen.map(el => el.dataset.index);
             let nousElements = []; ordreIndex.forEach(idx => { const el = desti.querySelector(`.pictograma[data-index="${idx}"]`); if(el) desti.appendChild(el); });
         }
-
+        
         const conts = [document.getElementById('contenidor-picts'), document.getElementById('contenidor-revers')];
         conts.forEach(cont => {
             cont.addEventListener('dragover', (e) => {
@@ -1118,7 +1131,7 @@
             if (paper === 'a3') { doc.setProperty('--width-paper', '297mm'); doc.setProperty('--height-paper', '420mm'); } 
             else { doc.setProperty('--width-paper', '210mm'); doc.setProperty('--height-paper', '297mm'); }
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
-
+            
             setTimeout(() => {
                 const mode = document.getElementById('selector-mode').value;
                 if(mode === 'targeta') document.querySelectorAll('.contingut-back').forEach(el => autoMidaText(el));
@@ -1182,10 +1195,10 @@ Normes:
 
                 const data = await response.json();
                 if(data.error) throw new Error(data.error.message);
-
+                
                 let text = data.candidates[0].content.parts[0].text.trim();
                 text = text.replace(/\n/g, ', ').replace(/,\s*,/g, ',');
-
+                
                 document.getElementById('llista-paraules').value = text;
                 document.getElementById('modal-prompt-ia').style.display = 'none';
                 generarDocument();
@@ -1198,22 +1211,8 @@ Normes:
 
 
         // ==========================================
-        // LÒGICA PICTOTRADUCTOR
+        // LÒGICA PICTOXAT
         // ==========================================
-        const stopWords = new Set(["el", "la", "els", "les", "un", "una", "uns", "unes", "a", "al", "als", "de", "del", "dels", "en", "per", "amb", "i", "o", "u", "si", "no", "que", "què", "com", "on", "em", "et", "es", "ens", "us", "meu", "meva", "teu", "teva", "seu", "seva", "si us plau", "sisplau", "hi", "ho", "li", "puc", "podem", "vull", "volem", "los", "las", "unos", "unas", "por", "para", "con", "y", "qué", "como", "donde", "me", "te", "se", "nos", "os", "mi", "tu", "su", "por favor", "puedo", "podemos", "quiero", "queremos", "the", "an", "to", "of", "in", "for", "on", "with", "at", "by", "from", "and", "or", "but", "is", "are", "am", "was", "were", "be", "been", "being", "you", "he", "she", "it", "we", "they", "my", "your", "his", "her", "its", "our", "their", "please", "can", "could", "would", "will", "shall", "should", "may", "might", "must", "do", "does", "did", "have", "has", "had", "ein", "eine", "einer", "eines", "einem", "einen", "der", "die", "das", "den", "dem", "des", "ich", "du", "er", "sie", "es", "wir", "ihr", "mich", "dich", "sich", "uns", "euch", "ist", "sind", "war", "waren", "sein", "haben", "hat", "hatte", "bitte"]);
-        function netejarParaula(paraula) { return paraula.replace(/^[.,?!¡¿()]+|[.,?!¡¿()]+$/g, '').toLowerCase(); }
-
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition; let recognition;
-        if (SpeechRecognition) {
-            recognition = new SpeechRecognition(); recognition.continuous = false; recognition.interimResults = false;
-            recognition.onstart = function() { const btn = document.getElementById('btn-mic'); btn.classList.add('escoltant'); btn.innerHTML = "👂 Escoltant..."; document.getElementById('text-input').value = ""; document.getElementById('text-input').placeholder = "Escoltant..."; };
-            recognition.onend = function() { const btn = document.getElementById('btn-mic'); btn.classList.remove('escoltant'); btn.innerHTML = "🎤 Parlar"; document.getElementById('text-input').placeholder = "Escriu la frase aquí o utilitza el micròfon..."; };
-            recognition.onstart = function() { isListening = true; const btn = document.getElementById('btn-mic-trad'); btn.classList.add('escoltant'); btn.innerHTML = textListen; document.getElementById('text-input').value = ""; document.getElementById('text-input').placeholder = "..."; };
-            recognition.onend = function() { isListening = false; const btn = document.getElementById('btn-mic-trad'); btn.classList.remove('escoltant'); btn.innerHTML = textSpeak; canviarIdiomaUI(); };
-            recognition.onresult = function(event) { document.getElementById('text-input').value = event.results[0][0].transcript; executarTraduccio(); };
-        } else { document.getElementById('btn-mic').style.display = 'none'; }
-        } else { document.getElementById('btn-mic-trad').style.display = 'none'; }
-
         function activarMicrofon() {
             if (!recognition) return; let idio = document.getElementById('idioma-input').value;
             const speechLangMap = { 'ca': 'ca-ES', 'es': 'es-ES', 'en': 'en-US', 'fr': 'fr-FR', 'de': 'de-DE', 'it': 'it-IT', 'pt': 'pt-PT', 'nl': 'nl-NL', 'ro': 'ro-RO', 'pl': 'pl-PL', 'uk': 'uk-UA', 'ru': 'ru-RU', 'bg': 'bg-BG', 'ar': 'ar-SA', 'zh': 'zh-CN', 'fa': 'fa-IR', 'he': 'he-IL', 'el': 'el-GR', 'eu': 'eu-ES', 'gl': 'gl-ES', 'val': 'ca-ES', 'cs': 'cs-CZ', 'sk': 'sk-SK', 'sl': 'sl-SI', 'hr': 'hr-HR', 'sr': 'sr-RS', 'mk': 'mk-MK', 'sq': 'sq-AL', 'hu': 'hu-HU', 'da': 'da-DK', 'sv': 'sv-SE', 'fi': 'fi-FI', 'et': 'et-EE', 'lt': 'lt-LT', 'lv': 'lv-LV', 'ko': 'ko-KR' };
@@ -1225,45 +1224,67 @@ Normes:
 
         async function executarTraduccio() {
             const frase = document.getElementById('text-input').value.trim(); if(!frase) return;
-            const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div> Traduint...`; btnTrad.disabled = true;
             const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div>`; btnTrad.disabled = true;
             document.getElementById('resultat-pictos').innerHTML = ''; document.getElementById('traduccio-literal-box').style.display = 'none';
             const apiKey = localStorage.getItem('gemini_api_key');
             if (apiKey) { await processarAmbGemini(frase, apiKey); } else { await processarBasic(frase); }
-            btnTrad.innerHTML = `➡️ Traduir`; btnTrad.disabled = false;
             
             const lang = document.getElementById('idioma-input').value;
             const texts = uiDict[lang] || uiDict['ca'];
-            btnTrad.innerHTML = texts[4]; btnTrad.disabled = false;
+            btnTrad.innerHTML = texts[5]; btnTrad.disabled = false;
         }
 
         async function processarAmbGemini(text, apiKey) {
-            const langCode = document.getElementById('idioma-input').value;
-            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha dit aquesta frase en l'idioma amb codi ISO '${langCode}': "${text}"
-Analitza la frase i retorna ÚNICAMENT un objecte JSON (sense format markdown, només les claus) amb aquesta structure exacta:
-Analitza la frase i retorna ÚNICAMENT un objecte JSON (sense format markdown, només les claus) amb aquesta estructura exacta:
-{ "traduccio_literal": "Frase completa i natural traduïda al català", "pictogrames": [ {"cat": "lema en català d'una paraula clau (infinitiu o singular)", "orig": "paraula original que hi correspon"} ] }
-Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Ignora modals com 'can', articles, preposicions o 'si us plau'. Màxim 6 pictogrames.`;
+            const langOrigen = document.getElementById('idioma-input').value;
+            const langDesti = document.getElementById('idioma-desti').value;
+            
+            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.
+Primer, avalua si la frase té sentit o si és incomprensible (per errors de micròfon o lletres a l'atzar). Corregeix petites faltes d'ortografia i de sentit. Si és totalment incomprensible, posa te_sentit a false.
+Retorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:
+{
+  "te_sentit": true o false,
+  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen dient que no s'ha entès. Si té sentit deixa-ho buit",
+  "traduccio_literal": "Frase completa i ben escrita traduïda a l'idioma destí",
+  "pictogrames": [
+    {"cat": "lema en l'idioma destí (infinitiu o singular) d'una paraula clau", "orig": "paraula original escrita pel nen que hi correspon"}
+  ]
+}
+Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ignora modals com 'can', articles o 'si us plau'. Màxim 6 pictogrames.`;
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 const data = await response.json(); let jsonText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim(); const resultat = JSON.parse(jsonText);
+                
+                if(!resultat.te_sentit) {
+                    alert(resultat.missatge_error || "No s'ha entès la frase."); return;
+                }
+
                 document.getElementById('text-traduit-literal').innerText = resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
-                for (let picto of resultat.pictogrames) { try { const sUrl = `https://api.arasaac.org/api/pictograms/ca/bestsearch/${encodeURIComponent(picto.cat)}`; const r = await fetch(sUrl); const d = await r.json(); if (d && d.length > 0) { const imgUrl = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_300.png`; crearTargetaTrad(picto.cat, picto.orig, imgUrl, langCode); } } catch(e) {} }
+                for (let picto of resultat.pictogrames) { try { const sUrl = `https://api.arasaac.org/api/pictograms/${langDesti}/bestsearch/${encodeURIComponent(picto.cat)}`; const r = await fetch(sUrl); const d = await r.json(); if (d && d.length > 0) { const imgUrl = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_300.png`; crearTargetaTrad(picto.cat, picto.orig, imgUrl, langOrigen); } } catch(e) {} }
             } catch(e) { alert("Error amb la IA. Comprova que la teva clau d'API és correcte. Canviant al mode bàsic..."); await processarBasic(text); }
         }
 
         async function processarBasic(frase) {
-            const langCode = document.getElementById('idioma-input').value;
-            try { const resT = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(frase)}&langpair=${langCode}|ca`); const dataT = await resT.json(); if(dataT.responseData && dataT.responseData.translatedText) { document.getElementById('text-traduit-literal').innerText = dataT.responseData.translatedText; document.getElementById('traduccio-literal-box').style.display = 'block'; } } catch(e) {}
-            let textKilled = frase.toLowerCase().replace("si us plau", "").replace("por favor", ""); const paraules = textKilled.split(/\s+/);
+            const langOrigen = document.getElementById('idioma-input').value;
+            const langDesti = document.getElementById('idioma-desti').value;
+            let fraseTraduida = frase;
+
+            if (langOrigen !== langDesti) {
+                try { const resT = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(frase)}&langpair=${langOrigen}|${langDesti}`); const dataT = await resT.json(); if(dataT.responseData && dataT.responseData.translatedText) { fraseTraduida = dataT.responseData.translatedText; document.getElementById('text-traduit-literal').innerText = fraseTraduida; document.getElementById('traduccio-literal-box').style.display = 'block'; } } catch(e) {}
+            } else {
+                 document.getElementById('text-traduit-literal').innerText = frase; document.getElementById('traduccio-literal-box').style.display = 'block';
+            }
+
+            let textKilled = fraseTraduida.toLowerCase().replace("si us plau", "").replace("por favor", ""); const paraules = textKilled.split(/\s+/);
+            const paraulesOriginals = frase.split(/\s+/); // Intenta emparellar
+
             for (let i=0; i<paraules.length; i++) {
                 let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (stopWords.has(pNeta)) continue; 
                 try {
-                    const searchUrl = `https://api.arasaac.org/api/pictograms/${langCode}/bestsearch/${encodeURIComponent(pNeta)}`; const res = await fetch(searchUrl); const data = await res.json();
+                    const searchUrl = `https://api.arasaac.org/api/pictograms/${langDesti}/bestsearch/${encodeURIComponent(pNeta)}`; const res = await fetch(searchUrl); const data = await res.json();
                     if (data && data.length > 0) {
-                        const pictoId = data[0]._id; const imgUrl = `https://static.arasaac.org/pictograms/${pictoId}/${pictoId}_300.png`; let paraulaCatalana = pNeta; 
-                        try { const detailsUrl = `https://api.arasaac.org/api/pictograms/ca/${pictoId}`; const caRes = await fetch(detailsUrl); const caData = await caRes.json(); if(caData && caData.keywords && caData.keywords.length > 0) paraulaCatalana = caData.keywords[0].keyword; } catch(e) {}
-                        crearTargetaTrad(paraulaCatalana, paraula, imgUrl, langCode);
+                        const pictoId = data[0]._id; const imgUrl = `https://static.arasaac.org/pictograms/${pictoId}/${pictoId}_300.png`; let paraulaPrincipal = pNeta; 
+                        let paraulaAnotada = paraulesOriginals[i] ? netejarParaula(paraulesOriginals[i]) : pNeta;
+                        crearTargetaTrad(paraulaPrincipal, paraulaAnotada, imgUrl, langOrigen);
                     } 
                 } catch (err) {}
             }
@@ -1272,7 +1293,7 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
         let numTargetesTrad = 0;
         function crearTargetaTrad(textCat, textOrig, imgUrl, langCode) {
             const contenidor = document.getElementById('resultat-pictos'); const div = document.createElement('div'); div.className = 'pictograma'; div.dataset.index = numTargetesTrad++;
-            let htmlOriginal = ''; if (langCode !== 'ca') { htmlOriginal = `<span class="fila-paraula text-alumne">(${textOrig})</span>`; }
+            let htmlOriginal = ''; if (textCat.toLowerCase() !== textOrig.toLowerCase()) { htmlOriginal = `<span class="fila-paraula text-alumne">(${textOrig})</span>`; }
             div.innerHTML = `<div class="imatge-box"><img src="${imgUrl}"></div><p><span class="fila-paraula text-traduit">${textCat}</span>${htmlOriginal}</p>`;
             div.onclick = function() { obrirModal(this); }; contenidor.appendChild(div);
         }
@@ -1282,16 +1303,15 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
         // ==========================================
         function obrirModal(el) {
             elementEditant = el;
-
-            // Adaptar pestanyes segons vista
+            
             if (currentView === 'pictotraductor') {
-                document.getElementById('modal-colors').style.display = 'none';
                 document.getElementById('tab-btn-traductor').style.display = 'none';
                 document.getElementById('tab-btn-pujar').style.display = 'none';
+                document.getElementById('tab-btn-ia').style.display = 'none';
             } else {
-                document.getElementById('modal-colors').style.display = 'block';
                 document.getElementById('tab-btn-traductor').style.display = 'flex';
                 document.getElementById('tab-btn-pujar').style.display = 'flex';
+                document.getElementById('tab-btn-ia').style.display = 'flex';
             }
 
             let imgTarget = null;
@@ -1304,7 +1324,6 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
             }
             imgOriginalSrcOnOpen = imgTarget ? imgTarget.src : '';
 
-            // Omplir inputs depenent de l'app
             const containerInputs = document.getElementById('camps-text');
             containerInputs.innerHTML = '';
             let paraulaCerca = '';
@@ -1313,8 +1332,8 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
                 containerInputs.className = `inputs-container-modal dues-paraules`;
                 const p = el.querySelector('p'); const trad = p.querySelector('.text-traduit'); const alum = p.querySelector('.text-alumne');
                 let v0 = trad ? trad.innerText : ""; let v1 = alum ? alum.innerText.replace(/[()]/g, '') : "";
-                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-0" value="${v0}" placeholder="Text Principal (Català)">`;
-                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-1" value="${v1}" placeholder="Text Secundari (Original)">`;
+                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-0" value="${v0}" placeholder="Text Principal">`;
+                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-1" value="${v1}" placeholder="Text Secundari">`;
                 paraulaCerca = v0;
             } else {
                 const mode = document.getElementById('selector-mode').value;
@@ -1375,7 +1394,7 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
             }
             tancarModal(); 
         }
-
+        
         function tancarModal() { document.getElementById('modal-edicio').style.display = 'none'; elementEditant = null; currentColorSelected = '#ffffff'; document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ccc'); }
         function eliminarTargeta() { if(!elementEditant) return; if(confirm("Segur que vols eliminar aquesta targeta?")) { if (currentView === 'pictotraductor') { elementEditant.remove(); tancarModal(); } else { const original = elementEditant.dataset.original; let llista = document.getElementById('llista-paraules').value.split(',').map(p=>p.trim()).filter(p=>p!==''); const idx = llista.indexOf(original); if(idx > -1) { llista.splice(idx, 1); document.getElementById('llista-paraules').value = llista.join(', '); tancarModal(); generarDocument(); } } } }
         function canviarPestanya(id) { document.querySelectorAll('.contingut-tab').forEach(e=>e.style.display='none'); document.querySelectorAll('.tab-btn').forEach(e=>e.classList.remove('actiu')); document.getElementById(id).style.display='block'; document.querySelectorAll(`.tab-btn[onclick*="${id}"]`).forEach(b=>b.classList.add('actiu')); }
@@ -1398,12 +1417,68 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
         }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
 
+        /* --- GENERADOR D'IMATGES IA (SENSE CLAU API, VIA POLLINATIONS) --- */
+        async function generarImatgesIA() {
+            const prompt = document.getElementById('ia-img-prompt').value.trim();
+            if(!prompt) return;
+            const divRes = document.getElementById('resultats-ia-img');
+            divRes.innerHTML = "<p style='text-align:center; grid-column: 1 / -1;'>⏳ Dibuixant... triga uns segons!</p>";
+            
+            const basePrmt = encodeURIComponent(prompt + ", simple flat vector illustration, pictogram, white background, no text");
+            const realPrmt = encodeURIComponent(prompt + ", realistic photography, highly detailed, no text");
+            
+            const urls = [
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
+                `https://image.pollinations.ai/prompt/${realPrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`
+            ];
+            
+            divRes.innerHTML = '';
+            urls.forEach(url => {
+                const img = document.createElement('img');
+                img.src = url;
+                img.onclick = () => aplicarImatge(url);
+                divRes.appendChild(img);
+            });
+        }
+
+        /* --- TRADUCTOR MULTI-IDIOMA (TEXT 1) --- */
+        async function traduirParaula() {
+            const word = document.getElementById('input-modal-0').value; 
+            const divRes = document.getElementById('resultats-traductor'); 
+            divRes.innerHTML = "<p style='text-align:center'>⏳ Traduint...</p>";
+            
+            let html = "";
+            const checkboxes = document.querySelectorAll('.check-trad:checked');
+            
+            if (checkboxes.length === 0) {
+                divRes.innerHTML = "<p style='text-align:center'>⚠️ Selecciona com a mínim un idioma.</p>";
+                return;
+            }
+
+            for (const cb of checkboxes) {
+                const langCode = cb.value;
+                const langNom = cb.parentNode.innerText.trim();
+                try { 
+                    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=ca|${langCode}`); 
+                    const data = await res.json(); 
+                    if(data.responseData && data.responseData.translatedText) { 
+                        html += `<div class="item-traduccio" onclick="copiarText('${data.responseData.translatedText}')"><div><span class="lang-code">${langNom}</span><span class="trad-text">${data.responseData.translatedText}</span></div><span class="copy-hint">📋</span></div>`; 
+                    } 
+                } catch(e) {} 
+            }
+            divRes.innerHTML = html || "Error de connexió";
+        }
+        function copiarText(t) { navigator.clipboard.writeText(t); const o = document.getElementById('toast'); o.style.display='block'; setTimeout(()=>o.style.display='none', 2000); }
+
+
         /* --- EDITOR CANVAS --- */
         function setTool(tool) { currentTool = tool; document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu')); document.getElementById('tool-' + tool).classList.add('actiu'); }
         function setDrawColor(c) { drawColor = c; }
         function undoLastDrawing() { if (currentDrawings.length > 0) { currentDrawings.pop(); drawEditorCanvas(); } }
         function getMousePos(e) { const rect = editorCanvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
-
+        
         function buildPath(ctx, shape) {
             ctx.beginPath();
             if (shape.type === 'freehand') { shape.points.forEach((p, i) => { if(i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); }); } 
@@ -1445,7 +1520,7 @@ Regles: Extreu NOMÉS conceptes importants (verbs, substantius, adjectius). Igno
                 drawEditorCanvas();
             }
         }
-
+        
         function obrirTabEdicio() {
             canviarPestanya('tab-dibuix'); let currentSrc = '';
             if (currentView === 'pictotraductor') { currentSrc = elementEditant.querySelector('img').src; }
