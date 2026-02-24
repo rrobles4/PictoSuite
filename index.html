@@ -138,22 +138,24 @@
         .pictograma {
             border: 4px solid var(--targeta-border); border-radius: 15px; background-color: var(--targeta-bg);
             display: flex; flex-direction: column; align-items: center; justify-content: space-between; 
-            aspect-ratio: 0.85; padding: 12px; cursor: grab; break-inside: avoid; page-break-inside: avoid;
+            aspect-ratio: 0.85; padding: 8px; cursor: grab; break-inside: avoid; page-break-inside: avoid;
             box-sizing: border-box; position: relative; overflow: hidden; 
         }
         .pictograma:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
         .pictograma.dragging { opacity: 0.4; border: 3px dashed #999; background: #eee; }
 
         .imatge-box {
-            background-color: #ffffff; border-radius: 10px; width: 100%; height: 70%; 
-            display: flex; align-items: center; justify-content: center; padding: 5px; box-sizing: border-box; overflow: hidden;
+            background-color: #ffffff; border-radius: 10px; width: 100%; height: 75%; 
+            display: flex; align-items: center; justify-content: center; padding: 2px; box-sizing: border-box; overflow: hidden;
+            flex-shrink: 1;
         }
         .imatge-box img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; }
 
         .pictograma p {
             margin: 0; width: 100%; text-align: center; font-size: var(--mida-font-base); font-family: var(--tipus-font); 
-            color: var(--targeta-text); line-height: 1.2; font-weight: bold; height: 28%; margin-top: 2%;
+            color: var(--targeta-text); line-height: 1.1; font-weight: bold; flex-shrink: 0;
             display: flex; align-items: center; justify-content: center; flex-direction: column;
+            min-height: 20%; padding-top: 2px;
         }
 
         .mode-targeta-front .pictograma .imatge-box { height: 100%; }
@@ -173,13 +175,13 @@
         .contingut-back-logo img { width: 90%; height: 90%; object-fit: contain; }
 
         .mode-domino .graella { grid-template-columns: repeat(2, 1fr) !important; }
-        .mode-domino .pictograma { flex-direction: row; aspect-ratio: 2.5 / 1; padding: 8px; gap: 0; }
-        .mode-domino .imatge-box { width: 48%; height: 100%; order: 1; margin: 0; padding: 5px; }
+        .mode-domino .pictograma { flex-direction: row; aspect-ratio: 2.5 / 1; padding: 4px; gap: 0; }
+        .mode-domino .imatge-box { width: 48%; height: 100%; order: 1; margin: 0; padding: 2px; }
         .separador-domino { display: none; width: 3px; height: 100%; background-color: var(--targeta-border); margin: 0 10px; flex-shrink: 0; order: 2; }
         .mode-domino .separador-domino { display: block; }
         .mode-domino .text-domino { order: 3; width: 48%; height: 100%; display: flex; align-items: center; justify-content: center; flex-direction: column; text-align: center; font-family: var(--tipus-font); font-weight: bold; color: var(--targeta-text); overflow: hidden; }
         .mode-domino .pictograma p { display: none; } 
-        .fila-paraula { text-align: center; width: 100%; font-family: var(--tipus-font); font-weight: bold; color: inherit; line-height: 1.1; margin: 2px 0; }
+        .fila-paraula { text-align: center; width: 100%; font-family: var(--tipus-font); font-weight: bold; color: inherit; line-height: 1.1; margin: 2px 0; white-space: nowrap; }
 
         /* --- DISSENYS PICTOXAT --- */
         .descripcio-traductor { color: #666; margin: 0 auto 25px auto; font-size: 1.1em; text-align: center; max-width: 800px;}
@@ -201,7 +203,7 @@
         #view-pictotraductor .imatge-box { height: 60%; }
         #view-pictotraductor .pictograma p { height: 38%; }
         .text-traduit { font-weight: bold; font-size: 22px; text-transform: uppercase; color: #000; }
-        .text-alumne { font-size: 16px; color: #666; font-style: italic; margin-top: 2px; font-weight: normal; text-transform: none;}
+        .text-alumne { font-size: 16px; color: #666; font-style: italic; margin-top: 2px; font-weight: normal; text-transform: none; white-space: nowrap;}
         
         .btn-settings { position: absolute; top: 15px; right: 15px; background: none; border: none; font-size: 28px; cursor: pointer; transition: transform 0.2s; z-index: 100; }
         .btn-settings:hover { transform: scale(1.1); }
@@ -314,7 +316,7 @@
                     <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ PictoXat</button>
                     <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 </div>
-                <button class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
+                <button id="btn-desar" class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
                 <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
             </div>
@@ -387,9 +389,16 @@
             <div class="barra-estils">
                 <div class="control-estil" style="flex:1;">
                     <label>Mida Paper</label>
-                    <select id="mida-paper" onchange="actualitzarEstils()">
+                    <select id="mida-paper" onchange="actualitzarOpcionsColumnes(); actualitzarEstils();">
                         <option value="a4">A4</option>
                         <option value="a3">A3</option>
+                    </select>
+                </div>
+                <div class="control-estil" style="flex:1;">
+                    <label>Sentit</label>
+                    <select id="sentit-paper" onchange="actualitzarEstils()">
+                        <option value="vertical" selected>Vertical</option>
+                        <option value="horitzontal">Horitzontal</option>
                     </select>
                 </div>
                 <div class="control-estil" style="flex:1;">
@@ -400,11 +409,6 @@
                         <option value="3" selected>3 columnes</option>
                         <option value="4">4 columnes</option>
                         <option value="5">5 columnes</option>
-                        <option value="6">6 columnes</option>
-                        <option value="7">7 columnes</option>
-                        <option value="8">8 columnes</option>
-                        <option value="9">9 columnes</option>
-                        <option value="10">10 columnes</option>
                     </select>
                 </div>
                 <div class="control-estil" style="flex:1;">
@@ -565,11 +569,35 @@
                             <option value="de">Alemany (Deutsch)</option>
                             <option value="it">Italià (Italiano)</option>
                             <option value="pt">Portuguès (Português)</option>
+                            <option value="nl">Neerlandès (Nederlands)</option>
                             <option value="ro">Romanès (Română)</option>
+                            <option value="pl">Polonès (Polski)</option>
                             <option value="uk">Ucraïnès (Українська)</option>
                             <option value="ru">Rus (Русский)</option>
+                            <option value="bg">Búlgar (Български)</option>
                             <option value="ar">Àrab (العربية)</option>
                             <option value="zh">Xinès (中文)</option>
+                            <option value="fa">Persa (فارسی)</option>
+                            <option value="he">Hebreu (עברית)</option>
+                            <option value="el">Grec (Ελληνικά)</option>
+                            <option value="eu">Basc (Euskara)</option>
+                            <option value="gl">Gallec (Galego)</option>
+                            <option value="val">Valencià (Valencià)</option>
+                            <option value="cs">Txec (Čeština)</option>
+                            <option value="sk">Eslovac (Slovenčina)</option>
+                            <option value="sl">Eslovè (Slovenščina)</option>
+                            <option value="hr">Croat (Hrvatski)</option>
+                            <option value="sr">Serbi (Српски)</option>
+                            <option value="mk">Macedoni (Македонски)</option>
+                            <option value="sq">Albanès (Shqip)</option>
+                            <option value="hu">Hongarès (Magyar)</option>
+                            <option value="da">Danès (Dansk)</option>
+                            <option value="sv">Suec (Svenska)</option>
+                            <option value="fi">Finlandès (Suomi)</option>
+                            <option value="et">Estonià (Eesti)</option>
+                            <option value="lt">Lituà (Lietuvių)</option>
+                            <option value="lv">Letó (Latviešu)</option>
+                            <option value="ko">Coreà (한국어)</option>
                             <option value="ur">Urdu (اردو)</option>
                         </select>
                     </div>
@@ -714,6 +742,7 @@
                         <input id="ia-img-prompt" placeholder="Descriu la imatge..." style="width:100%; padding:10px; font-size:1.1em; border:2px solid #ddd; border-radius:8px; box-sizing:border-box;" onkeyup="if(event.key==='Enter') generarImatgesIA()">
                     </div>
                     <div id="resultats-ia-img" class="resultats-grid"></div>
+                    <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:#333;color:white;margin-top:20px;padding:10px 15px;border-radius:20px;font-size:0.9em;border:none;cursor:pointer;">🚑 Fallada de servidor? Prova amb Craiyon</button>
                 </div>
                 
                 <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
@@ -932,6 +961,18 @@
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+            
+            // Efecte visual botó "Fet!"
+            const btn = document.getElementById('btn-desar');
+            const txtOriginal = btn.innerHTML;
+            btn.innerHTML = "✅ Fet!";
+            btn.style.backgroundColor = "var(--color-accio)";
+            btn.style.color = "white";
+            setTimeout(() => {
+                btn.innerHTML = txtOriginal;
+                btn.style.backgroundColor = "";
+                btn.style.color = "";
+            }, 2000);
         }
 
         function carregarProjecte(e) {
@@ -950,6 +991,7 @@
                     if (data.font !== undefined) document.getElementById('selector-font').value = data.font;
 
                     memoriaEdicions = data.memoria || {};
+                    actualitzarOpcionsColumnes();
                     canviarMode(); actualitzarEstils(); 
                 } catch(err) { alert("Error carregant el projecte"); }
             }; reader.readAsText(file);
@@ -1127,13 +1169,33 @@
 
         function actualitzarImatgeTargeta(index, src, opacitat) { const imgFront = document.getElementById(`img-${index}-front`); if(imgFront) { imgFront.src = src; imgFront.style.opacity = opacitat; } }
 
+        function actualitzarOpcionsColumnes() {
+            const paper = document.getElementById('mida-paper').value;
+            const colSelect = document.getElementById('selector-columnes');
+            const valActual = parseInt(colSelect.value);
+            let maxCols = paper === 'a3' ? 10 : 5;
+            
+            colSelect.innerHTML = '';
+            for(let i=1; i<=maxCols; i++) {
+                colSelect.innerHTML += `<option value="${i}">${i} columna${i>1?'s':''}</option>`;
+            }
+            colSelect.value = valActual <= maxCols ? valActual : maxCols;
+        }
+
         function actualitzarEstils() {
             const doc = document.documentElement.style;
             doc.setProperty('--tipus-font', document.getElementById('selector-font').value);
             
             const paper = document.getElementById('mida-paper').value;
-            if (paper === 'a3') { doc.setProperty('--width-paper', '297mm'); doc.setProperty('--height-paper', '420mm'); } 
-            else { doc.setProperty('--width-paper', '210mm'); doc.setProperty('--height-paper', '297mm'); }
+            const sentit = document.getElementById('sentit-paper').value;
+            
+            if (paper === 'a3') { 
+                doc.setProperty('--width-paper', sentit === 'horitzontal' ? '420mm' : '297mm'); 
+                doc.setProperty('--height-paper', sentit === 'horitzontal' ? '297mm' : '420mm'); 
+            } else { 
+                doc.setProperty('--width-paper', sentit === 'horitzontal' ? '297mm' : '210mm'); 
+                doc.setProperty('--height-paper', sentit === 'horitzontal' ? '210mm' : '297mm'); 
+            }
             doc.setProperty('--num-columnes', document.getElementById('selector-columnes').value);
             
             setTimeout(() => {
@@ -1151,8 +1213,7 @@
             if (files.length > 0) {
                 let sizes = []; 
                 files.forEach((fila) => { 
-                    fila.style.whiteSpace = 'normal'; 
-                    fila.style.wordBreak = 'break-word';
+                    fila.style.whiteSpace = 'nowrap'; // Força la paraula a quedar en 1 sola línia
                     let mida = 60; 
                     fila.style.fontSize = mida + 'px'; 
                     fila.style.lineHeight = '1.1'; 
@@ -1178,8 +1239,7 @@
                     limit++;
                 }
             } else {
-                container.style.whiteSpace = 'normal';
-                container.style.wordBreak = 'break-word';
+                container.style.whiteSpace = 'nowrap';
                 let mida = 60; container.style.fontSize = mida + 'px'; container.style.lineHeight = '1.1';
                 while (container.scrollWidth > container.clientWidth && mida > 8) { mida--; container.style.fontSize = mida + 'px'; }
                 let limit = 0;
@@ -1499,18 +1559,20 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
             }
             
             const basePrmt = encodeURIComponent(promptEng + ", simple flat vector illustration, pictogram, white background, no text");
-            const realPrmt = encodeURIComponent(promptEng + ", realistic photography, highly detailed, no text");
+            const realPrmt = encodeURIComponent(promptEng + ", realistic photography, highly detailed, no text, clean background");
+            const ts = Date.now();
             
             const urls = [
-                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
-                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
-                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`,
-                `https://image.pollinations.ai/prompt/${realPrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*1000)}`
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*10000)}&ts=${ts}1`,
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*10000)}&ts=${ts}2`,
+                `https://image.pollinations.ai/prompt/${basePrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*10000)}&ts=${ts}3`,
+                `https://image.pollinations.ai/prompt/${realPrmt}?width=300&height=300&nologo=true&seed=${Math.floor(Math.random()*10000)}&ts=${ts}4`
             ];
             
             divRes.innerHTML = '';
             urls.forEach(url => {
                 const img = document.createElement('img');
+                img.onerror = function() { this.style.display='none'; }; 
                 img.src = url;
                 img.onclick = () => aplicarImatge(url);
                 divRes.appendChild(img);
