@@ -238,7 +238,7 @@
         .cinc-paraules .input-text-modal:nth-child(n+3) { width: calc(33.33% - 8px); }
         
         /* FIX HORITZONTAL COLORS */
-        .color-palette { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 15px; }
+        .color-palette { display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 10px; }
         .color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #ccc; cursor: pointer; transition: 0.2s; box-sizing: border-box; padding: 0;}
         .color-btn:hover { transform: scale(1.1); border-color: #333; }
 
@@ -720,52 +720,50 @@
                 
                 <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
                     
-                    <div id="modal-colors" style="margin-bottom: 20px; background:#fffcf5; padding:10px; border-radius:10px; border:1px dashed #ccc;">
-                        <label style="margin-top:0;">🎨 Color Fons Targeta:</label>
-                        <div class="color-palette" style="margin-bottom:0;">
-                            <button class="color-btn" style="background:#ffffff" onclick="setTargetColor('#ffffff')"></button>
-                            <button class="color-btn" style="background:#ffe082" onclick="setTargetColor('#ffe082')"></button>
-                            <button class="color-btn" style="background:#a5d6a7" onclick="setTargetColor('#a5d6a7')"></button>
-                            <button class="color-btn" style="background:#90caf9" onclick="setTargetColor('#90caf9')"></button>
-                            <button class="color-btn" style="background:#ffcc80" onclick="setTargetColor('#ffcc80')"></button>
-                            <button class="color-btn" style="background:#e1bee7" onclick="setTargetColor('#e1bee7')"></button>
+                    <div style="display:flex; gap: 10px; margin-bottom: 15px; align-items:stretch;">
+                        <div style="flex:1; background:#fffcf5; padding:10px; border-radius:10px; border:1px dashed #ccc; display:flex; flex-direction:column; justify-content:center;">
+                            <label style="margin-top:0; margin-bottom:5px; font-size:0.85em; font-weight:bold;">🎨 Fons targeta:</label>
+                            <div class="color-palette" style="margin-bottom:0; justify-content:space-around;">
+                                <button class="color-btn" style="background:#ffffff; border-color:#333;" onclick="setTargetColor('#ffffff', this)"></button>
+                                <button class="color-btn" style="background:#ffe082" onclick="setTargetColor('#ffe082', this)"></button>
+                                <button class="color-btn" style="background:#a5d6a7" onclick="setTargetColor('#a5d6a7', this)"></button>
+                                <button class="color-btn" style="background:#90caf9" onclick="setTargetColor('#90caf9', this)"></button>
+                                <button class="color-btn" style="background:#ffcc80" onclick="setTargetColor('#ffcc80', this)"></button>
+                                <button class="color-btn" style="background:#e1bee7" onclick="setTargetColor('#e1bee7', this)"></button>
+                            </div>
+                        </div>
+                        
+                        <div style="flex:1; background:#f0f8ff; padding:10px; border-radius:10px; border:1px dashed #ccc; display:flex; flex-direction:column; justify-content:center;">
+                            <label style="margin-top:0; margin-bottom:5px; font-size:0.85em; font-weight:bold;">🖌️ Color d'edició:</label>
+                            <div class="color-palette" style="margin-bottom:0; justify-content:space-around;">
+                                <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
+                                <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
+                                <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
+                                <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
+                                <button class="btn-color-dibuix" style="background:#000000" onclick="setDrawColor('#000000')"></button>
+                            </div>
                         </div>
                     </div>
 
                     <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
                         
                         <div class="toolbar-dibuix">
-                            <button id="tool-move-img" class="btn-tool actiu" onclick="setTool('move-img')" title="Moure Dibuix">🖼️</button>
-                            <button id="tool-move-text" class="btn-tool" onclick="setTool('move-text')" title="Moure Lletra">🔤</button>
-                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div> 
-                            
-                            <button id="tool-freehand" class="btn-tool" onclick="setTool('freehand')" title="Dibuix Lliure">〰️</button>
+                            <button id="tool-freehand" class="btn-tool actiu" onclick="setTool('freehand')" title="Dibuix Lliure">〰️</button>
                             <button id="tool-rect" class="btn-tool" onclick="setTool('rect')" title="Quadrat">🔲</button>
                             <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
                             <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
                             <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
-                            
-                            <div style="width:2px; height:20px; background:#ccc; margin:0 2px;"></div> 
-                            
-                            <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
-                            <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
-                            <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
-                            <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
-                            <button class="btn-color-dibuix" style="background:#000000" onclick="setDrawColor('#000000')"></button>
-                            
-                            <div style="width:2px; height:20px; background:#ccc; margin:0 2px;"></div> 
-                            
-                            <button style="background:#95a5a6; border:none; padding:8px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
+                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div> 
+                            <button style="background:#95a5a6; border:none; padding:5px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
                         </div>
                         
-                        <div style="background:#eee; padding:5px 15px; border-radius:10px; margin-bottom:5px;">
-                            <label style="font-size:0.9em; font-weight:bold;">🔍 Mida de l'element seleccionat: <input type="range" id="ed-scale" min="0.3" max="3" step="0.1" value="1" oninput="onScaleChange()"></label>
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px; width:100%; box-sizing:border-box;">
+                            <label style="font-size:0.8em; font-weight:bold;">🔍 Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em; font-weight:bold;">↔️ X: <input type="range" id="ed-x" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em; font-weight:bold;">↕️ Y: <input type="range" id="ed-y" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
                         </div>
 
-                        <div id="canvas-wrapper" style="position:relative; width:300px; height:300px; border:2px dashed #ccc; border-radius:10px; overflow:hidden; background:white; margin:0 auto;">
-                            <canvas id="canvasEditor" width="300" height="300" style="touch-action:none; cursor:crosshair;"></canvas>
-                            <div id="preview-text" style="position:absolute; left:150px; top:250px; transform:translate(-50%, -50%); text-align:center; font-weight:bold; cursor:move; user-select:none; pointer-events:auto; width:100%;"></div>
-                        </div>
+                        <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white; cursor:crosshair;"></canvas>
                     </div>
                 </div>
 
@@ -859,7 +857,6 @@
         let dadesDomino = []; 
         let globalSchoolLogoSrc = ''; 
         let memoriaEdicions = {}; 
-        let memoriaTransforms = {}; // Guarda posicions Imatge i Text individualitzades
         let currentColorSelected = '#ffffff';
         let imgOriginalSrcOnOpen = ''; 
 
@@ -870,13 +867,10 @@
         let currentDrawings = [];
         let isDrawing = false;
         let drawColor = '#e74c3c';
-        let currentTool = 'move-img'; // Eina per defecte a l'obrir l'editor
+        let currentTool = 'freehand'; 
         let startX, startY, currentX, currentY;
         
-        // Variables moviment dibuix/lletra lliure
-        let imgDx = 0, imgDy = 0, imgScale = 1;
-        let txtDx = 0, txtDy = 0, txtScale = 1;
-        let isDraggingImg = false, isDraggingTxt = false, isDraggingShape = false;
+        let isDraggingShape = false;
         let draggedShapeIndex = -1;
         let lastMouseX = 0, lastMouseY = 0;
 
@@ -898,21 +892,6 @@
                 editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
                 window.addEventListener('touchend', stopDrawingCanvas);
             }
-
-            const pText = document.getElementById('preview-text');
-            pText.addEventListener('mousedown', (e) => {
-                if (currentTool !== 'move-text') setTool('move-text');
-                isDraggingTxt = true; lastMouseX = e.clientX; lastMouseY = e.clientY;
-                document.getElementById('ed-scale').value = txtScale;
-                e.stopPropagation();
-            });
-            pText.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                if (currentTool !== 'move-text') setTool('move-text');
-                isDraggingTxt = true; lastMouseX = e.touches[0].clientX; lastMouseY = e.touches[0].clientY;
-                document.getElementById('ed-scale').value = txtScale;
-                e.stopPropagation();
-            }, {passive: false});
         };
 
         // ==========================================
@@ -947,8 +926,7 @@
                 sentit: document.getElementById('sentit-paper').value,
                 columnes: document.getElementById('selector-columnes').value,
                 font: document.getElementById('selector-font').value,
-                memoria: memoriaEdicions,
-                transforms: memoriaTransforms
+                memoria: memoriaEdicions
             };
             const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
             const a = document.createElement('a'); 
@@ -989,7 +967,6 @@
                     if (data.font !== undefined) document.getElementById('selector-font').value = data.font;
 
                     memoriaEdicions = data.memoria || {};
-                    memoriaTransforms = data.transforms || {};
                     
                     canviarMode(); 
                     actualitzarEstils(); 
@@ -1066,8 +1043,6 @@
                         divFront.querySelector('img').src = mem.imgUrl; divFront.querySelector('img').style.opacity = '1'; divBack.querySelector('.contingut-back').innerHTML = mem.htmlFinal;
                     } else { buscarArasaacAuto(paraula, i); }
                     contenidor.appendChild(divFront); contenidorRevers.appendChild(divBack);
-                    aplicarTransformsLliures(paraula, divFront);
-                    aplicarTransformsLliures(paraula, divBack);
                 });
             } else if (mode === 'memory') {
                 wrapperRevers.style.display = 'block'; contenidor.classList.add('mode-memory-front');
@@ -1080,8 +1055,6 @@
                     else { buscarArasaacAuto(paraula, i); }
                     contenidor.appendChild(fitxaImg); contenidor.appendChild(fitxaText);
                     contenidorRevers.appendChild(crearElementReversLogoPictojocs()); contenidorRevers.appendChild(crearElementReversLogoPictojocs());
-                    aplicarTransformsLliures(paraula, fitxaImg);
-                    aplicarTransformsLliures(paraula, fitxaText);
                 });
             } else if (mode === 'domino') {
                 contenidor.classList.add('mode-domino');
@@ -1100,7 +1073,6 @@
                     div.addEventListener('click', () => obrirModal(div)); div.draggable = true;
                     div.addEventListener('dragstart', ()=>div.classList.add('dragging')); div.addEventListener('dragend', ()=>div.classList.remove('dragging'));
                     contenidor.appendChild(div);
-                    aplicarTransformsLliures(paraulaOriginal, div);
                 }
             } else {
                 llista.forEach((paraula, i) => {
@@ -1108,20 +1080,9 @@
                     if(mem) { targeta.querySelector('img').src = mem.imgUrl; targeta.querySelector('img').style.opacity = '1'; targeta.querySelector('p').innerHTML = mem.htmlFinal; } 
                     else { buscarArasaacAuto(paraula, i); }
                     contenidor.appendChild(targeta);
-                    aplicarTransformsLliures(paraula, targeta);
                 });
             }
             actualitzarEstils();
-        }
-        
-        function aplicarTransformsLliures(paraula, targetaElement) {
-            let mt = memoriaTransforms[paraula];
-            if (mt) {
-                const img = targetaElement.querySelector('img');
-                if (img && !img.src.includes('logo%20PictoJocs')) img.style.transform = `translate(${mt.imgDx}px, ${mt.imgDy}px) scale(${mt.imgScale})`;
-                const textContainer = targetaElement.querySelector('p') || targetaElement.querySelector('.text-domino') || targetaElement.querySelector('.contingut-back');
-                if (textContainer) textContainer.style.transform = `translate(${mt.txtDx}px, ${mt.txtDy}px) scale(${mt.txtScale})`;
-            }
         }
 
         function crearElementReversLogoPictojocs() {
@@ -1217,7 +1178,7 @@
                 else if(mode === 'memory') document.querySelectorAll('.nomes-text p').forEach(el => autoMidaText(el));
                 else if(mode === 'domino') document.querySelectorAll('.text-domino').forEach(el => autoMidaText(el));
                 else document.querySelectorAll('.pictograma p').forEach(el => autoMidaText(el));
-            }, 50); // Sense transició CSS, podem fer-ho gairebé instantani.
+            }, 50); 
         }
 
         function autoMidaText(container) {
@@ -1465,27 +1426,15 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
 
             document.getElementById('input-arasaac').value = paraulaCerca;
             document.getElementById('resultats-traductor').innerHTML = ''; 
-            
-            // Actualitzar text de la vista prèvia al teclejar
-            document.querySelectorAll('.input-text-modal').forEach(inp => {
-                inp.addEventListener('input', updatePreviewText);
-            });
-            
             document.getElementById('modal-edicio').style.display = 'flex';
             canviarPestanya('tab-arasaac'); if(paraulaCerca) buscarArasaacModal();
         }
 
-        function updatePreviewText() {
-            const pText = document.getElementById('preview-text');
-            pText.style.fontFamily = document.getElementById('selector-font').value.split(',')[0].replace(/'/g, '');
-            pText.style.color = document.getElementById('color-text').value;
-            let displayTexts = [];
-            document.querySelectorAll('.input-text-modal').forEach(inp => { if(inp.value.trim()!=='') displayTexts.push(inp.value.trim()); });
-            pText.innerHTML = displayTexts.map(t => `<div style="white-space:nowrap;">${t}</div>`).join('');
-            pText.style.transform = `translate(calc(-50% + ${txtDx}px), calc(-50% + ${txtDy}px)) scale(${txtScale})`;
+        function setTargetColor(color, btnElem) { 
+            currentColorSelected = color; 
+            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ccc'); 
+            if(btnElem) btnElem.style.borderColor = '#333'; 
         }
-
-        function setTargetColor(color) { currentColorSelected = color; document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ccc'); event.target.style.borderColor = '#333'; }
 
         function guardarTancar() {
             if(elementEditant) {
@@ -1505,15 +1454,12 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
                     else { currentImgUrl = elementEditant.querySelector('img') ? elementEditant.querySelector('img').src : null; }
                     
                     memoriaEdicions[original] = { htmlFinal: htmlFinal, imgUrl: currentImgUrl };
-                    memoriaTransforms[original] = { imgDx: imgDx, imgDy: imgDy, imgScale: imgScale, txtDx: txtDx, txtDy: txtDy, txtScale: txtScale };
 
                     if (mode === 'domino') { elementEditant.querySelector('.text-domino').innerHTML = htmlFinal; autoMidaText(elementEditant.querySelector('.text-domino')); if(dadesDomino[index]) { dadesDomino[index].txt = htmlFinal; dadesDomino[index].isHtml = true; } } 
                     else if (mode === 'targeta') { document.getElementById(`text-${index}-back`).innerHTML = htmlFinal; autoMidaText(document.getElementById(`text-${index}-back`)); } 
                     else if (mode === 'memory') { if(elementEditant.classList.contains('nomes-text')) { elementEditant.querySelector('p').innerHTML = htmlFinal; autoMidaText(elementEditant.querySelector('p')); } else { const p = elementEditant.querySelector('p'); if(p) p.innerHTML = htmlFinal; } } 
                     else { const p = elementEditant.querySelector('p'); p.innerHTML = htmlFinal; autoMidaText(p); }
                     if(currentColorSelected !== '#ffffff') { elementEditant.style.backgroundColor = currentColorSelected; }
-                    
-                    aplicarTransformsLliures(original, elementEditant);
                 }
             }
             tancarModal();
@@ -1559,6 +1505,7 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
         }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
 
+
         /* --- TRADUCTOR MULTI-IDIOMA (TEXT 1) --- */
         async function traduirParaula() {
             const word = document.getElementById('input-modal-0').value; 
@@ -1589,28 +1536,16 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
         function copiarText(t) { navigator.clipboard.writeText(t); const o = document.getElementById('toast'); o.style.display='block'; setTimeout(()=>o.style.display='none', 2000); }
 
 
-        /* --- EDITOR CANVAS I DRAG LLIURE --- */
+        /* --- EDITOR CANVAS CLÀSSIC (FUNCIONALITAT ORIGINAL RESTAURADA) --- */
         function setTool(tool) { 
             currentTool = tool; 
             document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu')); 
             document.getElementById('tool-' + tool).classList.add('actiu'); 
-            if (tool === 'move-img') document.getElementById('ed-scale').value = imgScale;
-            if (tool === 'move-text') document.getElementById('ed-scale').value = txtScale;
         }
         function setDrawColor(c) { drawColor = c; }
         function undoLastDrawing() { if (currentDrawings.length > 0) { currentDrawings.pop(); drawEditorCanvas(); } }
         function getMousePos(e) { const rect = editorCanvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
         
-        function onScaleChange() {
-            if (currentTool === 'move-text') {
-                txtScale = parseFloat(document.getElementById('ed-scale').value);
-                updatePreviewText();
-            } else {
-                imgScale = parseFloat(document.getElementById('ed-scale').value);
-                drawEditorCanvas();
-            }
-        }
-
         function buildPath(ctx, shape) {
             ctx.beginPath();
             if (shape.type === 'freehand') { shape.points.forEach((p, i) => { if(i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); }); } 
@@ -1627,45 +1562,26 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
 
         function startDrawingCanvas(e) {
             const pos = getMousePos(e); 
-            if (currentTool === 'move-img') { 
-                isDraggingImg = true; lastMouseX = e.clientX || e.touches[0].clientX; lastMouseY = e.clientY || e.touches[0].clientY; 
-            } else if (currentTool === 'move-text') {
-                isDraggingTxt = true; lastMouseX = e.clientX || e.touches[0].clientX; lastMouseY = e.clientY || e.touches[0].clientY; 
-            } else {
-                let hitIdx = getHitShapeIndex(pos.x, pos.y);
-                if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; } 
-                else { isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y; if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] }); }
-            }
+            let hitIdx = getHitShapeIndex(pos.x, pos.y);
+            if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; } 
+            else { isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y; if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] }); }
         }
 
         function drawCanvas(e) {
-            if (isDraggingImg) {
-                const cx = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-                const cy = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-                imgDx += cx - lastMouseX; imgDy += cy - lastMouseY;
-                lastMouseX = cx; lastMouseY = cy; drawEditorCanvas();
-            } else if (isDraggingTxt) {
-                const cx = e.clientX || (e.touches ? e.touches[0].clientX : 0);
-                const cy = e.clientY || (e.touches ? e.touches[0].clientY : 0);
-                txtDx += cx - lastMouseX; txtDy += cy - lastMouseY;
-                lastMouseX = cx; lastMouseY = cy; updatePreviewText();
-            } else if (isDrawing || isDraggingShape) {
-                const pos = getMousePos(e);
-                if (isDraggingShape) {
-                    let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY; let shape = currentDrawings[draggedShapeIndex];
-                    if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; }); else { shape.start.x += dx; shape.start.y += dy; shape.end.x += dx; shape.end.y += dy; }
-                    lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas();
-                } else if (isDrawing) {
-                    currentX = pos.x; currentY = pos.y;
-                    if (currentTool === 'freehand') currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY});
-                    drawEditorCanvas();
-                } else { let hitIdx = getHitShapeIndex(pos.x, pos.y); editorCanvas.style.cursor = hitIdx !== -1 ? 'pointer' : 'crosshair'; }
-            }
+            const pos = getMousePos(e);
+            if (isDraggingShape) {
+                let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY; let shape = currentDrawings[draggedShapeIndex];
+                if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; }); else { shape.start.x += dx; shape.start.y += dy; shape.end.x += dx; shape.end.y += dy; }
+                lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas();
+            } else if (isDrawing) {
+                currentX = pos.x; currentY = pos.y;
+                if (currentTool === 'freehand') currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY});
+                drawEditorCanvas();
+            } else { let hitIdx = getHitShapeIndex(pos.x, pos.y); editorCanvas.style.cursor = hitIdx !== -1 ? 'pointer' : 'crosshair'; }
         }
 
         function stopDrawingCanvas() {
             if (isDraggingShape) { isDraggingShape = false; draggedShapeIndex = -1; } 
-            isDraggingImg = false; isDraggingTxt = false;
             if (isDrawing) {
                 isDrawing = false;
                 if (currentTool !== 'freehand' && (startX !== currentX || startY !== currentY)) { currentDrawings.push({ type: currentTool, color: drawColor, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} }); }
@@ -1676,19 +1592,10 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
         function obrirTabEdicio() {
             canviarPestanya('tab-dibuix'); let currentSrc = '';
             
-            imgDx = 0; imgDy = 0; imgScale = 1;
-            txtDx = 0; txtDy = 0; txtScale = 1;
-
-            if (elementEditant && elementEditant.dataset.original) {
-                let mt = memoriaTransforms[elementEditant.dataset.original];
-                if (mt) {
-                    imgDx = mt.imgDx || 0; imgDy = mt.imgDy || 0; imgScale = mt.imgScale || 1;
-                    txtDx = mt.txtDx || 0; txtDy = mt.txtDy || 0; txtScale = mt.txtScale || 1;
-                }
-            }
-
-            setTool('move-img');
-            updatePreviewText();
+            document.getElementById('ed-scale').value = 1;
+            document.getElementById('ed-x').value = 0;
+            document.getElementById('ed-y').value = 0;
+            setTool('freehand');
 
             if (currentView === 'pictotraductor') { currentSrc = elementEditant.querySelector('img').src; }
             else {
@@ -1706,12 +1613,26 @@ Regles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ig
 
         function drawEditorCanvas() {
             editorCtx.clearRect(0, 0, 300, 300);
-            editorCtx.save(); editorCtx.translate(150 + imgDx, 120 + imgDy); editorCtx.scale(imgScale, imgScale);
-            if (editorImgObj.src) { const aspect = editorImgObj.width / editorImgObj.height; let w = 260, h = 260; if (aspect > 1) h = w / aspect; else w = h * aspect; editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h); }
-            editorCtx.restore(); editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; 
+            const scale = parseFloat(document.getElementById('ed-scale').value); 
+            const dx = parseFloat(document.getElementById('ed-x').value); 
+            const dy = parseFloat(document.getElementById('ed-y').value);
+            
+            editorCtx.save(); 
+            editorCtx.translate(150 + dx, 150 + dy); 
+            editorCtx.scale(scale, scale);
+            if (editorImgObj.src) { 
+                const aspect = editorImgObj.width / editorImgObj.height; 
+                let w = 280, h = 280; 
+                if (aspect > 1) h = w / aspect; else w = h * aspect; 
+                editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h); 
+            }
+            editorCtx.restore(); 
+            editorCtx.lineCap = 'round'; 
+            editorCtx.lineJoin = 'round'; 
             currentDrawings.forEach(shape => { editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4; buildPath(editorCtx, shape); editorCtx.stroke(); });
-            if(isDrawing && currentTool !== 'freehand' && currentTool !== 'move-img' && currentTool !== 'move-text') { editorCtx.strokeStyle = drawColor; editorCtx.lineWidth = 4; let tempShape = { type: currentTool, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} }; buildPath(editorCtx, tempShape); editorCtx.stroke(); }
+            if(isDrawing && currentTool !== 'freehand') { editorCtx.strokeStyle = drawColor; editorCtx.lineWidth = 4; let tempShape = { type: currentTool, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} }; buildPath(editorCtx, tempShape); editorCtx.stroke(); }
         }
+        
         function aplicarEdicioImatge(canviarTab = true) { const dataUrl = editorCanvas.toDataURL('image/png'); aplicarImatge(dataUrl); if(canviarTab) canviarPestanya('tab-arasaac'); }
     </script>
 </body>
