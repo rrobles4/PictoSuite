@@ -60,7 +60,7 @@
         .pictograma:hover{box-shadow:0 4px 10px rgba(0,0,0,.2)}
         .pictograma.dragging{opacity:.4;border:3px dashed #999;background:#eee}
         .imatge-box{background-color:#fff;border-radius:10px;width:100%;height:85%;display:flex;align-items:center;justify-content:center;padding:5px;box-sizing:border-box;overflow:hidden;flex-shrink:1;position:relative}
-        .imatge-box img{width:100%;height:100%;object-fit:contain;pointer-events:none}
+        .imatge-box img, .imatge-box video{width:100%;height:100%;object-fit:contain;pointer-events:none}
         .pictograma p{margin:0;width:100%;text-align:center;font-family:var(--tipus-font);color:var(--targeta-text);font-weight:bold;flex-shrink:0;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:15%;padding-top:2px;overflow:hidden}
         .mode-targeta-front .pictograma .imatge-box{height:100%}
         .mode-targeta-front .pictograma p{display:none}
@@ -832,62 +832,33 @@
             }, 50); 
         }
 
-        function autoMidaText(container) {
-            if (!container) return;
-            const files = container.querySelectorAll('.fila-paraula');
-            
-            const margeLateral = 12; 
-            const maxW = container.clientWidth - margeLateral;
-            const margeVertical = 4;
-            let maxH = container.clientHeight - margeVertical;
-            
-            if (maxW <= 0 || maxH <= 0) return;
-            
-            let midaInici = maxH;
-            if (midaInici > 80) midaInici = 80;
-
-            if (files.length > 0) {
-                let sizes = []; 
-                files.forEach((fila) => { 
-                    fila.style.whiteSpace = 'nowrap'; 
-                    let mida = midaInici; 
-                    fila.style.fontSize = mida + 'px'; 
-                    fila.style.lineHeight = '1.1'; 
-                    while (fila.scrollWidth > maxW && mida > 8) { 
-                        mida -= 0.5; 
-                        fila.style.fontSize = mida + 'px'; 
-                    } 
-                    sizes.push(mida); 
+        const _tCv=document.createElement('canvas'),_tCtx=_tCv.getContext('2d');
+        function autoMidaText(c){
+            if(!c)return;
+            const f=c.querySelectorAll('.fila-paraula'),isPX=c.closest('#view-pictotraductor')!==null,maxW=c.clientWidth-12,maxH=c.clientHeight-4;
+            if(maxW<=0||maxH<=0)return;
+            let bS=isPX?34:44;
+            const font=window.getComputedStyle(c).fontFamily||'Arial';
+            if(f.length>0){
+                const mH=Math.floor(maxH/(f.length*1.1));
+                if(bS>mH)bS=mH;
+                f.forEach(l=>{
+                    l.style.whiteSpace='nowrap';
+                    _tCtx.font=`bold 100px ${font}`;
+                    const w=_tCtx.measureText(l.innerText).width;
+                    let s=bS;
+                    if(w>0){const fW=Math.floor(maxW*(100/w));if(fW<s)s=fW}
+                    l.style.fontSize=s+'px';l.style.lineHeight='1.1'
                 });
-                
-                let limit = 0;
-                while (container.scrollHeight > maxH && limit < 100) { 
-                    let reduced = false; 
-                    files.forEach((fila, idx) => { 
-                        if (sizes[idx] > 8) { 
-                            sizes[idx] -= 0.5; 
-                            fila.style.fontSize = sizes[idx] + 'px'; 
-                            reduced = true; 
-                        } 
-                    }); 
-                    if (!reduced) break; 
-                    limit++;
-                }
-            } else {
-                container.style.whiteSpace = 'nowrap';
-                let mida = midaInici; 
-                container.style.fontSize = mida + 'px'; 
-                container.style.lineHeight = '1.1';
-                while (container.scrollWidth > maxW && mida > 8) { 
-                    mida -= 0.5; 
-                    container.style.fontSize = mida + 'px'; 
-                }
-                let limit = 0;
-                while (container.scrollHeight > maxH && limit < 100 && mida > 8) { 
-                    mida -= 0.5; 
-                    container.style.fontSize = mida + 'px'; 
-                    limit++; 
-                }
+            }else{
+                c.style.whiteSpace='nowrap';
+                const mH=Math.floor(maxH/1.1);
+                if(bS>mH)bS=mH;
+                _tCtx.font=`bold 100px ${font}`;
+                const w=_tCtx.measureText(c.innerText).width;
+                let s=bS;
+                if(w>0){const fW=Math.floor(maxW*(100/w));if(fW<s)s=fW}
+                c.style.fontSize=s+'px';c.style.lineHeight='1.1'
             }
         }
 
@@ -948,7 +919,7 @@
         async function processarAmbGemini(text, apiKey) {
             const langOrigen = document.getElementById('idioma-input').value; 
             const langDesti = document.getElementById('idioma-desti').value;
-            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible. Corregeix petites faltes d'ortografia. Si és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí", "orig": "paraula original escrita"}\n  ]\n}\nRegles: Extreu NOMÉS les paraules clau per dibuixar la frase (màxim 6). Pots ometre articles, preposicions o paraules com 'si us plau' a menys que tu, com a IA, consideris que són estrictament necessaris per al sentit del missatge.`;
+            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible (per errors de micròfon o lletres a l'atzar). Corregeix petites faltes d'ortografia i de sentit. Si és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí", "orig": "paraula original escrita pel nen que hi correspon"}\n  ]\n}\nRegles: Extreu NOMÉS les paraules clau per dibuixar la frase (màxim 6). Pots ometre articles, preposicions o paraules com 'si us plau' a menys que tu, com a IA, consideris que són estrictament necessaris per al sentit del missatge.`;
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 const data = await response.json(); let jsonText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim(); const resultat = JSON.parse(jsonText);
