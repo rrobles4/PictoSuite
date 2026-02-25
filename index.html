@@ -59,9 +59,9 @@
         .pictograma{border:4px solid var(--targeta-border);border-radius:15px;background-color:var(--targeta-bg);display:flex;flex-direction:column;align-items:center;justify-content:space-between;aspect-ratio:.85;padding:5px;cursor:grab;break-inside:avoid;page-break-inside:avoid;box-sizing:border-box;position:relative;overflow:hidden}
         .pictograma:hover{box-shadow:0 4px 10px rgba(0,0,0,.2)}
         .pictograma.dragging{opacity:.4;border:3px dashed #999;background:#eee}
-        .imatge-box{background-color:#fff;border-radius:10px;width:100%;height:80%;display:flex;align-items:center;justify-content:center;padding:5px;box-sizing:border-box;overflow:hidden;flex-shrink:1;position:relative}
+        .imatge-box{background-color:#fff;border-radius:10px;width:100%;height:85%;display:flex;align-items:center;justify-content:center;padding:5px;box-sizing:border-box;overflow:hidden;flex-shrink:1;position:relative}
         .imatge-box img{width:100%;height:100%;object-fit:contain;pointer-events:none}
-        .pictograma p{margin:0;width:100%;text-align:center;font-size:var(--mida-font-base);font-family:var(--tipus-font);color:var(--targeta-text);line-height:1.1;font-weight:bold;flex-shrink:0;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:15%;padding-top:2px}
+        .pictograma p{margin:0;width:100%;text-align:center;font-size:var(--mida-font-base);font-family:var(--tipus-font);color:var(--targeta-text);line-height:1.1;font-weight:bold;flex-shrink:0;display:flex;align-items:center;justify-content:center;flex-direction:column;min-height:12%;padding-top:0}
         .mode-targeta-front .pictograma .imatge-box{height:100%}
         .mode-targeta-front .pictograma p{display:none}
         .mode-memory-front .pictograma.nomes-img .imatge-box{height:100%}
@@ -93,10 +93,10 @@
         .traduccio-literal-box{font-size:1.2em;color:#2c3e50;margin:15px auto;padding:15px;background:#e8f8f5;border-radius:10px;border:1px dashed #27ae60;display:none;width:80%;text-align:center}
         .frase-pictos{display:flex;flex-wrap:wrap;gap:15px;justify-content:center;min-height:200px;padding:20px;border-radius:15px;align-items:stretch}
         #view-pictotraductor .pictograma{width:180px;cursor:pointer}
-        #view-pictotraductor .imatge-box{height:60%}
-        #view-pictotraductor .pictograma p{height:38%}
-        .text-traduit{font-weight:bold;font-size:22px;text-transform:uppercase;color:#000}
-        .text-alumne{font-size:16px;color:#666;font-style:italic;margin-top:2px;font-weight:normal;text-transform:none;white-space:nowrap}
+        #view-pictotraductor .imatge-box{height:75%}
+        #view-pictotraductor .pictograma p{height:22%}
+        .text-traduit{font-weight:bold;font-size:16px;text-transform:uppercase;color:#000}
+        .text-alumne{font-size:14px;color:#666;font-style:italic;margin-top:2px;font-weight:normal;text-transform:none;white-space:nowrap}
         .btn-settings{position:absolute;top:15px;right:15px;background:none;border:none;font-size:28px;cursor:pointer;transition:transform .2s;z-index:100}
         .btn-settings:hover{transform:scale(1.1)}
         .loader{border:4px solid #f3f3f3;border-top:4px solid var(--color-principal);border-radius:50%;width:24px;height:24px;animation:spin 1s linear infinite;display:inline-block;vertical-align:middle;margin-left:10px}
@@ -346,6 +346,13 @@
                         <select id="idioma-desti"></select>
                     </div>
                 </div>
+                
+                <div style="display:flex; justify-content:center; width:100%; margin-bottom:10px;">
+                    <label style="cursor:pointer; background:#e8f8f5; padding:8px 15px; border-radius:8px; border:2px solid #27ae60; color:#27ae60; font-weight:bold; display:flex; align-items:center; gap:8px;">
+                        <input type="checkbox" id="mode-lse-check" style="width:20px; height:20px;"> 👐 Mode Llenguatge de Signes (LSE)
+                    </label>
+                </div>
+
                 <div class="caixa-escriptura">
                     <textarea id="text-input" placeholder="Escriu la frase aquí o utilitza el micròfon..." onkeyup="if(event.key==='Enter') executarTraduccio()"></textarea>
                     <div class="botons-accio">
@@ -839,24 +846,24 @@
                 let sizes = []; 
                 files.forEach((fila) => { 
                     fila.style.whiteSpace = 'nowrap'; 
-                    let mida = 45; 
+                    let mida = 32; 
                     fila.style.fontSize = mida + 'px'; 
                     fila.style.lineHeight = '1.1'; 
-                    while (fila.scrollWidth > container.clientWidth && mida > 8) { mida--; fila.style.fontSize = mida + 'px'; } 
+                    while (fila.scrollWidth > (container.clientWidth - 8) && mida > 8) { mida -= 0.5; fila.style.fontSize = mida + 'px'; } 
                     sizes.push(mida); 
                 });
                 let limit = 0;
-                while (container.scrollHeight > container.clientHeight && limit < 100) { 
+                while (container.scrollHeight > (container.clientHeight - 4) && limit < 100) { 
                     let reduced = false; 
-                    files.forEach((fila, idx) => { if (sizes[idx] > 8) { sizes[idx]--; fila.style.fontSize = sizes[idx] + 'px'; reduced = true; } }); 
+                    files.forEach((fila, idx) => { if (sizes[idx] > 8) { sizes[idx] -= 0.5; fila.style.fontSize = sizes[idx] + 'px'; reduced = true; } }); 
                     if (!reduced) break; limit++;
                 }
             } else {
                 container.style.whiteSpace = 'nowrap';
-                let mida = 45; container.style.fontSize = mida + 'px'; container.style.lineHeight = '1.1';
-                while (container.scrollWidth > container.clientWidth && mida > 8) { mida--; container.style.fontSize = mida + 'px'; }
+                let mida = 32; container.style.fontSize = mida + 'px'; container.style.lineHeight = '1.1';
+                while (container.scrollWidth > (container.clientWidth - 8) && mida > 8) { mida -= 0.5; container.style.fontSize = mida + 'px'; }
                 let limit = 0;
-                while (container.scrollHeight > container.clientHeight && limit < 100 && mida > 8) { mida--; container.style.fontSize = mida + 'px'; limit++; }
+                while (container.scrollHeight > (container.clientHeight - 4) && limit < 100 && mida > 8) { mida -= 0.5; container.style.fontSize = mida + 'px'; limit++; }
             }
         }
 
@@ -915,20 +922,25 @@
         }
 
         async function processarAmbGemini(text, apiKey) {
-            const langOrigen = document.getElementById('idioma-input').value; const langDesti = document.getElementById('idioma-desti').value;
+            const isLse = document.getElementById('mode-lse-check').checked;
+            const langOrigen = document.getElementById('idioma-input').value; 
+            const langDesti = isLse ? 'es' : document.getElementById('idioma-desti').value;
             const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible (per errors de micròfon o lletres a l'atzar). Corregeix petites faltes d'ortografia i de sentit. Si és totalment incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen dient que no s'ha entès. Si té sentit deixa-ho buit",\n  "traduccio_literal": "Frase completa i ben escrita traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí (infinitiu o singular) d'una paraula clau", "orig": "paraula original escrita pel nen que hi correspon"}\n  ]\n}\nRegles: Extreu NOMÉS conceptes importants per dibuixar (verbs, substantius). Ignora modals com 'can', articles o 'si us plau'. Màxim 6 pictogrames.`;
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 const data = await response.json(); let jsonText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim(); const resultat = JSON.parse(jsonText);
                 if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return; }
-                document.getElementById('text-traduit-literal').innerText = resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
+                document.getElementById('text-traduit-literal').innerText = isLse ? text : resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
                 for (let picto of resultat.pictogrames) { try { const sUrl = `https://api.arasaac.org/api/pictograms/${langDesti}/bestsearch/${encodeURIComponent(picto.cat)}`; const r = await fetch(sUrl); const d = await r.json(); if (d && d.length > 0) { const imgUrl = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_300.png`; crearTargetaTrad(picto.cat, picto.orig, imgUrl, langOrigen); } } catch(e) {} }
             } catch(e) { alert("Error amb la IA. Comprova que la teva clau d'API és correcte. Canviant al mode bàsic..."); await processarBasic(text); }
         }
 
         async function processarBasic(frase) {
-            const langOrigen = document.getElementById('idioma-input').value; const langDesti = document.getElementById('idioma-desti').value; let fraseTraduida = frase;
-            if (langOrigen !== langDesti) { try { const resT = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(frase)}&langpair=${langOrigen}|${langDesti}`); const dataT = await resT.json(); if(dataT.responseData && dataT.responseData.translatedText) { fraseTraduida = dataT.responseData.translatedText; document.getElementById('text-traduit-literal').innerText = fraseTraduida; document.getElementById('traduccio-literal-box').style.display = 'block'; } } catch(e) {} } 
+            const isLse = document.getElementById('mode-lse-check').checked;
+            const langOrigen = document.getElementById('idioma-input').value; 
+            const langDesti = isLse ? 'es' : document.getElementById('idioma-desti').value; 
+            let fraseTraduida = frase;
+            if (langOrigen !== langDesti) { try { const resT = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(frase)}&langpair=${langOrigen}|${langDesti}`); const dataT = await resT.json(); if(dataT.responseData && dataT.responseData.translatedText) { fraseTraduida = dataT.responseData.translatedText; document.getElementById('text-traduit-literal').innerText = isLse ? frase : fraseTraduida; document.getElementById('traduccio-literal-box').style.display = 'block'; } } catch(e) {} } 
             else { document.getElementById('text-traduit-literal').innerText = frase; document.getElementById('traduccio-literal-box').style.display = 'block'; }
             let textKilled = fraseTraduida.toLowerCase().replace("si us plau", "").replace("por favor", ""); const paraules = textKilled.split(/\s+/); const paraulesOriginals = frase.split(/\s+/); 
             for (let i=0; i<paraules.length; i++) {
