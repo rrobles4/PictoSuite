@@ -181,20 +181,34 @@
         const RUTA_LOGO_PICTOJOCS = "https://github.com/rrobles4/pictojocs/blob/main/logo%20PictoJocs.png?raw=true";
     </script>
 
-    <div id="view-pictojocs">
+<style>
+        .menu-btn { position: fixed; top: 20px; left: 20px; background-color: var(--color-principal); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .menu-btn:hover { background-color: #357abd; }
+        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
+        .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
+        .side-menu a:hover { background-color: #f0f8ff; color: var(--color-principal); }
+        .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
+    </style>
+
+    <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '250px'">☰</button>
+
+    <div id="elMeuMenu" class="side-menu no-print">
+        <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
+        <a href="index.html">🏠 Inici (PictoSuite)</a>
+        <a href="pictotargetes.html">🃏 PictoTargetes</a>
+        <a href="pictoxat.html">💬 PictoXat</a>
+    </div>
+        <div id="view-pictojocs">
         <div class="configuracio no-print">
-            <div class="projecte-controls">
-                <div style="flex-grow: 1; text-align: left; display: flex; gap: 8px;">
-                    <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ PictoXat</button>
-                    <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
-                </div>
+            <div class="projecte-controls" style="justify-content: flex-end; padding-left: 60px;">
+                <button class="btn-nav-app" style="background:#f5b041; margin-right: auto;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 <button id="btn-desar" class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
                 <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
             </div>
             <div class="header-app">
-                <img id="app-logo-header" class="logo-pictojocs" src="" alt="PictoJocs Logo">
-                <h1>PictoJocs</h1>
+                <img id="app-logo-header" class="logo-pictojocs" src="https://raw.githubusercontent.com/rrobles4/pictojocs/main/logo%20PictoJocs.png" alt="Logo PictoTargetes">
+                <h1 style="color: var(--color-principal);">PictoTargetes</h1>
             </div>
             <div class="fila-flex">
                 <div class="columna" style="flex: 0.6;">
@@ -1117,40 +1131,5 @@
         }
         function aplicarEdicioImatge(canviarTab = true) { const dataUrl = editorCanvas.toDataURL('image/png'); aplicarImatge(dataUrl); if(canviarTab) canviarPestanya('tab-arasaac'); }
     </script>
-    <script>
-    // 1. Aquest codi amaga els botons i títols antics automàticament
-    document.querySelectorAll('h1').forEach(h => { if(h.innerText.includes('PictoJocs') || h.innerText.includes('PictoXat')) h.style.display = 'none'; });
-    document.querySelectorAll('button').forEach(b => { if(b.innerText.includes('PictoXat') || b.innerText.includes('Aplicacions') || b.innerText.includes('PictoJocs')) b.style.display = 'none'; });
-
-    // 2. Inserim el nou menú hamburguesa a dalt de tot de la pàgina
-    document.body.insertAdjacentHTML('afterbegin', `
-        <style>
-            .menu-btn { position: fixed; top: 20px; left: 20px; background-color: #4a90e2; color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-            .menu-btn:hover { background-color: #357abd; }
-            .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
-            .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
-            .side-menu a:hover { background-color: #f0f8ff; color: #4a90e2; }
-            .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
-            .header-app { text-align: center; margin-bottom: 20px; padding-top: 20px; }
-            .header-app img { max-width: 150px; border-radius: 10px; }
-            .header-app h1 { font-family: 'Fredoka', sans-serif; color: #4a90e2; margin: 10px 0 0 0; font-size: 2.5rem;}
-        </style>
-
-        <button class="menu-btn" onclick="document.getElementById('elMeuMenu').style.width = '250px'">☰</button>
-
-        <div id="elMeuMenu" class="side-menu">
-            <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
-            <a href="index.html">🏠 Inici (PictoSuite)</a>
-            <a href="pictotargetes.html">🃏 PictoTargetes</a>
-            <a href="pictoxat.html">💬 PictoXat</a>
-        </div>
-
-        <div class="header-app">
-            <img src="https://raw.githubusercontent.com/rrobles4/pictojocs/main/logo%20PictoJocs.png" alt="Logo PictoTargetes">
-            <h1>PictoTargetes</h1>
-        </div>
-    `);
-</script>
 </body>
 </html>
-
