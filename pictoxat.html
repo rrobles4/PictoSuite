@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PictoJocs & PictoXat</title>
     <link href="https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@400;700&family=Fredoka:wght@400;600&family=Indie+Flower&family=Patrick+Hand&family=Roboto&family=Comic+Neue:wght@400;700&family=Schoolbell&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=nWxtJX7Lpp7JqX6NvI09AMP4smMXZwfTph35BWMVYj8D85F-frsA__UAvW4uhy_Dm0AlzDQxpF7CNlrlmdopAHkuUu8fQHJaaK-Wos5o-lMfVyZo8Xu7U3abMjKt2JzMsg06_O8vdjEZwVK6DUo7dc5jK9vM5sVHtRgKUetzuNhFEttU8oswtdmDSXFQszXDOLmqTjLOyDhQsePjwW4VejB2Uk9qJnKR_yE3MXAFlbZd3RAE4qPdZeik08QLdaxwK4wAWYc1jYAEZpCyaLv0wyYUWsuv6UOW_XWjWePWoUYXn_OFmkGGRm5R2kCmAhzp" charset="UTF-8"></script><style>
         :root{--color-fons:#f0f8ff;--color-principal:#4a90e2;--color-secundari:#f39c12;--color-accio:#27ae60;--mida-font-base:18px;--tipus-font:'Arial',sans-serif;--color-font:#000000;--num-columnes:3;--width-paper:210mm;--height-paper:297mm;--targeta-bg:#ffffff;--targeta-border:#000000;--targeta-text:#000000}
         body{font-family:'Segoe UI',sans-serif;margin:0;padding:20px;background-color:#fdfbf7;background-image:linear-gradient(#e1e1e1 1px,transparent 1px),linear-gradient(90deg,#e1e1e1 1px,transparent 1px);background-size:20px 20px}
         .configuracio{background-color:#fff;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);max-width:950px;margin:0 auto 20px;border-left:10px solid var(--color-principal);position:relative}
@@ -181,34 +181,20 @@
         const RUTA_LOGO_PICTOJOCS = "https://github.com/rrobles4/pictojocs/blob/main/logo%20PictoJocs.png?raw=true";
     </script>
 
-<style>
-        .menu-btn { position: fixed; top: 20px; left: 20px; background-color: var(--color-principal); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .menu-btn:hover { background-color: #357abd; }
-        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
-        .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
-        .side-menu a:hover { background-color: #f0f8ff; color: var(--color-principal); }
-        .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
-    </style>
-
-    <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '250px'">☰</button>
-
-    <div id="elMeuMenu" class="side-menu no-print">
-        <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
-        <a href="index.html">🏠 Inici (PictoSuite)</a>
-        <a href="pictotargetes.html">🃏 PictoTargetes</a>
-        <a href="pictoxat.html">💬 PictoXat</a>
-    </div>
-        <div id="view-pictojocs" style="display: none;">
+    <div id="view-pictojocs">
         <div class="configuracio no-print">
-            <div class="projecte-controls" style="justify-content: flex-end; padding-left: 60px;">
-                <button class="btn-nav-app" style="background:#f5b041; margin-right: auto;" onclick="obrirSettings()">🤖 Configuració IA</button>
+            <div class="projecte-controls">
+                <div style="flex-grow: 1; text-align: left; display: flex; gap: 8px;">
+                    <button class="btn-nav-app" onclick="switchAppView('pictotraductor')">🗣️ PictoXat</button>
+                    <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
+                </div>
                 <button id="btn-desar" class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
                 <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
             </div>
             <div class="header-app">
-                <img id="app-logo-header" class="logo-pictojocs" src="https://raw.githubusercontent.com/rrobles4/pictojocs/main/logo%20PictoJocs.png" alt="Logo PictoTargetes">
-                <h1 style="color: var(--color-principal);">PictoTargetes</h1>
+                <img id="app-logo-header" class="logo-pictojocs" src="" alt="PictoJocs Logo">
+                <h1>PictoJocs</h1>
             </div>
             <div class="fila-flex">
                 <div class="columna" style="flex: 0.6;">
@@ -337,9 +323,10 @@
         </div>
     </div>
 
-    <div id="view-pictotraductor" style="display: block;">
+    <div id="view-pictotraductor" style="display: none;">
         <div class="configuracio no-print">
-            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 8px; padding-left: 60px;">
+            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 8px;">
+                <button class="btn-nav-app" style="background:#4a90e2;" onclick="switchAppView('pictojocs')">🔙 Anar a PictoJocs</button>
                 <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
             </div>
             <div class="header-app">
@@ -1130,5 +1117,53 @@
         }
         function aplicarEdicioImatge(canviarTab = true) { const dataUrl = editorCanvas.toDataURL('image/png'); aplicarImatge(dataUrl); if(canviarTab) canviarPestanya('tab-arasaac'); }
     </script>
+<script>
+    // 1. Utilitzem la teva pròpia funció per obrir el Xat automàticament a l'inici
+    setTimeout(() => {
+        if(typeof switchAppView === 'function') {
+            switchAppView('pictotraductor');
+        } else {
+            document.getElementById('view-pictojocs').style.display = 'none';
+            document.getElementById('view-pictotraductor').style.display = 'block';
+        }
+        
+        // 2. Amaguem la capçalera antiga de "PictoJocs" i els botons vells de canviar d'app
+        document.querySelectorAll('.header-app').forEach(h => h.style.display = 'none');
+        document.querySelectorAll('button').forEach(b => { 
+            if(b.innerText.includes('PictoXat') || b.innerText.includes('PictoJocs')) {
+                b.style.display = 'none'; 
+            }
+        });
+    }, 100);
+
+    // 3. Afegim el menú hamburguesa verd i el títol net a dalt de tot
+    document.body.insertAdjacentHTML('afterbegin', `
+        <style>
+            .menu-btn { position: fixed; top: 20px; left: 20px; background-color: #27ae60; color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 10000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+            .menu-btn:hover { background-color: #219653; }
+            .side-menu { height: 100%; width: 0; position: fixed; z-index: 10001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
+            .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
+            .side-menu a:hover { background-color: #e8f5e9; color: #27ae60; }
+            .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
+            .nova-capsalera { text-align: center; margin-bottom: 20px; padding-top: 20px; }
+            .nova-capsalera h1 { font-family: 'Fredoka', sans-serif; color: #27ae60; margin: 10px 0 0 0; font-size: 2.5rem;}
+            .nova-capsalera p { color: #666; font-family: 'Andika', sans-serif; margin-top: 5px;}
+        </style>
+
+        <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenuXat').style.width = '250px'">☰</button>
+
+        <div id="elMeuMenuXat" class="side-menu no-print">
+            <button class="close-btn" onclick="document.getElementById('elMeuMenuXat').style.width = '0'">×</button>
+            <a href="index.html">🏠 Inici (PictoSuite)</a>
+            <a href="pictotargetes.html">🃏 PictoTargetes</a>
+            <a href="pictoxat.html">💬 PictoXat</a>
+        </div>
+
+        <div class="nova-capsalera no-print">
+            <h1>💬 PictoXat</h1>
+            <p>Comunicació Augmentativa i Alternativa</p>
+        </div>
+    `);
+</script>
 </body>
 </html>
