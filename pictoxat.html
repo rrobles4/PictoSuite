@@ -866,10 +866,25 @@
             const frase = document.getElementById('text-input').value.trim(); if(!frase) return;
             const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div>`; btnTrad.disabled = true;
             document.getElementById('resultat-pictos').innerHTML = ''; document.getElementById('traduccio-literal-box').style.display = 'none';
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (apiKey) { await processarAmbGemini(frase, apiKey); } else { await processarBasic(frase); }
+            const apiKey = (localStorage.getItem('gemini_api_key') || '').trim();
+            let processat = false;
+            if (apiKey) processat = await processarAmbGemini(frase, apiKey);
+            if (!processat) await processarBasic(frase);
             const lang = document.getElementById('idioma-input').value; const texts = uiDict[lang] || uiDict['ca'];
             btnTrad.innerHTML = texts[5]; btnTrad.disabled = false;
+        }
+
+        function parseRespostaGemini(rawText) {
+            if (!rawText || typeof rawText !== 'string') return null;
+            let text = rawText.replace(/```json/g, '').replace(/```/g, '').trim();
+            try { return JSON.parse(text); } catch (e) {}
+            const ini = text.indexOf('{');
+            const fi = text.lastIndexOf('}');
+            if (ini !== -1 && fi !== -1 && fi > ini) {
+                const candidate = text.slice(ini, fi + 1).replace(/,\s*([}\]])/g, '$1');
+                try { return JSON.parse(candidate); } catch (e) {}
+            }
+            return null;
         }
 
         async function processarAmbGemini(text, apiKey) {
@@ -882,17 +897,18 @@
                 if (data?.error?.message) throw new Error(data.error.message);
                 const textResposta = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (!textResposta) throw new Error("Resposta IA buida o no vàlida.");
-                let jsonText = textResposta.replace(/```json/g, '').replace(/```/g, '').trim();
-                const resultat = JSON.parse(jsonText);
-                if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return; }
-                document.getElementById('text-traduit-literal').innerText = resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
+                const resultat = parseRespostaGemini(textResposta);
+                if(!resultat) throw new Error("No s'ha pogut interpretar la resposta de la IA.");
+                if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return true; }
+                const traduccioLiteral = (resultat.traduccio_literal || resultat.traduccio || text).toString();
+                document.getElementById('text-traduit-literal').innerText = traduccioLiteral; document.getElementById('traduccio-literal-box').style.display = 'block';
                 let creades = 0;
                 const pictogrames = Array.isArray(resultat.pictogrames)
                     ? resultat.pictogrames
                     : (Array.isArray(resultat.keywords) ? resultat.keywords : []);
                 for (let picto of pictogrames) {
                     try { 
-                        const textCat = (picto?.cat || picto?.lemma || picto?.text || picto?.word || '').toString().trim();
+                        const textCat = (typeof picto === 'string' ? picto : (picto?.cat || picto?.lemma || picto?.text || picto?.word || '')).toString().trim();
                         const textOrig = (picto?.orig || picto?.original || picto?.source || textCat).toString().trim();
                         if (!textCat) continue;
                         const pictograma = await buscarPictogramaAmbFallback(textCat, langDesti);
@@ -900,12 +916,13 @@
                     } catch(e) {} 
                 }
                 if (creades === 0) {
-                    await generarPictogramesDesDeText(resultat.traduccio_literal || text, text, langDesti, langOrigen);
+                    await generarPictogramesDesDeText(traduccioLiteral, text, langDesti, langOrigen);
                 }
+                return true;
             } catch(e) {
                 console.error('Error processant IA:', e);
                 alert("Error amb la IA. Canviant al mode bàsic temporalment...");
-                await processarBasic(text);
+                return false;
             }
         }
 
