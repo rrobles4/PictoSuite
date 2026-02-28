@@ -216,7 +216,7 @@
         <div style="padding:5px 25px 10px;">
             <span style="display:block;font-size:0.82em;font-weight:bold;color:#555;margin-bottom:4px;font-family:'Fredoka',sans-serif;">🤖 Clau API OpenRouter:</span>
             <input type="password" id="openrouter-api-key" placeholder="sk-or-..." style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em;">
-            <button onclick="guardarApiKey(event)" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
+            <button onclick="guardarApiKey(this)" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
             <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
         </div>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
@@ -902,7 +902,7 @@
             for (const model of OPENROUTER_MODELS) {
                 try {
                     const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.2 }) });
-                    if (!response.ok) { lastError = 'HTTP error: ' + response.status; continue; }
+                    if (!response.ok) { lastError = 'HTTP error: ' + response.status + ' for model ' + model; continue; }
                     const data = await response.json();
                     if (data?.error) { lastError = data.error.message || JSON.stringify(data.error); continue; }
                     const text = data?.choices?.[0]?.message?.content;
@@ -947,10 +947,9 @@
 
         function obrirSettings() { document.getElementById('elMeuMenu').style.width = '280px'; }
         function guardarSettings() { /* handled by guardarApiKey in sidebar */ }
-        function guardarApiKey(event) {
+        function guardarApiKey(btn) {
             const key = document.getElementById('openrouter-api-key').value.trim();
             localStorage.setItem('openrouter_api_key', key);
-            const btn = event.target;
             const orig = btn.textContent;
             btn.textContent = '✅ Desada!';
             setTimeout(() => btn.textContent = orig, 2000);
@@ -958,6 +957,8 @@
         function toggleDarkMode(el) {
             document.body.classList.toggle('dark-mode', el.checked);
             localStorage.setItem('dark_mode', el.checked ? '1' : '0');
+            const s = document.getElementById('toggle-slider');
+            if (s) s.style.backgroundColor = el.checked ? 'var(--color-principal)' : '#ccc';
         }
         function enviarSuggeriment() {
             const email = document.getElementById('sugg-email').value;

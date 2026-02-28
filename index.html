@@ -205,7 +205,7 @@
         <div class="sidebar-section">
             <span class="sidebar-label">🤖 Clau API OpenRouter:</span>
             <input type="password" id="openrouter-api-key" class="sidebar-input" placeholder="sk-or-...">
-            <button class="sidebar-btn" onclick="guardarApiKey()">💾 Desar clau</button>
+            <button class="sidebar-btn" onclick="guardarApiKey(this)">💾 Desar clau</button>
             <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
         </div>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
@@ -291,12 +291,12 @@
             localStorage.setItem('dark_mode', el.checked ? '1' : '0');
         }
 
-        function guardarApiKey() {
+        function guardarApiKey(btn) {
             const key = document.getElementById('openrouter-api-key').value.trim();
             localStorage.setItem('openrouter_api_key', key);
-            const btn = event.target;
+            const orig = btn.textContent;
             btn.textContent = '✅ Desada!';
-            setTimeout(() => btn.textContent = '💾 Desar clau', 2000);
+            setTimeout(() => btn.textContent = orig, 2000);
         }
 
         function enviarSuggeriment() {

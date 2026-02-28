@@ -186,7 +186,7 @@
 
     <div id="view-pictotraductor" style="display: block;">
         <div class="configuracio no-print">
-            <div class="projecte-controls" style="display:none;">
+            <div class="projecte-controls" style="display:none;"></div>
             <div class="controls-traductor">
                 <div style="display:flex; gap: 15px; width: 100%; justify-content: center; align-items: flex-end; flex-wrap: wrap; margin-bottom: 15px;">
                     <div style="display:flex; flex-direction:column; align-items:center;">
@@ -741,14 +741,14 @@
         }
 
         function obrirModalPromptIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nPer utilitzar aquest mètode intel·ligent, clica a la icona '🤖 Configuració IA' de dalt a la dreta i enganxa-hi la teva clau gratuïta de Google Gemini."); return; }
+            const apiKey = localStorage.getItem('openrouter_api_key');
+            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i afegeix la teva clau gratuïta d'OpenRouter."); return; }
             document.getElementById('ia-prompt-text').value = '';
             document.getElementById('modal-prompt-ia').style.display = 'flex';
         }
 
         async function generarLlistaIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
+            const apiKey = localStorage.getItem('openrouter_api_key');
             const promptUser = document.getElementById('ia-prompt-text').value.trim();
             if (!promptUser) return;
             const lang = document.getElementById('idioma').options[document.getElementById('idioma').selectedIndex].text;
@@ -756,10 +756,8 @@
             btn.innerHTML = "⏳ Generant..."; btn.disabled = true;
             const prompt = `Ets un expert en crear materials educatius amb pictogrames (com ARASAAC). \nEl mestre et demana: "${promptUser}".\nGenera una llista ordenada i lògica de paraules que encaixin perfectament amb el que demana. \nIdioma de les paraules: ${lang}.\nNormes:\n- Retorna ÚNICAMENT les paraules separades per comes.\n- No posis cap text extra, ni llistes numerades, ni explicacions.\n- Usa paraules en la seva forma de diccionari (infinitius, singulars) sempre que sigui possible, ja que són més fàcils de trobar com a pictogrames.`;
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                const data = await response.json();
-                if(data.error) throw new Error(data.error.message);
-                let text = data.candidates[0].content.parts[0].text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
+                let text = await fetchOpenRouterText(prompt, apiKey);
+                text = text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
                 document.getElementById('llista-paraules').value = text; document.getElementById('modal-prompt-ia').style.display = 'none'; generarDocument();
             } catch (err) { alert("Error connectant amb la IA: " + err.message); } finally { btn.innerHTML = "✅ Generar"; btn.disabled = false; }
         }
@@ -928,10 +926,9 @@
 
         function obrirSettings() { document.getElementById('elMeuMenuXat').style.width = '280px'; }
         function guardarSettings() { /* handled by guardarApiKey in sidebar */ }
-        function guardarApiKey() {
+        function guardarApiKey(btn) {
             const key = document.getElementById('openrouter-api-key').value.trim();
             localStorage.setItem('openrouter_api_key', key);
-            const btn = event.target;
             const orig = btn.textContent;
             btn.textContent = '✅ Desada!';
             setTimeout(() => btn.textContent = orig, 2000);
@@ -1359,7 +1356,7 @@
             <div style="padding:5px 25px 10px;">
                 <span style="display:block;font-size:0.82em;font-weight:bold;color:#555;margin-bottom:4px;">🤖 Clau API OpenRouter:</span>
                 <input type="password" id="openrouter-api-key" placeholder="sk-or-..." style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em;">
-                <button onclick="guardarApiKey()" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
+                <button onclick="guardarApiKey(this)" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
                 <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
             </div>
             <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
