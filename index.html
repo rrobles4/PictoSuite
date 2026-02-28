@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PictoSuite - Inici</title>
+    <title>PictoSuite</title>
     <link href="https://fonts.googleapis.com/css2?family=Andika&family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -215,7 +215,7 @@
     </div>
 
     <div id="modal-contacte" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;">
-        <div style="background:#fff;border-radius:12px;width:90%;max-width:500px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <div style="background:#fff;border-radius:12px;width:90%;max-width:600px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
             <h3 style="margin-top:0;color:#2c3e50;font-family:var(--font-titols);">✉️ Tens alguna suggerència?</h3>
             <p style="color:#666;font-size:0.9em;">Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
             <div style="display:flex;flex-direction:column;gap:10px;">
@@ -223,7 +223,7 @@
                     <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
                     <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
                 </div>
-                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:80px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
+                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:96px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
                 <div style="display:flex;gap:10px;justify-content:center;">
                     <button onclick="enviarSuggeriment()" style="background:#333;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px;">✉️ Envia'm un missatge</button>
                     <button onclick="document.getElementById('modal-contacte').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
@@ -255,32 +255,36 @@
 
         <div class="app-card futura">
             <div class="app-icon">📝</div>
-            <h2 class="app-title">Picto</h2>
+            <h2 class="app-title">Fitxes</h2>
             <p class="app-desc">Editor de text per crear documents amb inserció directa de pictogrames.</p>
             <span class="etiqueta proximament">Pròximament</span>
         </div>
 
         <div class="app-card futura">
             <div class="app-icon">📅</div>
-            <h2 class="app-title">Picto</h2>
+            <h2 class="app-title">Rutines</h2>
             <p class="app-desc">Generador de seqüències visuals, horaris i anticipadors d'hàbits.</p>
             <span class="etiqueta proximament">Pròximament</span>
         </div>
 
         <div class="app-card futura">
             <div class="app-icon">📖</div>
-            <h2 class="app-title">Picto</h2>
+            <h2 class="app-title">Contes</h2>
             <p class="app-desc">Crea històries integrant pictogrames a les paraules clau.</p>
             <span class="etiqueta proximament">Pròximament</span>
         </div>
 
         <div class="app-card futura">
             <div class="app-icon">🎯</div>
-            <h2 class="app-title">Picto</h2>
+            <h2 class="app-title">Bingo</h2>
             <p class="app-desc">Generador automàtic de cartrons de bingo visuals.</p>
             <span class="etiqueta proximament">Pròximament</span>
         </div>
     </div>
+
+    <footer style="text-align:center;padding:20px;font-size:0.85em;color:#555;margin-top:10px;margin-bottom:20px;">
+        © 2026 PictoSuite | Creat per Rafa Robles Fonanet. Codi sota llicència MIT. Pictogrames d'ARASAAC (CC BY-NC-SA).
+    </footer>
 
     <script>
         function obrirMenu() { document.getElementById("elMeuMenu").style.width = "280px"; }
@@ -303,7 +307,7 @@
             const email = document.getElementById('sugg-email').value;
             const subject = document.getElementById('sugg-assumpte').value;
             const msg = document.getElementById('sugg-missatge').value;
-            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
+            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent("Suggerència per a PictoSuite: "+subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
         }
 
         window.addEventListener('load', function() {

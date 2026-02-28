@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PictoJocs & PictoXat</title>
+    <title>PictoSuite</title>
     <link href="https://fonts.googleapis.com/css2?family=Andika&family=Dancing+Script:wght@400;700&family=Fredoka:wght@400;600&family=Indie+Flower&family=Patrick+Hand&family=Roboto&family=Comic+Neue:wght@400;700&family=Schoolbell&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root{--color-fons:#f0f8ff;--color-principal:#4a90e2;--color-secundari:#f39c12;--color-accio:#27ae60;--mida-font-base:18px;--tipus-font:'Arial',sans-serif;--color-font:#000000;--num-columnes:3;--width-paper:210mm;--height-paper:297mm;--targeta-bg:#ffffff;--targeta-border:#000000;--targeta-text:#000000}
-        body{font-family:'Segoe UI',sans-serif;margin:0;padding:20px;background-color:#fdfbf7;background-image:linear-gradient(#e1e1e1 1px,transparent 1px),linear-gradient(90deg,#e1e1e1 1px,transparent 1px);background-size:20px 20px}
+        body{font-family:'Andika',sans-serif;margin:0;padding:20px;background-color:#fdfbf7;background-image:linear-gradient(#e1e1e1 1px,transparent 1px),linear-gradient(90deg,#e1e1e1 1px,transparent 1px);background-size:20px 20px}
         .configuracio{background-color:#fff;padding:20px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.1);max-width:950px;margin:0 auto 20px;border-left:10px solid var(--color-principal);position:relative}
         .projecte-controls{display:flex;justify-content:flex-end;gap:8px;margin-bottom:5px;align-items:center}
         .btn-nav-app{background:#8e44ad;color:#fff;border:none;padding:5px 10px;font-size:.9em;border-radius:6px;cursor:pointer;font-weight:bold;transition:.2s;box-shadow:0 2px 4px rgba(0,0,0,.2)}
@@ -15,7 +15,7 @@
         .btn-mini{background:#ecf0f1;border:1px solid #bdc3c7;padding:5px 10px;border-radius:6px;cursor:pointer;font-size:.85em;font-weight:bold;color:#333;display:flex;align-items:center;gap:5px;transition:.2s}
         .btn-mini:hover{background:#d5dbdb}
         .header-app{display:flex;align-items:center;justify-content:center;gap:15px;margin-top:25px;margin-bottom:20px;text-align:center}
-        .header-app h1{margin:0;color:#2c3e50;font-size:3em;letter-spacing:1px}
+        .header-app h1{margin:0;color:#2c3e50;font-size:2.5rem;letter-spacing:1px}
         .logo-pictojocs{height:95px;width:auto}
         .fila-flex{display:flex;gap:20px;margin-bottom:15px;align-items:flex-end}
         .columna{flex:1}
@@ -144,6 +144,25 @@
         .btn-tool.actiu{background:#e8f8f5;border:2px solid var(--color-accio);box-shadow:0 0 5px rgba(39,174,96,.3)}
         .caixa-idiomes-check{max-height:150px;overflow-y:auto;border:2px solid #eee;padding:10px;border-radius:8px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:5px;text-align:left;background:#fafafa}
         .caixa-idiomes-check label{margin:0;font-weight:normal;font-size:.9em;display:flex;align-items:center;gap:5px;cursor:pointer}
+        .toggle-wrap{display:flex;justify-content:space-between;align-items:center;padding:10px 25px}
+        .toggle-switch{position:relative;display:inline-block;width:46px;height:22px}
+        .toggle-switch input{opacity:0;width:0;height:0}
+        .toggle-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;border-radius:22px;transition:.3s}
+        .toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;border-radius:50%;transition:.3s}
+        input:checked + .toggle-slider{background-color:var(--color-principal)}
+        input:checked + .toggle-slider:before{transform:translateX(24px)}
+        .menu-btn{position:fixed;top:20px;left:20px;background-color:var(--color-principal);color:white;border:none;border-radius:8px;padding:10px 15px;font-size:24px;cursor:pointer;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,.1);transition:background .3s}
+        .menu-btn:hover{background-color:var(--color-principal)}
+        .side-menu{height:100%;width:0;position:fixed;z-index:1001;top:0;left:0;background-color:#ffffff;overflow-x:hidden;overflow-y:auto;transition:0.4s;box-shadow:2px 0 10px rgba(0,0,0,.1);padding-top:70px;display:flex;flex-direction:column;font-family:'Fredoka',sans-serif}
+        .side-menu a{padding:15px 25px;text-decoration:none;font-size:18px;color:#333;display:block;transition:0.2s}
+        .side-menu a:hover{background-color:#f0f8ff;color:var(--color-principal)}
+        .side-menu .close-btn{position:absolute;top:10px;right:20px;font-size:30px;background:none;border:none;cursor:pointer;color:#999}
+        .sidebar-section{padding:10px 25px}
+        .sidebar-label{display:block;font-size:0.82em;font-weight:bold;color:#555;margin-bottom:4px;font-family:'Fredoka',sans-serif}
+        .sidebar-input{width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em}
+        .sidebar-btn{margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold}
+        body.dark-mode .sidebar-label{color:#a6adc8}
+        body.dark-mode .sidebar-input{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         @media print{
             @page{margin:0 !important}
             body{background:#fff;padding:0;margin:0;-webkit-print-color-adjust:exact;background-image:none}
@@ -186,17 +205,8 @@
 <body>
 
     <script>
-        const RUTA_LOGO_PICTOJOCS = "https://github.com/rrobles4/pictojocs/blob/main/logo%20PictoJocs.png?raw=true";
+        const RUTA_LOGO_PICTOJOCS = "logo PictoSuite.png";
     </script>
-
-<style>
-        .menu-btn { position: fixed; top: 20px; left: 20px; background-color: var(--color-principal); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .menu-btn:hover { background-color: var(--color-principal); }
-        .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
-        .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
-        .side-menu a:hover { background-color: #f0f8ff; color: var(--color-principal); }
-        .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
-    </style>
 
     <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '280px'">☰</button>
 
@@ -206,21 +216,21 @@
         <a href="targetes.html">🃏 Targetes</a>
         <a href="pictoxat.html">💬 PictoXat</a>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
-        <div style="padding:10px 25px;display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:16px;font-family:'Fredoka',sans-serif;">🌙 Mode Fosc</span>
-            <label style="position:relative;display:inline-block;width:46px;height:22px;">
-                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)" style="opacity:0;width:0;height:0;">
-                <span id="toggle-slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;border-radius:22px;transition:.3s;"></span>
+        <div class="toggle-wrap">
+            <span style="font-size:16px;">🌙 Mode Fosc</span>
+            <label class="toggle-switch">
+                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
+                <span class="toggle-slider"></span>
             </label>
         </div>
-        <div style="padding:5px 25px 10px;">
-            <span style="display:block;font-size:0.82em;font-weight:bold;color:#555;margin-bottom:4px;font-family:'Fredoka',sans-serif;">🤖 Clau API OpenRouter:</span>
-            <input type="password" id="openrouter-api-key" placeholder="sk-or-..." style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em;">
-            <button onclick="guardarApiKey(this)" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
+        <div class="sidebar-section">
+            <span class="sidebar-label">🤖 Clau API OpenRouter:</span>
+            <input type="password" id="openrouter-api-key" class="sidebar-input" placeholder="sk-or-...">
+            <button class="sidebar-btn" onclick="guardarApiKey(this)">💾 Desar clau</button>
             <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
         </div>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
-        <div style="padding:5px 25px 15px;">
+        <div class="sidebar-section">
             <button onclick="document.getElementById('elMeuMenu').style.width='0'; document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</button>
         </div>
     </div>
@@ -363,7 +373,7 @@
     </div>
 
     <div id="modal-contacte" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;" class="no-print">
-        <div style="background:#fff;border-radius:12px;width:90%;max-width:500px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+        <div style="background:#fff;border-radius:12px;width:90%;max-width:600px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
             <h3 style="margin-top:0;color:#2c3e50;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</h3>
             <p style="color:#666;font-size:0.9em;">Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
             <div style="display:flex;flex-direction:column;gap:10px;">
@@ -371,22 +381,13 @@
                     <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
                     <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
                 </div>
-                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:80px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
+                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:96px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
                 <div style="display:flex;gap:10px;justify-content:center;">
                     <button onclick="enviarSuggeriment()" style="background:#333;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px;">✉️ Envia'm un missatge</button>
                     <button onclick="document.getElementById('modal-contacte').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="footer-credits no-print">
-        <p style="margin: 0; font-weight: bold; color: #333;">© <span id="any-actual"></span> PictoJocs - Creat per Rafa Robles Fontanet.</p>
-        <p style="margin: 2px 0; font-size: 0.9em;">Tots els drets reservats. Prohibida la còpia o modificació d'aquest software sense permís.</p>
-        <hr style="margin: 10px auto; width: 50%; opacity: 0.3;">
-        <p style="margin: 5px 0; font-size: 0.8em; color: #666;">
-            Els símbols pictogràfics utilitzats són propietat del Govern d'Aragó i han estat creats per Sergio Palao per a 
-            <a href="http://www.arasaac.org" target="_blank" style="color: #4a90e2; text-decoration: none;">ARASAAC</a>, que els distribueix sota llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #4a90e2;">CC (BY-NC-SA)</a>.
-        </p>
     </div>
 
 
@@ -498,7 +499,10 @@
                             <label style="font-size:0.8em; font-weight:bold;">↔️ X: <input type="range" id="ed-x" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
                             <label style="font-size:0.8em; font-weight:bold;">↕️ Y: <input type="range" id="ed-y" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
                         </div>
+                        <div style="position:relative;display:inline-block;">
                         <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white; cursor:crosshair;"></canvas>
+                        <input type="text" id="canvas-inline-text" placeholder="Escriu i prem ↵" style="display:none;position:absolute;background:rgba(255,255,255,0.95);border:2px solid #4a90e2;border-radius:4px;padding:3px 8px;font:bold 14px Arial;min-width:90px;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+                        </div>
                     </div>
                 </div>
 
@@ -578,7 +582,8 @@
         let lastMouseX = 0, lastMouseY = 0;
 
         window.onload = function() {
-            document.getElementById('any-actual').innerText = new Date().getFullYear();
+            const anyActualEl = document.getElementById('any-actual');
+            if (anyActualEl) anyActualEl.innerText = new Date().getFullYear();
             if (typeof RUTA_LOGO_PICTOJOCS !== 'undefined' && RUTA_LOGO_PICTOJOCS.trim() !== '') {
                 document.querySelectorAll('.logo-pictojocs').forEach(el => el.src = RUTA_LOGO_PICTOJOCS);
                 document.querySelectorAll('.big-logo-print').forEach(el => el.src = RUTA_LOGO_PICTOJOCS);
@@ -596,7 +601,7 @@
             if (localStorage.getItem('dark_mode') === '1') {
                 document.body.classList.add('dark-mode');
                 const t = document.getElementById('dark-mode-toggle');
-                if (t) { t.checked = true; document.getElementById('toggle-slider').style.backgroundColor = 'var(--color-principal)'; }
+                if (t) t.checked = true;
             }
             const key = localStorage.getItem('openrouter_api_key');
             if (key) { const inp = document.getElementById('openrouter-api-key'); if (inp) inp.value = key; }
@@ -894,7 +899,7 @@
             document.getElementById('modal-prompt-ia').style.display = 'flex';
         }
 
-        const OPENROUTER_MODELS = ['meta-llama/llama-3.1-8b-instruct:free', 'google/gemma-2-9b-it:free'];
+        const OPENROUTER_MODELS = ['google/gemma-2-9b-it:free', 'meta-llama/llama-3.1-8b-instruct:free'];
         async function fetchOpenRouterText(prompt, apiKey) {
             const url = 'https://openrouter.ai/api/v1/chat/completions';
             const headers = { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
@@ -957,14 +962,12 @@
         function toggleDarkMode(el) {
             document.body.classList.toggle('dark-mode', el.checked);
             localStorage.setItem('dark_mode', el.checked ? '1' : '0');
-            const s = document.getElementById('toggle-slider');
-            if (s) s.style.backgroundColor = el.checked ? 'var(--color-principal)' : '#ccc';
         }
         function enviarSuggeriment() {
             const email = document.getElementById('sugg-email').value;
             const subject = document.getElementById('sugg-assumpte').value;
             const msg = document.getElementById('sugg-missatge').value;
-            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
+            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent("Suggerència per a PictoSuite: "+subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
         }
 
         async function executarTraduccio() {
@@ -1148,8 +1151,28 @@
             const pos = getMousePos(e); let hitIdx = getHitShapeIndex(pos.x, pos.y); 
             if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; selectedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); } 
             else if (currentTool === 'text') {
-                const txt = prompt('Escriu el text:');
-                if (txt) { currentDrawings.push({ type: 'text', color: drawColor, start: {x: pos.x, y: pos.y}, text: txt }); selectedShapeIndex = currentDrawings.length - 1; drawEditorCanvas(); }
+                const inlineInput = document.getElementById('canvas-inline-text');
+                if (inlineInput) {
+                    inlineInput.style.left = pos.x + 'px';
+                    inlineInput.style.top = (pos.y - 18) + 'px';
+                    inlineInput.style.display = 'block';
+                    inlineInput.value = '';
+                    inlineInput.focus();
+                    inlineInput._pendingPos = {x: pos.x, y: pos.y};
+                    inlineInput.onkeydown = function(ev) {
+                        if (ev.key === 'Enter') { ev.preventDefault(); inlineInput.blur(); }
+                        if (ev.key === 'Escape') { inlineInput.style.display = 'none'; inlineInput.onblur = null; }
+                    };
+                    inlineInput.onblur = function() {
+                        const txt = inlineInput.value.trim();
+                        inlineInput.style.display = 'none';
+                        if (txt && inlineInput._pendingPos) {
+                            currentDrawings.push({ type: 'text', color: drawColor, start: {x: inlineInput._pendingPos.x, y: inlineInput._pendingPos.y}, text: txt });
+                            selectedShapeIndex = currentDrawings.length - 1;
+                            drawEditorCanvas();
+                        }
+                    };
+                }
             } else { 
                 selectedShapeIndex = -1; isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y; 
                 if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] }); 
@@ -1158,7 +1181,7 @@
         }
         function drawCanvas(e) {
             const pos = getMousePos(e);
-            if (isDraggingShape) { let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY; let shape = currentDrawings[draggedShapeIndex]; if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; }); else { shape.start.x += dx; shape.start.y += dy; shape.end.x += dx; shape.end.y += dy; } lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); } 
+            if (isDraggingShape) { let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY; let shape = currentDrawings[draggedShapeIndex]; if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; }); else { shape.start.x += dx; shape.start.y += dy; if(shape.end){shape.end.x += dx; shape.end.y += dy;} } lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); } 
             else if (isDrawing) { currentX = pos.x; currentY = pos.y; if (currentTool === 'freehand') currentDrawings[currentDrawings.length-1].points.push({x: currentX, y: currentY}); drawEditorCanvas(); } 
             else { let hitIdx = getHitShapeIndex(pos.x, pos.y); editorCanvas.style.cursor = hitIdx !== -1 ? 'pointer' : 'crosshair'; }
         }
@@ -1175,11 +1198,14 @@
             editorCtx.save(); editorCtx.translate(150 + dx, 150 + dy); editorCtx.scale(scale, scale);
             if (editorImgObj.src && !editorImgObj.src.endsWith('.mp4')) { const aspect = editorImgObj.width / editorImgObj.height; let w = 280, h = 280; if (aspect > 1) h = w / aspect; else w = h * aspect; editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h); }
             editorCtx.restore(); editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; 
-            currentDrawings.forEach(shape => { 
+            currentDrawings.forEach((shape, idx) => { 
                 if (shape.type === 'text') { 
                     editorCtx.fillStyle = shape.color; editorCtx.font = 'bold 16px Arial'; editorCtx.fillText(shape.text || '', shape.start.x, shape.start.y); 
-                    if (shape === currentDrawings[selectedShapeIndex]) { editorCtx.strokeStyle = '#4a90e2'; editorCtx.lineWidth = 1; editorCtx.setLineDash([3,3]); buildPath(editorCtx, shape); editorCtx.stroke(); editorCtx.setLineDash([]); }
-                } else { editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4; buildPath(editorCtx, shape); editorCtx.stroke(); } 
+                    if (idx === selectedShapeIndex) { editorCtx.strokeStyle = '#4a90e2'; editorCtx.lineWidth = 1; editorCtx.setLineDash([3,3]); buildPath(editorCtx, shape); editorCtx.stroke(); editorCtx.setLineDash([]); }
+                } else {
+                    if (idx === selectedShapeIndex) { editorCtx.strokeStyle = 'rgba(74,144,226,0.55)'; editorCtx.lineWidth = 10; editorCtx.setLineDash([]); buildPath(editorCtx, shape); editorCtx.stroke(); }
+                    editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4; buildPath(editorCtx, shape); editorCtx.stroke();
+                } 
             });
             if(isDrawing && currentTool !== 'freehand') { editorCtx.strokeStyle = drawColor; editorCtx.lineWidth = 4; let tempShape = { type: currentTool, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} }; buildPath(editorCtx, tempShape); editorCtx.stroke(); }
         }
