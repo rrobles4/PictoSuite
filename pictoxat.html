@@ -96,6 +96,8 @@
         #view-pictotraductor .pictograma{width:180px;cursor:pointer}
         #view-pictotraductor .imatge-box{height:75%}
         #view-pictotraductor .pictograma p{height:25%; padding-top:2px}
+        #view-pictotraductor .pictograma.negat .imatge-box{position:relative}
+        #view-pictotraductor .pictograma.negat .imatge-box::after{content:'✕';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:3.2em;font-weight:900;color:rgba(231,76,60,.92);text-shadow:0 1px 2px rgba(255,255,255,.75);pointer-events:none}
         .text-traduit{font-weight:bold;text-transform:uppercase;color:#000}
         .text-alumne{color:#666;font-style:italic;margin-top:2px;font-weight:normal;text-transform:none;white-space:nowrap}
         .btn-settings{position:absolute;top:15px;right:15px;background:none;border:none;font-size:28px;cursor:pointer;transition:transform .2s;z-index:100}
@@ -762,7 +764,48 @@
         }
 
         const stopWords = new Set(["el", "la", "els", "les", "un", "una", "uns", "unes", "a", "al", "als", "de", "del", "dels", "en", "per", "amb", "i", "o", "u", "si", "no", "que", "què", "com", "on", "em", "et", "es", "ens", "us", "meu", "meva", "teu", "teva", "seu", "seva", "si us plau", "sisplau", "hi", "ho", "li", "puc", "podem", "vull", "volem", "los", "las", "unos", "unas", "por", "para", "con", "y", "qué", "como", "donde", "me", "te", "se", "nos", "os", "mi", "tu", "su", "por favor", "puedo", "podemos", "quiero", "queremos", "the", "an", "to", "of", "in", "for", "on", "with", "at", "by", "from", "and", "or", "but", "is", "are", "am", "was", "were", "be", "been", "being", "you", "he", "she", "it", "we", "they", "my", "your", "his", "her", "its", "our", "their", "please", "can", "could", "would", "will", "shall", "should", "may", "might", "must", "do", "does", "did", "have", "has", "had", "ein", "eine", "einer", "eines", "einem", "einen", "der", "die", "das", "den", "dem", "des", "ich", "du", "er", "sie", "es", "wir", "ihr", "mich", "dich", "sich", "uns", "euch", "ist", "sind", "war", "waren", "sein", "haben", "hat", "hatte", "bitte", "ہے", "ہیں", "اور", "میں", "کو", "کا", "کی", "کے", "سے", "یہ", "وہ", "ਨੂੰ", "ਦਾ", "ਦੀ", "ਦੇ", "ਹੈ", "ਹਨ", "ਅਤੇ", "ਵਿੱਚ", "ਨਾਲ", "ਇੱਕ"]);
+        const negacioWords = new Set(["no", "not", "don't", "dont", "can't", "cant", "cannot", "won't", "wont", "never", "ni", "sin", "nunca", "pas", "ne", "nicht", "kein", "keine", "non", "mai", "لا", "ليس", "ما", "не", "нет", "ніколи", "nie", "nu", "ਨਹੀਂ", "نہیں"]);
         function netejarParaula(paraula) { return paraula.replace(/^[.,?!¡¿()]+|[.,?!¡¿()]+$/g, '').toLowerCase(); }
+
+        function segmentarParaules(text, langCode) {
+            const raw = (text || '').toString().trim();
+            if (!raw) return [];
+            try {
+                if (typeof Intl !== 'undefined' && Intl.Segmenter) {
+                    const segmenter = new Intl.Segmenter(langCode || 'und', { granularity: 'word' });
+                    const tokens = [];
+                    for (const part of segmenter.segment(raw)) {
+                        if (!part.isWordLike) continue;
+                        const token = netejarParaula(part.segment);
+                        if (token) tokens.push(token);
+                    }
+                    if (tokens.length) return tokens;
+                }
+            } catch (e) {}
+            const fallbackTokens = raw.match(/[\p{L}\p{M}\p{N}'’-]+/gu) || raw.split(/\s+/);
+            return fallbackTokens.map(netejarParaula).filter(Boolean);
+        }
+
+        function extreureParaulesNegades(frase) {
+            const result = new Set();
+            const tokens = segmentarParaules(frase, 'und');
+            for (let i = 0; i < tokens.length; i++) {
+                if (!negacioWords.has(tokens[i])) continue;
+                for (let j = i + 1; j < tokens.length; j++) {
+                    const t = tokens[j];
+                    if (t.length < 2 || stopWords.has(t) || negacioWords.has(t)) continue;
+                    result.add(t);
+                    break;
+                }
+            }
+            return result;
+        }
+
+        function obtenirMinimPictogrames(fraseTraduida) {
+            const tokens = segmentarParaules(fraseTraduida, 'und').filter(t => t && t.length >= 2 && !stopWords.has(t));
+            if (!tokens.length) return 1;
+            return Math.min(8, Math.max(3, Math.floor(tokens.length * 0.75)));
+        }
 
         const GLOBAL_SYMBOLS_CONFIG = {
             enabled: true,
@@ -890,7 +933,7 @@
         async function processarAmbGemini(text, apiKey) {
             const langOrigen = document.getElementById('idioma-input').value; 
             const langDesti = document.getElementById('idioma-desti').value;
-            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible. Corregeix petites faltes d'ortografia. Si és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí", "orig": "paraula original escrita pel nen que hi correspon"}\n  ]\n}\nRegles: Extreu NOMÉS les paraules clau per dibuixar la frase (màxim 6). Pots ometre articles, preposicions o paraules com 'si us plau' a menys que tu, com a IA, consideris que són estrictament necessaris per al sentit del missatge.`;
+            const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, corregeix errors ortogràfics o de transcripció per entendre bé el missatge (sense canviar la intenció). Si la frase és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, missatge curt en idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema a l'idioma destí", "orig": "terme original corresponent", "negada": true o false}\n  ]\n}\nRegles de qualitat: \n- Prioritza comprensió completa del missatge.\n- Dona entre 4 i 8 pictogrames si la frase ho permet.\n- Evita articles/preposicions que no aportin significat, però mantén negacions, temps, lloc i accions essencials.\n- Mantén cobertura semàntica equivalent independentment de l'idioma origen (àrabs, ciríl·lics, etc.).`;
             try {
                 const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
                 const data = await response.json();
@@ -902,6 +945,8 @@
                 if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return true; }
                 const traduccioLiteral = (resultat.traduccio_literal || resultat.traduccio || text).toString();
                 document.getElementById('text-traduit-literal').innerText = traduccioLiteral; document.getElementById('traduccio-literal-box').style.display = 'block';
+                const negadesOriginal = extreureParaulesNegades(text);
+                const pictosAfegits = new Set();
                 let creades = 0;
                 const pictogrames = Array.isArray(resultat.pictogrames)
                     ? resultat.pictogrames
@@ -911,12 +956,29 @@
                         const textCat = (typeof picto === 'string' ? picto : (picto?.cat || picto?.lemma || picto?.text || picto?.word || '')).toString().trim();
                         const textOrig = (picto?.orig || picto?.original || picto?.source || textCat).toString().trim();
                         if (!textCat) continue;
+                        const key = netejarParaula(textCat);
+                        if (!key || pictosAfegits.has(key)) continue;
                         const pictograma = await buscarPictogramaAmbFallback(textCat, langDesti);
-                        if (pictograma) { crearTargetaTrad(textCat, textOrig, pictograma.src, langOrigen, pictograma.source); creades++; }
+                        const negada = Boolean(picto?.negada || picto?.negat || picto?.negative || negadesOriginal.has(netejarParaula(textOrig)) || negadesOriginal.has(key));
+                        if (pictograma) { crearTargetaTrad(textCat, textOrig, pictograma.src, langOrigen, pictograma.source, negada); pictosAfegits.add(key); creades++; }
                     } catch(e) {} 
                 }
-                if (creades === 0) {
-                    await generarPictogramesDesDeText(traduccioLiteral, text, langDesti, langOrigen);
+                const minim = obtenirMinimPictogrames(traduccioLiteral);
+                if (creades < minim) {
+                    const afegides = await generarPictogramesDesDeText(traduccioLiteral, text, langDesti, langOrigen, {
+                        maxAfegir: Math.max(1, minim - creades),
+                        pictosAfegits,
+                        negadesOriginal
+                    });
+                    creades += afegides;
+                    if (creades < minim) {
+                        await generarPictogramesDesDeText(traduccioLiteral, text, langDesti, langOrigen, {
+                            maxAfegir: Math.max(1, minim - creades),
+                            pictosAfegits,
+                            negadesOriginal,
+                            modeAgressiu: true
+                        });
+                    }
                 }
                 return true;
             } catch(e) {
@@ -926,19 +988,27 @@
             }
         }
 
-        async function generarPictogramesDesDeText(fraseTraduida, fraseOriginal, langDesti, langOrigen) {
+        async function generarPictogramesDesDeText(fraseTraduida, fraseOriginal, langDesti, langOrigen, opts = {}) {
             let creades = 0;
             let textKilled = (fraseTraduida || '').toLowerCase().replace("si us plau", "").replace("por favor", "").replace("please", "");
-            const paraules = textKilled.split(/\s+/);
-            const paraulesOriginals = (fraseOriginal || fraseTraduida || '').split(/\s+/);
+            const paraules = segmentarParaules(textKilled, langDesti);
+            const paraulesOriginals = segmentarParaules((fraseOriginal || fraseTraduida || ''), langOrigen);
+            const maxAfegir = typeof opts.maxAfegir === 'number' ? opts.maxAfegir : Number.MAX_SAFE_INTEGER;
+            const pictosAfegits = opts.pictosAfegits || new Set();
+            const negadesOriginal = opts.negadesOriginal || extreureParaulesNegades(fraseOriginal);
+            const modeAgressiu = Boolean(opts.modeAgressiu);
             for (let i=0; i<paraules.length; i++) {
-                let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (stopWords.has(pNeta)) continue;
+                if (creades >= maxAfegir) break;
+                let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (!modeAgressiu && stopWords.has(pNeta)) continue;
+                if (pictosAfegits.has(pNeta)) continue;
                 try {
                     const pictograma = await buscarPictogramaAmbFallback(pNeta, langDesti);
                     if (pictograma) {
                         let paraulaPrincipal = pNeta;
                         let paraulaAnotada = paraulesOriginals[i] ? netejarParaula(paraulesOriginals[i]) : pNeta;
-                        crearTargetaTrad(paraulaPrincipal, paraulaAnotada, pictograma.src, langOrigen, pictograma.source);
+                        const negada = negadesOriginal.has(paraulaAnotada) || negadesOriginal.has(paraulaPrincipal);
+                        crearTargetaTrad(paraulaPrincipal, paraulaAnotada, pictograma.src, langOrigen, pictograma.source, negada);
+                        pictosAfegits.add(pNeta);
                         creades++;
                     }
                 } catch (err) {}
@@ -973,8 +1043,9 @@
         }
 
         let numTargetesTrad = 0;
-        function crearTargetaTrad(textCat, textOrig, imgUrl, langCode, source = 'arasaac') {
+        function crearTargetaTrad(textCat, textOrig, imgUrl, langCode, source = 'arasaac', negada = false) {
             const contenidor = document.getElementById('resultat-pictos'); const div = document.createElement('div'); div.className = 'pictograma'; div.dataset.index = numTargetesTrad++;
+            if (negada) div.classList.add('negat');
             let htmlOriginal = ''; if (textCat.toLowerCase() !== textOrig.toLowerCase()) { htmlOriginal = `<span class="fila-paraula text-alumne">(${textOrig})</span>`; }
             div.innerHTML = `<div class="imatge-box"><img src="${imgUrl}"></div><p><span class="fila-paraula text-traduit">${textCat}</span>${htmlOriginal}</p>`;
             div.onclick = function() { obrirModal(this); }; contenidor.appendChild(div);
