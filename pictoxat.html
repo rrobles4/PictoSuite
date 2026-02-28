@@ -165,12 +165,15 @@
         .sidebar-input{width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em}
         .sidebar-btn{margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold}
         .nova-capsalera{text-align:center;margin-bottom:10px;padding-top:20px}
-        .nova-capsalera h1{font-family:'Fredoka',sans-serif;color:var(--color-accio);margin:10px 0 0 0;font-size:2.5rem}
+        .nova-capsalera h1{font-family:'Fredoka',sans-serif;color:#333333;margin:10px 0 0 0;font-size:2.5rem}
         body.dark-mode .sidebar-label{color:#a6adc8}
         body.dark-mode .sidebar-input{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         body.dark-mode .side-menu{background-color:#2a2a3e}
         body.dark-mode .side-menu a{color:#cdd6f4}
         body.dark-mode .side-menu a:hover{background-color:#1e1e2e}
+        body.dark-mode{background-color:#1e1e2e;color:#cdd6f4;background-image:linear-gradient(rgba(255,255,255,0.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.05) 1px,transparent 1px);background-size:20px 20px}
+        body.dark-mode .nova-capsalera h1{color:#ffffff}
+        body.dark-mode .side-menu select.sidebar-input{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         @media print{
             @page{margin:0 !important}
             body{background:#fff;padding:0;margin:0;-webkit-print-color-adjust:exact;background-image:none}
@@ -217,21 +220,33 @@
         <a href="pictoxat.html">💬 PictoXat</a>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
         <div class="toggle-wrap">
-            <span style="font-size:16px;">🌙 Mode Fosc</span>
+            <span style="font-size:16px;" data-i18n="mode_fosc">🌙 Mode Fosc</span>
             <label class="toggle-switch">
                 <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
                 <span class="toggle-slider"></span>
             </label>
         </div>
         <div class="sidebar-section">
-            <span class="sidebar-label">🤖 Clau API OpenRouter:</span>
-            <input type="password" id="openrouter-api-key" class="sidebar-input" placeholder="sk-or-...">
-            <button class="sidebar-btn" onclick="guardarApiKey(this)">💾 Desar clau</button>
-            <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
+            <span class="sidebar-label" data-i18n="idioma_ui">🌐 Idioma interfície:</span>
+            <select id="ui-lang-select" class="sidebar-input" onchange="canviarIdiomaInterficie(this.value)">
+                <option value="ca">Català</option>
+                <option value="es">Castellà</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="ar">العربية</option>
+                <option value="zh">中文</option>
+                <option value="ur">اردو</option>
+            </select>
+        </div>
+        <div class="sidebar-section">
+            <span class="sidebar-label" data-i18n="clau_api">🤖 Clau API Google AI Studio:</span>
+            <input type="password" id="gemini-api-key" class="sidebar-input" placeholder="AIza...">
+            <button class="sidebar-btn" onclick="guardarApiKey(this)" data-i18n="desar_clau">💾 Desar clau</button>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;" data-i18n="aconseguir_clau">👉 Aconseguir clau gratis</a>
         </div>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
         <div class="sidebar-section">
-            <button onclick="document.getElementById('elMeuMenuXat').style.width='0'; document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</button>
+            <button onclick="document.getElementById('elMeuMenuXat').style.width='0'; document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:'Fredoka',sans-serif;" data-i18n="suggerencia">✉️ Tens alguna suggerència?</button>
         </div>
     </div>
 
@@ -390,7 +405,6 @@
                             <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
                             <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
                             <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
-                            <button id="tool-text" class="btn-tool" onclick="setTool('text')" title="Quadre de Text">🔤</button>
                             <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div>
                             <button style="background:#95a5a6; border:none; padding:5px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
                             <button style="background:#e74c3c; border:none; padding:5px 12px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="eliminarElementSeleccionat()" title="Eliminar element seleccionat">🗑️</button>
@@ -420,6 +434,27 @@
     <div id="toast" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background: #333; color:white; padding: 10px 20px; border-radius: 30px; z-index:2000;">Copiat!</div>
 
     <script>
+        const i18nUI = {
+            ca: { mode_fosc:"🌙 Mode Fosc", idioma_ui:"🌐 Idioma interfície:", clau_api:"🤖 Clau API Google AI Studio:", desar_clau:"💾 Desar clau", aconseguir_clau:"👉 Aconseguir clau gratis", suggerencia:"✉️ Tens alguna suggerència?" },
+            es: { mode_fosc:"🌙 Modo Oscuro", idioma_ui:"🌐 Idioma interfaz:", clau_api:"🤖 Clave API Google AI Studio:", desar_clau:"💾 Guardar clave", aconseguir_clau:"👉 Obtener clave gratis", suggerencia:"✉️ ¿Alguna sugerencia?" },
+            en: { mode_fosc:"🌙 Dark Mode", idioma_ui:"🌐 Interface language:", clau_api:"🤖 Google AI Studio API Key:", desar_clau:"💾 Save key", aconseguir_clau:"👉 Get free key", suggerencia:"✉️ Any suggestion?" },
+            fr: { mode_fosc:"🌙 Mode Sombre", idioma_ui:"🌐 Langue interface :", clau_api:"🤖 Clé API Google AI Studio :", desar_clau:"💾 Enregistrer", aconseguir_clau:"👉 Obtenir une clé", suggerencia:"✉️ Une suggestion ?" },
+            ar: { mode_fosc:"🌙 الوضع المظلم", idioma_ui:"🌐 لغة الواجهة:", clau_api:"🤖 مفتاح API جوجل:", desar_clau:"💾 حفظ المفتاح", aconseguir_clau:"👉 احصل على مفتاح مجاني", suggerencia:"✉️ هل لديك اقتراح؟" },
+            zh: { mode_fosc:"🌙 暗黑模式", idioma_ui:"🌐 界面语言：", clau_api:"🤖 谷歌AI Studio密钥：", desar_clau:"💾 保存密钥", aconseguir_clau:"👉 获取免费密钥", suggerencia:"✉️ 有什么建议？" },
+            ur: { mode_fosc:"🌙 ڈارک موڈ", idioma_ui:"🌐 انٹرفیس زبان:", clau_api:"🤖 گوگل AI کی:", desar_clau:"💾 کی محفوظ کریں", aconseguir_clau:"👉 مفت کی لیں", suggerencia:"✉️ کوئی تجویز؟" }
+        };
+
+        function canviarIdiomaInterficie(lang) {
+            localStorage.setItem('ui_lang', lang);
+            const t = i18nUI[lang] || i18nUI['ca'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (t[key] !== undefined) el.textContent = t[key];
+            });
+            const sel = document.getElementById('ui-lang-select');
+            if (sel && sel.value !== lang) sel.value = lang;
+        }
+
         const uiDict = {'ca':["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!","El teu idioma:","Tradueix a:","Escriu la frase aquí o utilitza el micròfon...","🎤 Parlar","➡️ Traduir","👂 Escoltant..."],'es':["¿Necesitas ayuda y no sabes cómo decirlo? ¡Elige tu idioma y explícalo con pictogramas!","Tu idioma:","Traducir a:","Escribe la frase aquí o usa el micrófono...","🎤 Hablar","➡️ Traducir","👂 Escuchando..."],'en':["Need help and don't know how to say it? Choose your language and explain it with pictograms!","Your language:","Translate to:","Type the phrase here or use the microphone...","🎤 Speak","➡️ Translate","👂 Listening..."],'fr':["Besoin d'aide et vous ne savez pas comment le dire ? Choisissez votre langue et expliquez-le avec des pictogrammes !","Votre langue :","Traduire en :","Écrivez la phrase ici ou utilisez le microphone...","🎤 Parler","➡️ Traduire","👂 En écoute..."],'de':["Brauchst du Hilfe und weißt nicht, wie du es sagen sollst? Wähle deine Sprache und erkläre es mit Piktogrammen!","Deine Sprache:","Übersetzen in:","Schreibe den Satz hier oder benutze das Mikrofon...","🎤 Sprechen","➡️ Übersetzen","👂 Höre zu..."],'it':["Hai bisogno di aiuto e non sai come dirlo? Scegli la tua lingua e spiegalo con i pittogrammi!","La tua lingua:","Traduci in:","Scrivi la frase qui o usa il microfono...","🎤 Parla","➡️ Traduci","👂 Ascoltando..."],'pt':["Precisa de ajuda e não sabe como dizer? Escolha o seu idioma e explique com pictogramas!","Seu idioma:","Traduzir para:","Escreva a frase aqui ou use o microfone...","🎤 Falar","➡️ Traduzir","👂 Ouvindo..."],'nl':["Hulp nodig en je weet niet hoe je het moet zeggen? Kies je taal en leg het uit met pictogrammen!","Jouw taal:","Vertaal naar:","Typ hier de zin of gebruik de microfoon...","🎤 Spreken","➡️ Vertalen","👂 Luisteren..."],'ro':["Ai nevoie de ajutor și nu știi cum să spui? Alege limba ta și explică prin pictograme!","Limba ta:","Traduce în:","Scrie fraza aici sau folosește microfonul...","🎤 Vorbește","➡️ Traduce","👂 Ascult..."],'pl':["Potrzebujesz pomocy i nie wiesz, jak to powiedzieć? Wybierz swój język i wyjaśnij to za pomocą piktogramów!","Twój język:","Przetłumacz na:","Wpisz tu zdanie lub użyj mikrofonu...","🎤 Mów","➡️ Tłumacz","👂 Słucham..."],'uk':["Потрібна допомога і не знаєте, як це сказати? Виберіть свою мову і поясніть за допомогою піктограм!","Ваша мова:","Перекласти на:","Напишіть фразу тут або скористайтеся мікрофоном...","🎤 Говорити","➡️ Перекласти","👂 Слухаю..."],'ru':["Нужна помощь и не знаете, как это сказать? Выберите свой язык и объясните с помощью пиктограмм!","Ваш язык:","Перевести на:","Напишите фразу здесь или используйте микрофон...","🎤 Говорить","➡️ Перевести","👂 Слушаю..."],'bg':["Нуждаете се от помощ и не знаете как да го кажете? Изберете своя език и го обяснете с пиктограми!","Вашият език:","Превод на:","Напишете фразата тук или използвайте микрофона...","🎤 Говори","➡️ Преведи","👂 Слушам..."],'ar':["هل تحتاج إلى مساعدة ولا تعرف كيف تقولها؟ اختر لغتك واشرحها باستخدام الرموز التوضيحية!","لغتك:","ترجم إلى:","اكتب العبارة هنا أو استخدم الميكروفون...","🎤 تحدث","➡️ ترجمة","👂 أستمع..."],'zh':["需要帮助不知道怎么说？选择你的语言，用图画解释吧！","你的语言：","翻译成：","在这里输入句子或使用麦克风...","🎤 说话","➡️ 翻译","👂 听着..."],'fa':["کمک می خواهید و نمی دانید چگونه بگویید؟ زبان خود را انتخاب کنید و با پیکتوگرام توضیح دهید!","زبان شما:","ترجمه به:","جمله را اینجا بنویسید یا از میکروفون استفاده کنید...","🎤 صحبت کن","➡️ ترجمه","👂 در حال گوش دادن..."],'he':["צריך עזרה ולא יודע איך להגיד את זה? בחר את השפה שלך והסבר באמצעות סמלים!","השפה שלך:","תרגם ל:","הקלד את המשפט כאן או השתמש במיקרופון...","🎤 דבר","➡️ תרגם","👂 מקשיב..."],'el':["Χρειάζεστε βοήθεια και δεν ξέρετε πώς να το πείτε; Επιλέξτε τη γλώσσα σας και εξηγήστε το με εικονογράμματα!","Η γλώσσα σας:","Μετάφραση σε:","Γράψτε τη φράση εδώ ή χρησιμοποιήστε το μικρόφωνο...","🎤 Μιλήστε","➡️ Μετάφραση","👂 Ακούω..."],'eu':["Laguntza behar duzu eta ez dakizu nola esan? Aukeratu zure hizkuntza eta azaldu piktogramekin!","Zure hizkuntza:","Itzuli honetara:","Idatzi esaldia hemen edo erabili mikrofonoa...","🎤 Hitz egin","➡️ Itzuli","👂 Entzuten..."],'gl':["Necesitas axuda e non sabes como dicilo? Elixe o teu idioma e explícao con pictogramas!","O teu idioma:","Traducir a:","Escribe a frase aquí ou usa o micrófono...","🎤 Falar","➡️ Traducir","👂 Escoitando..."],'val':["Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!","El teu idioma:","Tradueix a:","Escriu la frase aquí o utilitza el micròfon...","🎤 Parlar","➡️ Traduir","👂 Escoltant..."],'cs':["Potřebujete pomoci a nevíte, jak to říct? Vyberte si svůj jazyk a vysvětlete to pomocí piktogramů!","Váš jazyk:","Přeložit do:","Napište sem větu nebo použite mikrofon...","🎤 Mluvit","➡️ Přeložit","👂 Poslouchám..."],'sk':["Potrebujete pomôcť a neviete, ako to povedať? Vyberte si svoj jazyk a vysvetlite to pomocou piktogramov!","Váš jazyk:","Preložiť do:","Napíšte sem vetu alebo použite mikrofón...","🎤 Hovoriť","➡️ Preložiť","👂 Počúvam..."],'sl':["Potrebujete pomoč in ne veste, kako bi to povedali? Izberite svoj jezik in razložite s piktogrami!","Vaš jezik:","Prevedi v:","Tukaj vnesite frazo ali uporabite mikrofon...","🎤 Govori","➡️ Prevedi","👂 Poslušam..."],'hr':["Potrebna vam je pomoć i ne znate kako to reći? Odaberite svoj jezik i objasnite to pomoću piktograma!","Vaš jezik:","Prevedi na:","Ovdje napišite izraz ili upotrijebite mikrofon...","🎤 Govori","➡️ Prevedi","👂 Slušam..."],'sr':["Treba vam pomoć i ne znate kako da to kažete? Izaberite svoj jezik i objasnite pomoću piktograma!","Tvoj jezik:","Prevedi na:","Napišite frazu ovde ili koristite mikrofon...","🎤 Govori","➡️ Prevedi","👂 Slušam..."],'mk':["Имате потреба од помош и не знаете како да го кажете тоа? Изберете го вашиот јазик и објаснете со пиктограми!","Вашиот јазик:","Преведи на:","Напишете ја фразата тука или користете го микрофонот...","🎤 Зборувај","➡️ Преведи","👂 Слушам..."],'sq':["Keni nevojë për ndihmë dhe nuk dini si ta thoni? Zgjidhni gjuhën tuaj dhe shpjegojeni me piktograme!","Gjuha juaj:","Përkthe në:","Shkruani frazën këtu ose përdorni mikrofonin...","🎤 Flisni","➡️ Përkthe","👂 Duke dëgjuar..."],'hu':["Segítségre van szüksége, és nem tudja, hogyan mondja el? Válassza ki a nyelvét, és magyarázza el piktogramokkal!","Az Ön nyelve:","Fordítás erre:","Írja be ide a kifejezést, vagy használja a mikrofont...","🎤 Beszélj","➡️ Fordítás","👂 Figyelek..."],'da':["Brug for hjælp og ved ikke, hvordan man siger det? Vælg dit sprog og forklar det med piktogrammer!","Dit sprog:","Oversæt til:","Skriv sætningen her eller brug mikrofonen...","🎤 Tal","➡️ Oversæt","👂 Lytter..."],'sv':["Behöver du hjälp och vet inte hur du ska säga det? Välj ditt språk och förklara det med piktogram!","Ditt språk:","Översätt till:","Skriv frasen här eller använd mikrofonen...","🎤 Tala","➡️ Översätt","👂 Lyssnar..."],'fi':["Tarvitsetko apua etkä tiedä miten sanoa se? Valitse kielesi ja selitä se kuvamerkeillä!","Sinun kielesi:","Käännä kielelle:","Kirjoita lause tähän tai käytä mikrofonia...","🎤 Puhu","➡️ Käännä","👂 Kuuntelen..."],'et':["Vajad abi ja ei tea, kuidas seda öelda? Vali oma keel ja selgita piktogrammidega!","Sinu keel:","Tõlgi keelde:","Kirjuta fraas siia või kasuta mikrofoni...","🎤 Räägi","➡️ Tõlgi","👂 Kuulan..."],'lt':["Reikia pagalbos ir nežinote, kaip tai pasakyti? Pasirinkite savo kalbą ir paaiškinkite piktogramomis!","Jūsų kalba:","Išversti į:","Įrašykite frazę čia arba naudokite mikrofoną...","🎤 Kalbėti","➡️ Išversti","👂 Klausau..."],'lv':["Nepieciešama palīdzība un nezināt, kā to pateikt? Izvēlieties savu valodu un izskaidrojiet to ar piktogrammām!","Jūsu valoda:","Tulkot uz:","Ierakstiet frāzi šeit vai izmantojiet mikrofonu...","🎤 Runāt","➡️ Tulkot","👂 Klausos..."],'ko':["도움이 필요하지만 어떻게 말해야 할지 모르겠나요? 언어를 선택하고 픽토그램으로 설명해 보세요!","사용 언어:","번역할 언어:","여기에 문장을 입력하거나 마이크를 사용하세요...","🎤 말하기","➡️ 번역","👂 듣는 중..."],'ur':["مدد کی ضرورت ہے اور نہیں جانتے کہ کیسے کہنا ہے؟ اپنی زبان منتخب کریں اور تصویری علامتوں سے سمجھائیں!","آپ کی زبان:","اس میں ترجمہ کریں:","یہاں جملہ لکھیں یا مائیکروفون استعمال کریں...","🎤 بولیں","➡️ ترجمہ کریں","👂 سن رہا ہوں..."]};
 
         function initLangs(){
@@ -501,8 +536,10 @@
                 const t = document.getElementById('dark-mode-toggle');
                 if (t) t.checked = true;
             }
-            const savedKey = localStorage.getItem('openrouter_api_key');
-            if (savedKey) { const inp = document.getElementById('openrouter-api-key'); if (inp) inp.value = savedKey; }
+            const savedKey = localStorage.getItem('gemini_api_key');
+            if (savedKey) { const inp = document.getElementById('gemini-api-key'); if (inp) inp.value = savedKey; }
+            const lang = localStorage.getItem('ui_lang') || 'ca';
+            canviarIdiomaInterficie(lang);
         };
 
         function switchAppView(view) {
@@ -796,14 +833,14 @@
         }
 
         function obrirModalPromptIA() {
-            const apiKey = localStorage.getItem('openrouter_api_key');
-            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i afegeix la teva clau gratuïta d'OpenRouter."); return; }
+            const apiKey = localStorage.getItem('gemini_api_key');
+            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i afegeix la teva clau de Google AI Studio."); return; }
             document.getElementById('ia-prompt-text').value = '';
             document.getElementById('modal-prompt-ia').style.display = 'flex';
         }
 
         async function generarLlistaIA() {
-            const apiKey = localStorage.getItem('openrouter_api_key');
+            const apiKey = localStorage.getItem('gemini_api_key');
             const promptUser = document.getElementById('ia-prompt-text').value.trim();
             if (!promptUser) return;
             const lang = document.getElementById('idioma').options[document.getElementById('idioma').selectedIndex].text;
@@ -811,7 +848,7 @@
             btn.innerHTML = "⏳ Generant..."; btn.disabled = true;
             const prompt = `Ets un expert en crear materials educatius amb pictogrames (com ARASAAC). \nEl mestre et demana: "${promptUser}".\nGenera una llista ordenada i lògica de paraules que encaixin perfectament amb el que demana. \nIdioma de les paraules: ${lang}.\nNormes:\n- Retorna ÚNICAMENT les paraules separades per comes.\n- No posis cap text extra, ni llistes numerades, ni explicacions.\n- Usa paraules en la seva forma de diccionari (infinitius, singulars) sempre que sigui possible, ja que són més fàcils de trobar com a pictogrames.`;
             try {
-                let text = await fetchOpenRouterText(prompt, apiKey);
+                let text = await fetchGeminiText(prompt, apiKey);
                 text = text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
                 document.getElementById('llista-paraules').value = text; document.getElementById('modal-prompt-ia').style.display = 'none'; generarDocument();
             } catch (err) { alert("Error connectant amb la IA: " + err.message); } finally { btn.innerHTML = "✅ Generar"; btn.disabled = false; }
@@ -982,8 +1019,8 @@
         function obrirSettings() { document.getElementById('elMeuMenuXat').style.width = '280px'; }
         function guardarSettings() { /* handled by guardarApiKey in sidebar */ }
         function guardarApiKey(btn) {
-            const key = document.getElementById('openrouter-api-key').value.trim();
-            localStorage.setItem('openrouter_api_key', key);
+            const key = document.getElementById('gemini-api-key').value.trim();
+            localStorage.setItem('gemini_api_key', key);
             const orig = btn.textContent;
             btn.textContent = '✅ Desada!';
             setTimeout(() => btn.textContent = orig, 2000);
@@ -997,7 +1034,7 @@
             const frase = document.getElementById('text-input').value.trim(); if(!frase) return;
             const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div>`; btnTrad.disabled = true;
             document.getElementById('resultat-pictos').innerHTML = ''; document.getElementById('traduccio-literal-box').style.display = 'none';
-            const apiKey = (localStorage.getItem('openrouter_api_key') || '').trim();
+            const apiKey = (localStorage.getItem('gemini_api_key') || '').trim();
             let processat = false;
             if (apiKey) processat = await processarAmbGemini(frase, apiKey);
             if (!processat) await processarBasic(frase);
@@ -1018,31 +1055,20 @@
             return null;
         }
 
-        const OPENROUTER_MODELS = ['google/gemma-2-9b-it:free', 'meta-llama/llama-3.1-8b-instruct:free'];
-        async function fetchOpenRouterText(prompt, apiKey) {
-            const url = 'https://openrouter.ai/api/v1/chat/completions';
-            const headers = { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
-            let lastError = 'Error desconegut';
-            for (const model of OPENROUTER_MODELS) {
-                try {
-                    const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.2 }) });
-                    if (!response.ok) { lastError = `HTTP error ${response.status} for model ${model}`; continue; }
-                    const data = await response.json();
-                    if (data?.error) { lastError = data.error.message || JSON.stringify(data.error); continue; }
-                    const text = data?.choices?.[0]?.message?.content;
-                    if (!text) { lastError = 'Resposta buida del model ' + model; continue; }
-                    return text.toString().trim();
-                } catch (e) { lastError = e.message; }
-            }
-            throw new Error(lastError);
-        }
-        async function fetchGeminiJson(prompt, apiKey) {
-            const text = await fetchOpenRouterText(prompt, apiKey);
-            return { candidates: [{ content: { parts: [{ text }] } }] };
+        async function fetchGeminiText(prompt, apiKey) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2 } }) });
+            if (!response.ok) throw new Error('HTTP error: ' + response.status);
+            const data = await response.json();
+            if (data?.error) throw new Error(data.error.message || JSON.stringify(data.error));
+            const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (!text) throw new Error('Resposta buida');
+            return text.toString().trim();
         }
 
-        async function fetchGeminiText(prompt, apiKey) {
-            return await fetchOpenRouterText(prompt, apiKey);
+        async function fetchGeminiJson(prompt, apiKey) {
+            const text = await fetchGeminiText(prompt, apiKey);
+            return { candidates: [{ content: { parts: [{ text }] } }] };
         }
 
         async function processarAmbGeminiRescat(text, apiKey, langOrigen, langDesti) {
@@ -1195,7 +1221,7 @@
                     const dataT = await resT.json(); 
                     if(dataT.responseData && dataT.responseData.translatedText) { 
                         if(dataT.responseData.translatedText.includes('MYMEMORY WARNING')) { 
-                            alert("⚠️ Has superat el límit de traduccions gratuïtes per avui.\nSi us plau, afegeix la teva clau d'OpenRouter al menú lateral (☰) per continuar sense límits."); 
+                            alert("⚠️ Has superat el límit de traduccions gratuïtes per avui.\nSi us plau, afegeix la teva clau de Google AI Studio al menú lateral (☰) per continuar sense límits."); 
                             document.getElementById('text-traduit-literal').innerText = "⚠️ Límit de traducció assolit."; 
                             document.getElementById('traduccio-literal-box').style.display = 'block'; 
                             return; 

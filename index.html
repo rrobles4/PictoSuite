@@ -47,6 +47,7 @@
         body.dark-mode #modal-contacte textarea { background: #1e1e2e; color: #cdd6f4; border-color: #555; }
         body.dark-mode .sidebar-label { color: #a6adc8; }
         body.dark-mode .sidebar-input { background: #1e1e2e; color: #cdd6f4; border-color: #555; }
+        body.dark-mode .side-menu select.sidebar-input { background: #1e1e2e; color: #cdd6f4; border-color: #555; }
 
         .menu-btn {
             position: fixed;
@@ -196,21 +197,33 @@
         <a href="pictoxat.html">💬 PictoXat</a>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
         <div class="toggle-wrap">
-            <span style="font-size:16px;">🌙 Mode Fosc</span>
+            <span style="font-size:16px;" data-i18n="mode_fosc">🌙 Mode Fosc</span>
             <label class="toggle-switch">
                 <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
                 <span class="toggle-slider"></span>
             </label>
         </div>
         <div class="sidebar-section">
-            <span class="sidebar-label">🤖 Clau API OpenRouter:</span>
-            <input type="password" id="openrouter-api-key" class="sidebar-input" placeholder="sk-or-...">
-            <button class="sidebar-btn" onclick="guardarApiKey(this)">💾 Desar clau</button>
-            <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
+            <span class="sidebar-label" data-i18n="idioma_ui">🌐 Idioma interfície:</span>
+            <select id="ui-lang-select" class="sidebar-input" onchange="canviarIdiomaInterficie(this.value)">
+                <option value="ca">Català</option>
+                <option value="es">Castellà</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="ar">العربية</option>
+                <option value="zh">中文</option>
+                <option value="ur">اردو</option>
+            </select>
+        </div>
+        <div class="sidebar-section">
+            <span class="sidebar-label" data-i18n="clau_api">🤖 Clau API Google AI Studio:</span>
+            <input type="password" id="gemini-api-key" class="sidebar-input" placeholder="AIza...">
+            <button class="sidebar-btn" onclick="guardarApiKey(this)" data-i18n="desar_clau">💾 Desar clau</button>
+            <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;" data-i18n="aconseguir_clau">👉 Aconseguir clau gratis</a>
         </div>
         <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
         <div class="sidebar-section">
-            <button onclick="tancarMenu(); document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:var(--font-titols);">✉️ Tens alguna suggerència?</button>
+            <button onclick="tancarMenu(); document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:var(--font-titols);" data-i18n="suggerencia">✉️ Tens alguna suggerència?</button>
         </div>
     </div>
 
@@ -261,13 +274,6 @@
         </div>
 
         <div class="app-card futura">
-            <div class="app-icon">📅</div>
-            <h2 class="app-title">Rutines</h2>
-            <p class="app-desc">Generador de seqüències visuals, horaris i anticipadors d'hàbits.</p>
-            <span class="etiqueta proximament">Pròximament</span>
-        </div>
-
-        <div class="app-card futura">
             <div class="app-icon">📖</div>
             <h2 class="app-title">Contes</h2>
             <p class="app-desc">Crea històries integrant pictogrames a les paraules clau.</p>
@@ -287,6 +293,27 @@
     </footer>
 
     <script>
+        const i18nUI = {
+            ca: { mode_fosc:"🌙 Mode Fosc", idioma_ui:"🌐 Idioma interfície:", clau_api:"🤖 Clau API Google AI Studio:", desar_clau:"💾 Desar clau", aconseguir_clau:"👉 Aconseguir clau gratis", suggerencia:"✉️ Tens alguna suggerència?" },
+            es: { mode_fosc:"🌙 Modo Oscuro", idioma_ui:"🌐 Idioma interfaz:", clau_api:"🤖 Clave API Google AI Studio:", desar_clau:"💾 Guardar clave", aconseguir_clau:"👉 Obtener clave gratis", suggerencia:"✉️ ¿Alguna sugerencia?" },
+            en: { mode_fosc:"🌙 Dark Mode", idioma_ui:"🌐 Interface language:", clau_api:"🤖 Google AI Studio API Key:", desar_clau:"💾 Save key", aconseguir_clau:"👉 Get free key", suggerencia:"✉️ Any suggestion?" },
+            fr: { mode_fosc:"🌙 Mode Sombre", idioma_ui:"🌐 Langue interface :", clau_api:"🤖 Clé API Google AI Studio :", desar_clau:"💾 Enregistrer", aconseguir_clau:"👉 Obtenir une clé", suggerencia:"✉️ Une suggestion ?" },
+            ar: { mode_fosc:"🌙 الوضع المظلم", idioma_ui:"🌐 لغة الواجهة:", clau_api:"🤖 مفتاح API جوجل:", desar_clau:"💾 حفظ المفتاح", aconseguir_clau:"👉 احصل على مفتاح مجاني", suggerencia:"✉️ هل لديك اقتراح؟" },
+            zh: { mode_fosc:"🌙 暗黑模式", idioma_ui:"🌐 界面语言：", clau_api:"🤖 谷歌AI Studio密钥：", desar_clau:"💾 保存密钥", aconseguir_clau:"👉 获取免费密钥", suggerencia:"✉️ 有什么建议？" },
+            ur: { mode_fosc:"🌙 ڈارک موڈ", idioma_ui:"🌐 انٹرفیس زبان:", clau_api:"🤖 گوگل AI Studio کی:", desar_clau:"💾 کی محفوظ کریں", aconseguir_clau:"👉 مفت کی لیں", suggerencia:"✉️ کوئی تجویز؟" }
+        };
+
+        function canviarIdiomaInterficie(lang) {
+            localStorage.setItem('ui_lang', lang);
+            const t = i18nUI[lang] || i18nUI['ca'];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.dataset.i18n;
+                if (t[key] !== undefined) el.textContent = t[key];
+            });
+            const sel = document.getElementById('ui-lang-select');
+            if (sel && sel.value !== lang) sel.value = lang;
+        }
+
         function obrirMenu() { document.getElementById("elMeuMenu").style.width = "280px"; }
         function tancarMenu() { document.getElementById("elMeuMenu").style.width = "0"; }
 
@@ -296,8 +323,8 @@
         }
 
         function guardarApiKey(btn) {
-            const key = document.getElementById('openrouter-api-key').value.trim();
-            localStorage.setItem('openrouter_api_key', key);
+            const key = document.getElementById('gemini-api-key').value.trim();
+            localStorage.setItem('gemini_api_key', key);
             const orig = btn.textContent;
             btn.textContent = '✅ Desada!';
             setTimeout(() => btn.textContent = orig, 2000);
@@ -316,11 +343,13 @@
                 const t = document.getElementById('dark-mode-toggle');
                 if (t) t.checked = true;
             }
-            const key = localStorage.getItem('openrouter_api_key');
+            const key = localStorage.getItem('gemini_api_key');
             if (key) {
-                const inp = document.getElementById('openrouter-api-key');
+                const inp = document.getElementById('gemini-api-key');
                 if (inp) inp.value = key;
             }
+            const lang = localStorage.getItem('ui_lang') || 'ca';
+            canviarIdiomaInterficie(lang);
         });
     </script>
 </body>
