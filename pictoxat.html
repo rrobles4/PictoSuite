@@ -869,13 +869,40 @@
                 const data = await response.json(); let jsonText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim(); const resultat = JSON.parse(jsonText);
                 if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return; }
                 document.getElementById('text-traduit-literal').innerText = resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
+                let creades = 0;
                 for (let picto of resultat.pictogrames) { 
                     try { 
-                        const pictograma = await buscarPictogramaAmbFallback(picto.cat, langDesti);
-                        if (pictograma) { crearTargetaTrad(picto.cat, picto.orig, pictograma.src, langOrigen, pictograma.source); }
+                        const textCat = (picto?.cat || picto?.lemma || picto?.text || picto?.word || '').toString().trim();
+                        const textOrig = (picto?.orig || picto?.original || picto?.source || textCat).toString().trim();
+                        if (!textCat) continue;
+                        const pictograma = await buscarPictogramaAmbFallback(textCat, langDesti);
+                        if (pictograma) { crearTargetaTrad(textCat, textOrig, pictograma.src, langOrigen, pictograma.source); creades++; }
                     } catch(e) {} 
                 }
+                if (creades === 0) {
+                    await generarPictogramesDesDeText(resultat.traduccio_literal || text, text, langDesti, langOrigen);
+                }
             } catch(e) { alert("Error amb la IA. Comprova que la teva clau d'API és correcte. Canviant al mode bàsic..."); await processarBasic(text); }
+        }
+
+        async function generarPictogramesDesDeText(fraseTraduida, fraseOriginal, langDesti, langOrigen) {
+            let creades = 0;
+            let textKilled = (fraseTraduida || '').toLowerCase().replace("si us plau", "").replace("por favor", "").replace("please", "");
+            const paraules = textKilled.split(/\s+/);
+            const paraulesOriginals = (fraseOriginal || fraseTraduida || '').split(/\s+/);
+            for (let i=0; i<paraules.length; i++) {
+                let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (stopWords.has(pNeta)) continue;
+                try {
+                    const pictograma = await buscarPictogramaAmbFallback(pNeta, langDesti);
+                    if (pictograma) {
+                        let paraulaPrincipal = pNeta;
+                        let paraulaAnotada = paraulesOriginals[i] ? netejarParaula(paraulesOriginals[i]) : pNeta;
+                        crearTargetaTrad(paraulaPrincipal, paraulaAnotada, pictograma.src, langOrigen, pictograma.source);
+                        creades++;
+                    }
+                } catch (err) {}
+            }
+            return creades;
         }
 
         async function processarBasic(frase) {
@@ -901,14 +928,7 @@
             } else { 
                 document.getElementById('text-traduit-literal').innerText = frase; document.getElementById('traduccio-literal-box').style.display = 'block'; 
             }
-            let textKilled = fraseTraduida.toLowerCase().replace("si us plau", "").replace("por favor", ""); const paraules = textKilled.split(/\s+/); const paraulesOriginals = frase.split(/\s+/); 
-            for (let i=0; i<paraules.length; i++) {
-                let paraula = paraules[i]; let pNeta = netejarParaula(paraula); if (pNeta.length < 2) continue; if (stopWords.has(pNeta)) continue; 
-                try {
-                    const pictograma = await buscarPictogramaAmbFallback(pNeta, langDesti);
-                    if (pictograma) { let paraulaPrincipal = pNeta; let paraulaAnotada = paraulesOriginals[i] ? netejarParaula(paraulesOriginals[i]) : pNeta; crearTargetaTrad(paraulaPrincipal, paraulaAnotada, pictograma.src, langOrigen, pictograma.source); }
-                } catch (err) {}
-            }
+            await generarPictogramesDesDeText(fraseTraduida, frase, langDesti, langOrigen);
         }
 
         let numTargetesTrad = 0;
