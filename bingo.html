@@ -50,7 +50,7 @@
             position: fixed;
             top: 20px;
             left: 20px;
-            background-color: var(--color-principal);
+            background-color: #27ae60;
             color: white;
             border: none;
             border-radius: 8px;
@@ -255,13 +255,19 @@
         </div>
 
         <div class="fila-flex">
-            <div class="columna">
+            <div class="columna" style="display:flex;flex-direction:column;gap:5px;">
                 <label data-i18n="mida_cartro">Mida del cartró</label>
-                <select id="mida-cartro">
-                    <option value="3">3×3 (9 cel·les)</option>
-                    <option value="4">4×4 (16 cel·les)</option>
-                    <option value="5" selected>5×5 (25 cel·les)</option>
-                </select>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <div style="flex:1;">
+                        <label for="bingo-files" style="font-size:0.8em;margin-bottom:2px;" data-i18n="files_bingo">Files</label>
+                        <input type="number" id="bingo-files" value="5" min="2" max="10" style="width:100%;padding:8px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
+                    </div>
+                    <span style="font-size:1.5em;font-weight:bold;margin-bottom:0;align-self:flex-end;padding-bottom:8px;">×</span>
+                    <div style="flex:1;">
+                        <label for="bingo-columnes" style="font-size:0.8em;margin-bottom:2px;" data-i18n="columnes_bingo">Columnes</label>
+                        <input type="number" id="bingo-columnes" value="5" min="2" max="10" style="width:100%;padding:8px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
+                    </div>
+                </div>
             </div>
             <div class="columna">
                 <label data-i18n="num_jugadors">Nombre de cartrons</label>
@@ -292,6 +298,13 @@
                 <select id="mida-paper">
                     <option value="a4" selected>A4</option>
                     <option value="a3">A3</option>
+                </select>
+            </div>
+            <div class="columna">
+                <label data-i18n="orientacio_paper">Orientació</label>
+                <select id="orientacio-paper">
+                    <option value="portrait" selected data-i18n-opt="opt_vertical">Vertical</option>
+                    <option value="landscape" data-i18n-opt="opt_horitzontal">Horitzontal</option>
                 </select>
             </div>
         </div>
@@ -327,17 +340,46 @@
         </div>
     </div>
 
+    <!-- Modal editor de casella del Bingo -->
+    <div id="modal-bingo-edicio" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:3000;justify-content:center;align-items:center;">
+        <div style="background:#fff;border-radius:12px;width:90%;max-width:550px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <div style="background:#f1f1f1;padding:15px;font-weight:bold;border-bottom:2px solid #ddd;text-align:center;font-family:var(--font-titols);">✏️ Editar casella del Bingo</div>
+            <div style="padding:15px;overflow-y:auto;flex:1;">
+                <div style="margin-bottom:12px;">
+                    <label style="font-weight:bold;color:#555;font-size:0.9em;margin-bottom:5px;display:block;">Text de la casella (màxim 2 paraules):</label>
+                    <input type="text" id="bingo-edit-text" placeholder="Ex: gat" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
+                </div>
+                <div style="margin-bottom:12px;">
+                    <label style="font-weight:bold;color:#555;font-size:0.9em;margin-bottom:5px;display:block;">🔍 Cerca pictograma (ARASAAC):</label>
+                    <div style="display:flex;gap:8px;">
+                        <input type="text" id="bingo-edit-cerca" placeholder="Cerca..." style="flex:1;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
+                        <button onclick="cercarPictoBingoModal()" style="background:var(--color-principal);border-radius:8px;padding:10px 15px;font-size:1em;color:#fff;border:none;cursor:pointer;white-space:nowrap;">🔍 Cerca</button>
+                    </div>
+                </div>
+                <div id="bingo-edit-resultats" style="display:flex;flex-wrap:wrap;gap:6px;max-height:250px;overflow-y:auto;padding:5px;border:1px solid #eee;border-radius:8px;min-height:60px;"></div>
+                <div id="bingo-edit-preview" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px;background:#f8f9fa;border-radius:8px;display:none;">
+                    <img id="bingo-edit-preview-img" src="" style="width:60px;height:60px;object-fit:contain;border:1px solid #ddd;border-radius:6px;">
+                    <span id="bingo-edit-preview-text" style="font-weight:bold;"></span>
+                </div>
+            </div>
+            <div style="padding:15px;border-top:1px solid #eee;display:flex;gap:10px;justify-content:center;">
+                <button onclick="aplicarEdicioBingo()" style="background:var(--color-accio);color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">✅ Aplicar</button>
+                <button onclick="document.getElementById('modal-bingo-edicio').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
+            </div>
+        </div>
+    </div>
+
     <div id="zona-sortida"></div>
 
     <script>
         const i18nUI = {
-            ca: { mode_fosc:"🌙 Mode Fosc", idioma_ui:"🌐 Idioma de l'aplicació", clau_api:"🤖 Clau API Google AI Studio:", desar_clau:"💾 Desar clau", aconseguir_clau:"👉 Aconseguir clau gratis", suggerencia:"✉️ Tens alguna suggerència?", mida_cartro:"Mida del cartró", num_jugadors:"Nombre de cartrons", mode_visual:"Mode de visualització", mida_paper_bingo:"Mida impressió", paraules_bingo:"Paraules (separades amb comes):", generar_bingo:"🎯 Generar Bingo", mode_ia:"🤖 Mode IA", imprimir:"🖨️ Imprimir", ia_descripcio:"Escriu una temàtica i la IA generarà una llista de paraules per al Bingo.", tematica:"Temàtica:", num_paraules_ia:"Nombre de paraules:", generar_ia:"✨ Genera paraules", tancar:"Tancar", opt_imatgetext:"Imatge + Text", opt_nomesimg:"Només pictogrames", opt_nomestext:"Només text" },
-            es: { mode_fosc:"🌙 Modo Oscuro", idioma_ui:"🌐 Idioma de la aplicación", clau_api:"🤖 Clave API Google AI Studio:", desar_clau:"💾 Guardar clave", aconseguir_clau:"👉 Obtener clave gratis", suggerencia:"✉️ ¿Alguna sugerencia?", mida_cartro:"Tamaño del cartón", num_jugadors:"Número de cartones", mode_visual:"Modo de visualización", mida_paper_bingo:"Tamaño impresión", paraules_bingo:"Palabras (separadas por comas):", generar_bingo:"🎯 Generar Bingo", mode_ia:"🤖 Modo IA", imprimir:"🖨️ Imprimir", ia_descripcio:"Escribe una temática y la IA generará una lista de palabras para el Bingo.", tematica:"Temática:", num_paraules_ia:"Número de palabras:", generar_ia:"✨ Generar palabras", tancar:"Cerrar", opt_imatgetext:"Imagen + Texto", opt_nomesimg:"Solo pictogramas", opt_nomestext:"Solo texto" },
-            en: { mode_fosc:"🌙 Dark Mode", idioma_ui:"🌐 Application language", clau_api:"🤖 Google AI Studio API Key:", desar_clau:"💾 Save key", aconseguir_clau:"👉 Get free key", suggerencia:"✉️ Any suggestion?", mida_cartro:"Card size", num_jugadors:"Number of cards", mode_visual:"Display mode", mida_paper_bingo:"Print size", paraules_bingo:"Words (comma-separated):", generar_bingo:"🎯 Generate Bingo", mode_ia:"🤖 AI Mode", imprimir:"🖨️ Print", ia_descripcio:"Enter a theme and AI will generate a word list for the Bingo.", tematica:"Theme:", num_paraules_ia:"Number of words:", generar_ia:"✨ Generate words", tancar:"Close", opt_imatgetext:"Image + Text", opt_nomesimg:"Pictograms only", opt_nomestext:"Text only" },
-            fr: { mode_fosc:"🌙 Mode Sombre", idioma_ui:"🌐 Langue de l'application", clau_api:"🤖 Clé API Google AI Studio :", desar_clau:"💾 Enregistrer", aconseguir_clau:"👉 Obtenir une clé", suggerencia:"✉️ Une suggestion ?", mida_cartro:"Taille du carton", num_jugadors:"Nombre de cartons", mode_visual:"Mode d'affichage", mida_paper_bingo:"Taille d'impression", paraules_bingo:"Mots (séparés par des virgules) :", generar_bingo:"🎯 Générer Bingo", mode_ia:"🤖 Mode IA", imprimir:"🖨️ Imprimer", ia_descripcio:"Entrez un thème et l'IA génèrera une liste de mots pour le Bingo.", tematica:"Thème :", num_paraules_ia:"Nombre de mots :", generar_ia:"✨ Générer des mots", tancar:"Fermer", opt_imatgetext:"Image + Texte", opt_nomesimg:"Pictogrammes seulement", opt_nomestext:"Texte seulement" },
-            ar: { mode_fosc:"🌙 الوضع المظلم", idioma_ui:"🌐 لغة التطبيق", clau_api:"🤖 مفتاح API جوجل:", desar_clau:"💾 حفظ المفتاح", aconseguir_clau:"👉 احصل على مفتاح مجاني", suggerencia:"✉️ هل لديك اقتراح؟", mida_cartro:"حجم البطاقة", num_jugadors:"عدد البطاقات", mode_visual:"وضع العرض", mida_paper_bingo:"حجم الطباعة", paraules_bingo:"كلمات (مفصولة بفواصل):", generar_bingo:"🎯 إنشاء بينغو", mode_ia:"🤖 وضع AI", imprimir:"🖨️ طباعة", ia_descripcio:"اكتب موضوعاً وستنشئ الذكاء الاصطناعي قائمة كلمات للبينغو.", tematica:"الموضوع:", num_paraules_ia:"عدد الكلمات:", generar_ia:"✨ إنشاء كلمات", tancar:"إغلاق", opt_imatgetext:"صورة + نص", opt_nomesimg:"رموز فقط", opt_nomestext:"نص فقط" },
-            zh: { mode_fosc:"🌙 暗黑模式", idioma_ui:"🌐 应用语言", clau_api:"🤖 谷歌AI Studio密钥：", desar_clau:"💾 保存密钥", aconseguir_clau:"👉 获取免费密钥", suggerencia:"✉️ 有什么建议？", mida_cartro:"卡片大小", num_jugadors:"卡片数量", mode_visual:"显示模式", mida_paper_bingo:"打印大小", paraules_bingo:"词语（逗号分隔）：", generar_bingo:"🎯 生成宾果", mode_ia:"🤖 AI模式", imprimir:"🖨️ 打印", ia_descripcio:"输入主题，AI将为宾果生成词语列表。", tematica:"主题：", num_paraules_ia:"词语数量：", generar_ia:"✨ 生成词语", tancar:"关闭", opt_imatgetext:"图片+文字", opt_nomesimg:"仅图示", opt_nomestext:"仅文字" },
-            ur: { mode_fosc:"🌙 ڈارک موڈ", idioma_ui:"🌐 ایپ کی زبان", clau_api:"🤖 گوگل AI Studio کی کلید:", desar_clau:"💾 کی محفوظ کریں", aconseguir_clau:"👉 مفت کی لیں", suggerencia:"✉️ کوئی تجویز؟", mida_cartro:"کارڈ کا سائز", num_jugadors:"کارڈز کی تعداد", mode_visual:"ڈسپلے موڈ", mida_paper_bingo:"پرنٹ سائز", paraules_bingo:"الفاظ (کاما سے الگ):", generar_bingo:"🎯 بنگو بنائیں", mode_ia:"🤖 AI موڈ", imprimir:"🖨️ پرنٹ", ia_descripcio:"ایک موضوع لکھیں اور AI بنگو کے لیے الفاظ کی فہرست بنائے گا۔", tematica:"موضوع:", num_paraules_ia:"الفاظ کی تعداد:", generar_ia:"✨ الفاظ بنائیں", tancar:"بند کریں", opt_imatgetext:"تصویر + متن", opt_nomesimg:"صرف تصویریں", opt_nomestext:"صرف متن" }
+            ca: { mode_fosc:"🌙 Mode Fosc", idioma_ui:"🌐 Idioma de l'aplicació", clau_api:"🤖 Clau API Google AI Studio:", desar_clau:"💾 Desar clau", aconseguir_clau:"👉 Aconseguir clau gratis", suggerencia:"✉️ Tens alguna suggerència?", mida_cartro:"Mida del cartró", num_jugadors:"Nombre de cartrons", mode_visual:"Mode de visualització", mida_paper_bingo:"Mida impressió", orientacio_paper:"Orientació", paraules_bingo:"Paraules (separades amb comes):", generar_bingo:"🎯 Generar Bingo", mode_ia:"🤖 Mode IA", imprimir:"🖨️ Imprimir", ia_descripcio:"Escriu una temàtica i la IA generarà una llista de paraules per al Bingo.", tematica:"Temàtica:", num_paraules_ia:"Nombre de paraules:", generar_ia:"✨ Genera paraules", tancar:"Tancar", opt_imatgetext:"Imatge + Text", opt_nomesimg:"Només pictogrames", opt_nomestext:"Només text", files_bingo:"Files", columnes_bingo:"Columnes" },
+            es: { mode_fosc:"🌙 Modo Oscuro", idioma_ui:"🌐 Idioma de la aplicación", clau_api:"🤖 Clave API Google AI Studio:", desar_clau:"💾 Guardar clave", aconseguir_clau:"👉 Obtener clave gratis", suggerencia:"✉️ ¿Alguna sugerencia?", mida_cartro:"Tamaño del cartón", num_jugadors:"Número de cartones", mode_visual:"Modo de visualización", mida_paper_bingo:"Tamaño impresión", orientacio_paper:"Orientación", paraules_bingo:"Palabras (separadas por comas):", generar_bingo:"🎯 Generar Bingo", mode_ia:"🤖 Modo IA", imprimir:"🖨️ Imprimir", ia_descripcio:"Escribe una temática y la IA generará una lista de palabras para el Bingo.", tematica:"Temática:", num_paraules_ia:"Número de palabras:", generar_ia:"✨ Generar palabras", tancar:"Cerrar", opt_imatgetext:"Imagen + Texto", opt_nomesimg:"Solo pictogramas", opt_nomestext:"Solo texto", files_bingo:"Filas", columnes_bingo:"Columnas" },
+            en: { mode_fosc:"🌙 Dark Mode", idioma_ui:"🌐 Application language", clau_api:"🤖 Google AI Studio API Key:", desar_clau:"💾 Save key", aconseguir_clau:"👉 Get free key", suggerencia:"✉️ Any suggestion?", mida_cartro:"Card size", num_jugadors:"Number of cards", mode_visual:"Display mode", mida_paper_bingo:"Print size", orientacio_paper:"Orientation", paraules_bingo:"Words (comma-separated):", generar_bingo:"🎯 Generate Bingo", mode_ia:"🤖 AI Mode", imprimir:"🖨️ Print", ia_descripcio:"Enter a theme and AI will generate a word list for the Bingo.", tematica:"Theme:", num_paraules_ia:"Number of words:", generar_ia:"✨ Generate words", tancar:"Close", opt_imatgetext:"Image + Text", opt_nomesimg:"Pictograms only", opt_nomestext:"Text only", files_bingo:"Rows", columnes_bingo:"Columns" },
+            fr: { mode_fosc:"🌙 Mode Sombre", idioma_ui:"🌐 Langue de l'application", clau_api:"🤖 Clé API Google AI Studio :", desar_clau:"💾 Enregistrer", aconseguir_clau:"👉 Obtenir une clé", suggerencia:"✉️ Une suggestion ?", mida_cartro:"Taille du carton", num_jugadors:"Nombre de cartons", mode_visual:"Mode d'affichage", mida_paper_bingo:"Taille d'impression", orientacio_paper:"Orientation", paraules_bingo:"Mots (séparés par des virgules) :", generar_bingo:"🎯 Générer Bingo", mode_ia:"🤖 Mode IA", imprimir:"🖨️ Imprimer", ia_descripcio:"Entrez un thème et l'IA génèrera une liste de mots pour le Bingo.", tematica:"Thème :", num_paraules_ia:"Nombre de mots :", generar_ia:"✨ Générer des mots", tancar:"Fermer", opt_imatgetext:"Image + Texte", opt_nomesimg:"Pictogrammes seulement", opt_nomestext:"Texte seulement", files_bingo:"Lignes", columnes_bingo:"Colonnes" },
+            ar: { mode_fosc:"🌙 الوضع المظلم", idioma_ui:"🌐 لغة التطبيق", clau_api:"🤖 مفتاح API جوجل:", desar_clau:"💾 حفظ المفتاح", aconseguir_clau:"👉 احصل على مفتاح مجاني", suggerencia:"✉️ هل لديك اقتراح؟", mida_cartro:"حجم البطاقة", num_jugadors:"عدد البطاقات", mode_visual:"وضع العرض", mida_paper_bingo:"حجم الطباعة", orientacio_paper:"التوجه", paraules_bingo:"كلمات (مفصولة بفواصل):", generar_bingo:"🎯 إنشاء بينغو", mode_ia:"🤖 وضع AI", imprimir:"🖨️ طباعة", ia_descripcio:"اكتب موضوعاً وستنشئ الذكاء الاصطناعي قائمة كلمات للبينغو.", tematica:"الموضوع:", num_paraules_ia:"عدد الكلمات:", generar_ia:"✨ إنشاء كلمات", tancar:"إغلاق", opt_imatgetext:"صورة + نص", opt_nomesimg:"رموز فقط", opt_nomestext:"نص فقط", files_bingo:"صفوف", columnes_bingo:"أعمدة" },
+            zh: { mode_fosc:"🌙 暗黑模式", idioma_ui:"🌐 应用语言", clau_api:"🤖 谷歌AI Studio密钥：", desar_clau:"💾 保存密钥", aconseguir_clau:"👉 获取免费密钥", suggerencia:"✉️ 有什么建议？", mida_cartro:"卡片大小", num_jugadors:"卡片数量", mode_visual:"显示模式", mida_paper_bingo:"打印大小", orientacio_paper:"方向", paraules_bingo:"词语（逗号分隔）：", generar_bingo:"🎯 生成宾果", mode_ia:"🤖 AI模式", imprimir:"🖨️ 打印", ia_descripcio:"输入主题，AI将为宾果生成词语列表。", tematica:"主题：", num_paraules_ia:"词语数量：", generar_ia:"✨ 生成词语", tancar:"关闭", opt_imatgetext:"图片+文字", opt_nomesimg:"仅图示", opt_nomestext:"仅文字", files_bingo:"行", columnes_bingo:"列" },
+            ur: { mode_fosc:"🌙 ڈارک موڈ", idioma_ui:"🌐 ایپ کی زبان", clau_api:"🤖 گوگل AI Studio کی کلید:", desar_clau:"💾 کی محفوظ کریں", aconseguir_clau:"👉 مفت کی لیں", suggerencia:"✉️ کوئی تجویز؟", mida_cartro:"کارڈ کا سائز", num_jugadors:"کارڈز کی تعداد", mode_visual:"ڈسپلے موڈ", mida_paper_bingo:"پرنٹ سائز", orientacio_paper:"سمت", paraules_bingo:"الفاظ (کاما سے الگ):", generar_bingo:"🎯 بنگو بنائیں", mode_ia:"🤖 AI موڈ", imprimir:"🖨️ پرنٹ", ia_descripcio:"ایک موضوع لکھیں اور AI بنگو کے لیے الفاظ کی فہرست بنائے گا۔", tematica:"موضوع:", num_paraules_ia:"الفاظ کی تعداد:", generar_ia:"✨ الفاظ بنائیں", tancar:"بند کریں", opt_imatgetext:"تصویر + متن", opt_nomesimg:"صرف تصویریں", opt_nomestext:"صرف متن", files_bingo:"صفیں", columnes_bingo:"کالم" }
         };
 
         function canviarIdiomaInterficie(lang) {
@@ -389,14 +431,15 @@
         }
 
         function generarBingo() {
-            const mida = parseInt(document.getElementById('mida-cartro').value);
+            const files = parseInt(document.getElementById('bingo-files').value) || 5;
+            const columnes = parseInt(document.getElementById('bingo-columnes').value) || 5;
             const numJugadors = parseInt(document.getElementById('num-jugadors').value);
             const modeVisual = document.getElementById('mode-visual').value;
             const textParaules = document.getElementById('llista-paraules').value;
             const avis = document.getElementById('avis-paraules');
 
             const llista = textParaules.split(',').map(p => p.trim()).filter(p => p !== '');
-            const cellsPerCard = mida * mida;
+            const cellsPerCard = files * columnes;
 
             // Math: minimum words needed = cells_per_card + num_players (so each card can be different)
             const minParaules = cellsPerCard + numJugadors;
@@ -412,14 +455,14 @@
             }
 
             if (llista.length < cellsPerCard) {
-                avis.textContent = `⚠️ Necessites almenys ${cellsPerCard} paraules per omplir un cartró de ${mida}×${mida}. Tens ${llista.length} paraules.`;
+                avis.textContent = `⚠️ Necessites almenys ${cellsPerCard} paraules per omplir un cartró de ${files}×${columnes}. Tens ${llista.length} paraules.`;
                 avis.className = 'avis error';
                 avis.style.display = 'block';
                 return;
             }
 
             if (llista.length < minParaules) {
-                avis.textContent = `⚠️ Amb ${numJugadors} cartrons de ${mida}×${mida}, es recomanen almenys ${minParaules} paraules per evitar cartrons idèntics. Tens ${llista.length}. Es generaran igualment però alguns cartrons podrien ser similars.`;
+                avis.textContent = `⚠️ Amb ${numJugadors} cartrons de ${files}×${columnes}, es recomanen almenys ${minParaules} paraules per evitar cartrons idèntics. Tens ${llista.length}. Es generaran igualment però alguns cartrons podrien ser similars.`;
                 avis.className = 'avis';
                 avis.style.display = 'block';
             }
@@ -448,11 +491,13 @@
 
                 const grid = document.createElement('div');
                 grid.className = 'bingo-grid';
-                grid.style.gridTemplateColumns = `repeat(${mida}, 1fr)`;
+                grid.style.gridTemplateColumns = `repeat(${columnes}, 1fr)`;
 
                 words.forEach(word => {
                     const cell = document.createElement('div');
                     cell.className = 'bingo-cell';
+                    cell.style.cursor = 'pointer';
+                    cell.addEventListener('click', () => obrirEditorBingoCell(cell));
                     if (modeVisual === 'nomes-text') cell.classList.add('nomes-text');
                     if (modeVisual === 'nomes-img') cell.classList.add('nomes-img');
 
@@ -489,25 +534,22 @@
             zona.appendChild(container);
 
             if (llista.length >= cellsPerCard && llista.length >= minParaules) {
-                avis.textContent = `✅ ${numJugadors} cartrons de ${mida}×${mida} generats correctament amb ${llista.length} paraules.`;
+                avis.textContent = `✅ ${numJugadors} cartrons de ${files}×${columnes} generats correctament amb ${llista.length} paraules.`;
                 avis.className = 'avis ok';
                 avis.style.display = 'block';
             }
         }
 
         function imprimirBingo() {
-            const mida = document.getElementById('mida-paper').value;
+            const mida = document.getElementById('mida-paper').value.toUpperCase();
+            const orientacio = document.getElementById('orientacio-paper').value;
             let styleEl = document.getElementById('print-page-style');
             if (!styleEl) {
                 styleEl = document.createElement('style');
                 styleEl.id = 'print-page-style';
                 document.head.appendChild(styleEl);
             }
-            if (mida === 'a3') {
-                styleEl.textContent = '@media print { @page { size: A3 portrait; margin: 10mm; } }';
-            } else {
-                styleEl.textContent = '@media print { @page { size: A4 portrait; margin: 10mm; } }';
-            }
+            styleEl.textContent = `@media print { @page { size: ${mida} ${orientacio}; margin: 10mm; } }`;
             window.print();
         }
 
@@ -536,7 +578,7 @@
             const prompt = `Generate a list of exactly ${numParaules} words or short expressions (maximum 3 words each) about the theme: "${tematica}". The words must be suitable for primary school or special education students. Respond ONLY with the words separated by commas, in the same language as the theme provided, without numbering or any additional explanation.`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -563,6 +605,98 @@
             } catch (e) {
                 estat.textContent = `❌ Error: ${e.message}`;
             }
+        }
+
+        let currentBingoCell = null;
+        let currentBingoImg = null;
+        let currentBingoText = null;
+        let selectedBingoPictoUrl = null;
+
+        function obrirEditorBingoCell(cell) {
+            currentBingoCell = cell;
+            currentBingoImg = cell.querySelector('img');
+            currentBingoText = cell.querySelector('.cell-text');
+            selectedBingoPictoUrl = currentBingoImg ? currentBingoImg.src : null;
+            const textInput = document.getElementById('bingo-edit-text');
+            const cercaInput = document.getElementById('bingo-edit-cerca');
+            textInput.value = currentBingoText ? currentBingoText.textContent : '';
+            cercaInput.value = currentBingoText ? currentBingoText.textContent : '';
+            document.getElementById('bingo-edit-resultats').innerHTML = '';
+            const preview = document.getElementById('bingo-edit-preview');
+            if (selectedBingoPictoUrl && !selectedBingoPictoUrl.includes('1x1.png')) {
+                document.getElementById('bingo-edit-preview-img').src = selectedBingoPictoUrl;
+                document.getElementById('bingo-edit-preview-text').textContent = textInput.value;
+                preview.style.display = 'flex';
+            } else {
+                preview.style.display = 'none';
+            }
+            document.getElementById('modal-bingo-edicio').style.display = 'flex';
+            if (cercaInput.value) cercarPictoBingoModal();
+        }
+
+        async function cercarPictoBingoModal() {
+            const q = document.getElementById('bingo-edit-cerca').value.trim();
+            const div = document.getElementById('bingo-edit-resultats');
+            div.innerHTML = '';
+            if (!q) return;
+            const lang = localStorage.getItem('ui_lang') || 'ca';
+            try {
+                const r = await fetch(`https://api.arasaac.org/v1/pictograms/${lang}/search/${encodeURIComponent(q)}`);
+                const d = await r.json();
+                const urls = (d||[]).map(x => `https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`);
+                urls.forEach(url => {
+                    const i = document.createElement('img');
+                    i.src = url;
+                    i.style.cssText = 'width:60px;height:60px;object-fit:contain;cursor:pointer;border:2px solid transparent;border-radius:6px;padding:2px;';
+                    i.onclick = () => {
+                        document.querySelectorAll('#bingo-edit-resultats img').forEach(x => x.style.borderColor = 'transparent');
+                        i.style.borderColor = '#27ae60';
+                        selectedBingoPictoUrl = url;
+                        document.getElementById('bingo-edit-preview-img').src = url;
+                        document.getElementById('bingo-edit-preview-text').textContent = document.getElementById('bingo-edit-text').value;
+                        document.getElementById('bingo-edit-preview').style.display = 'flex';
+                    };
+                    div.appendChild(i);
+                });
+                if (urls.length === 0) {
+                    try {
+                        const gsR = await fetch(`https://www.globalsymbols.com/api/v1/labels/search/?query=${encodeURIComponent(q)}&language=${lang}&limit=20`);
+                        const gsD = await gsR.json();
+                        (gsD.results || gsD || []).forEach(item => {
+                            const url = item.picto?.image_url || item.image_url;
+                            if (url) {
+                                const i = document.createElement('img');
+                                i.src = url;
+                                i.style.cssText = 'width:60px;height:60px;object-fit:contain;cursor:pointer;border:2px solid transparent;border-radius:6px;padding:2px;';
+                                i.onclick = () => {
+                                    document.querySelectorAll('#bingo-edit-resultats img').forEach(x => x.style.borderColor = 'transparent');
+                                    i.style.borderColor = '#27ae60';
+                                    selectedBingoPictoUrl = url;
+                                    document.getElementById('bingo-edit-preview-img').src = url;
+                                    document.getElementById('bingo-edit-preview-text').textContent = document.getElementById('bingo-edit-text').value;
+                                    document.getElementById('bingo-edit-preview').style.display = 'flex';
+                                };
+                                div.appendChild(i);
+                            }
+                        });
+                    } catch(e2) {}
+                }
+            } catch(e) {}
+        }
+
+        function aplicarEdicioBingo() {
+            if (!currentBingoCell) return;
+            let text = document.getElementById('bingo-edit-text').value.trim();
+            // Limit to 2 words
+            const words = text.split(/\s+/).filter(w => w.length > 0);
+            if (words.length > 2) text = words.slice(0, 2).join(' ');
+            if (currentBingoText) currentBingoText.textContent = text;
+            if (currentBingoImg && selectedBingoPictoUrl && !selectedBingoPictoUrl.includes('1x1.png')) {
+                currentBingoImg.src = selectedBingoPictoUrl;
+                currentBingoImg.style.opacity = '1';
+            }
+            document.getElementById('modal-bingo-edicio').style.display = 'none';
+            currentBingoCell = null;
         }
 
         window.addEventListener('load', function() {

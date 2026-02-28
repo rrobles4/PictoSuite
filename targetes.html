@@ -151,8 +151,8 @@
         .toggle-slider:before{position:absolute;content:"";height:16px;width:16px;left:3px;bottom:3px;background-color:white;border-radius:50%;transition:.3s}
         input:checked + .toggle-slider{background-color:var(--color-principal)}
         input:checked + .toggle-slider:before{transform:translateX(24px)}
-        .menu-btn{position:fixed;top:20px;left:20px;background-color:var(--color-principal);color:white;border:none;border-radius:8px;padding:10px 15px;font-size:24px;cursor:pointer;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,.1);transition:background .3s}
-        .menu-btn:hover{background-color:var(--color-principal)}
+        .menu-btn{position:fixed;top:20px;left:20px;background-color:#27ae60;color:white;border:none;border-radius:8px;padding:10px 15px;font-size:24px;cursor:pointer;z-index:1000;box-shadow:0 4px 6px rgba(0,0,0,.1);transition:background .3s}
+        .menu-btn:hover{background-color:#27ae60}
         .side-menu{height:100%;width:0;position:fixed;z-index:1001;top:0;left:0;background-color:#ffffff;overflow-x:hidden;overflow-y:auto;transition:0.4s;box-shadow:2px 0 10px rgba(0,0,0,.1);padding-top:70px;display:flex;flex-direction:column;font-family:'Fredoka',sans-serif}
         .side-menu a{padding:15px 25px;text-decoration:none;font-size:18px;color:#333;display:block;transition:0.2s}
         .side-menu a:hover{background-color:#f0f8ff;color:var(--color-principal)}
@@ -188,6 +188,12 @@
         body.dark-mode #modal-contacte input,body.dark-mode #modal-contacte textarea{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         body.dark-mode input[type="text"],body.dark-mode input[type="email"],body.dark-mode select,body.dark-mode textarea{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         body.dark-mode .header-app h1{color:#ffffff}
+        body.dark-mode .barra-estils{background:#2a2a3e;border-color:#555}
+        body.dark-mode .panell-metode{background:#1e1e2e;border-color:#555}
+        body.dark-mode .instruccions{background:#1a3a2a;border-color:#27ae60;color:#a8d5b5}
+        body.dark-mode .avis-impressio{background:#2a2a3e;color:#cdd6f4;border-left-color:#888}
+        body.dark-mode .avis-impressio strong{color:#cdd6f4}
+        body.dark-mode .input-logo-wrapper{background:#1e1e2e;border-color:#555;color:#a6adc8}
         body.dark-mode .side-menu select.sidebar-input{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         .graella.mode-rutines{display:flex;flex-direction:row;gap:0;grid-template-columns:none;flex-wrap:wrap}
         .graella.mode-rutines.dir-vertical{flex-direction:column;flex-wrap:nowrap}
@@ -441,7 +447,7 @@
     <div id="modal-edicio">
         <div class="modal-contingut">
             <div class="modal-tabs">
-                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 ARASAAC</button>
+                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 Pictos</button>
                 <button id="tab-btn-traductor" class="tab-btn" onclick="canviarPestanya('tab-traductor')">🌍 Traductor</button>
                 <button id="tab-btn-pujar" class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar</button>
                 <button id="tab-btn-ia" class="tab-btn" onclick="canviarPestanya('tab-ia-img')">🤖 IA</button>
@@ -972,7 +978,7 @@
         }
 
         async function fetchGeminiText(prompt, apiKey) {
-            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
             const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2 } }) });
             if (!response.ok) throw new Error('HTTP error: ' + response.status);
             const data = await response.json();
@@ -1176,7 +1182,8 @@
 
         async function buscarArasaacModal() { 
             const q = document.getElementById('input-arasaac').value; const div = document.getElementById('resultats-arasaac'); div.innerHTML = ''; let lang = currentView === 'pictojocs' ? document.getElementById('idioma').value : 'ca';
-            try { const r = await fetch(`https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(q)}`); const d = await r.json(); const urls = d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`); urls.forEach(url=>{ const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i); }); } catch(e) {}
+            try { const r = await fetch(`https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(q)}`); const d = await r.json(); const urls = d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`); urls.forEach(url=>{ const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i); });
+            if(d.length === 0) { try { const gsR = await fetch(`https://www.globalsymbols.com/api/v1/labels/search/?query=${encodeURIComponent(q)}&language=${lang}&limit=20`); const gsD = await gsR.json(); (gsD.results||gsD||[]).forEach(item=>{ const url = item.picto?.image_url||item.image_url; if(url){const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i);} }); } catch(e2){} } } catch(e) {}
         }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
 
