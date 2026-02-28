@@ -581,9 +581,11 @@
 
         function switchAppView(view) {
             currentView = view;
-            document.getElementById('view-pictojocs').style.display = (view === 'pictojocs') ? 'block' : 'none';
-            document.getElementById('view-pictotraductor').style.display = (view === 'pictotraductor') ? 'block' : 'none';
-            if (view === 'pictotraductor') canviarIdiomaUI();
+            const viewPictojocs = document.getElementById('view-pictojocs');
+            const viewPictotraductor = document.getElementById('view-pictotraductor');
+            if (viewPictojocs) viewPictojocs.style.display = (view === 'pictojocs') ? 'block' : 'none';
+            if (viewPictotraductor) viewPictotraductor.style.display = (view === 'pictotraductor') ? 'block' : 'none';
+            if (view === 'pictotraductor' && viewPictotraductor) canviarIdiomaUI();
         }
 
         function enviarSuggeriment() {
