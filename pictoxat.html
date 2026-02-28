@@ -1166,7 +1166,7 @@
 
         let numTargetesTrad = 0;
         function crearTargetaTrad(textCat, textOrig, imgUrl, langCode, source = 'arasaac', negada = false) {
-            const contenidor = document.getElementById('resultat-pictos'); const div = document.createElement('div'); div.className = 'pictograma'; div.dataset.index = numTargetesTrad++;
+            const contenidor = document.getElementById('resultat-pictos'); const div = document.createElement('div'); div.className = 'pictograma'; div.dataset.index = numTargetesTrad++; div.dataset.orig = textOrig;
             if (negada) div.classList.add('negat');
             let htmlOriginal = ''; if (textCat.toLowerCase() !== textOrig.toLowerCase()) { htmlOriginal = `<span class="fila-paraula text-alumne">(${textOrig})</span>`; }
             div.innerHTML = `<div class="imatge-box"><img src="${imgUrl}"></div><p><span class="fila-paraula text-traduit">${textCat}</span>${htmlOriginal}</p>`;
@@ -1184,8 +1184,8 @@
             imgOriginalSrcOnOpen = imgTarget ? imgTarget.src : '';
             const containerInputs = document.getElementById('camps-text'); containerInputs.innerHTML = ''; let paraulaCerca = '';
             if (currentView === 'pictotraductor') {
-                containerInputs.className = `inputs-container-modal dues-paraules`; const p = el.querySelector('p'); const trad = p.querySelector('.text-traduit'); const alum = p.querySelector('.text-alumne'); let v0 = trad ? trad.innerText : ""; let v1 = alum ? alum.innerText.replace(/[()]/g, '') : "";
-                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-0" value="${v0}" placeholder="Text Principal">`; containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-1" value="${v1}" placeholder="Text Secundari">`; paraulaCerca = v0;
+                containerInputs.className = `inputs-container-modal dues-paraules`; const p = el.querySelector('p'); const trad = p.querySelector('.text-traduit'); let v0 = trad ? trad.innerText : ""; let v1 = el.dataset.orig || "";
+                containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-0" value="${v1}" placeholder="Text Principal">`; containerInputs.innerHTML += `<input type="text" class="input-text-modal" id="input-modal-1" value="${v0}" placeholder="Text Secundari">`; paraulaCerca = v1 || v0;
             } else {
                 const mode = document.getElementById('selector-mode').value; let containerTxt = null; let maxInputs = (mode === 'targeta' || mode === 'memory') ? 5 : 2; let classeLayout = (mode === 'targeta' || mode === 'memory') ? "cinc-paraules" : "dues-paraules";
                 if (mode === 'domino') containerTxt = el.querySelector('.text-domino'); else if (mode === 'targeta') containerTxt = document.getElementById(`text-${el.dataset.index}-back`); else containerTxt = el.querySelector('p');
@@ -1203,9 +1203,9 @@
             if(elementEditant) {
                 if (document.getElementById('tab-dibuix').style.display === 'block') { aplicarEdicioImatge(false); }
                 if (currentView === 'pictotraductor') {
-                    let txtCat = document.getElementById('input-modal-0').value.trim(); let txtOrig = document.getElementById('input-modal-1').value.trim();
+                    let txtCat = document.getElementById('input-modal-1').value.trim(); let txtOrig = document.getElementById('input-modal-0').value.trim();
                     let p = elementEditant.querySelector('p'); let html = `<span class="fila-paraula text-traduit">${txtCat}</span>`; if(txtOrig !== "") html += `<span class="fila-paraula text-alumne">(${txtOrig})</span>`;
-                    p.innerHTML = html; setTimeout(() => autoMidaText(p), 50);
+                    p.innerHTML = html; elementEditant.dataset.orig = txtOrig; setTimeout(() => autoMidaText(p), 50);
                 } else {
                     const mode = document.getElementById('selector-mode').value; const index = elementEditant.dataset.index; const original = elementEditant.dataset.original;
                     let nousTextos = []; document.querySelectorAll('.input-text-modal').forEach(inp => { if(inp.value.trim() !== "") nousTextos.push(inp.value.trim()); });
