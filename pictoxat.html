@@ -273,7 +273,7 @@
     <div id="modal-edicio">
         <div class="modal-contingut">
             <div class="modal-tabs">
-                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 ARASAAC</button>
+                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 Pictogrames</button>
                 <button id="tab-btn-traductor" class="tab-btn" onclick="canviarPestanya('tab-traductor')">🌍 Traductor</button>
                 <button id="tab-btn-pujar" class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar</button>
                 <button id="tab-btn-ia" class="tab-btn" onclick="canviarPestanya('tab-ia-img')">🤖 IA</button>
@@ -1242,8 +1242,11 @@
         }
 
         async function buscarArasaacModal() { 
-            const q = document.getElementById('input-arasaac').value; const div = document.getElementById('resultats-arasaac'); div.innerHTML = ''; let lang = currentView === 'pictojocs' ? document.getElementById('idioma').value : 'ca';
-            try { const r = await fetch(`https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(q)}`); const d = await r.json(); const urls = d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`); urls.forEach(url=>{ const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i); }); } catch(e) {}
+            const q = document.getElementById('input-arasaac').value; const div = document.getElementById('resultats-arasaac'); div.innerHTML = ''; let lang = currentView === 'pictojocs' ? document.getElementById('idioma').value : (document.getElementById('idioma-input') ? document.getElementById('idioma-input').value : 'ca');
+            const arasaacLangs = ['ar','bg','br','ca','da','de','el','en','es','et','eu','fa','fi','fr','ga','gl','he','hr','hu','it','ko','lt','mk','nl','pl','pt','ro','ru','sk','sl','sq','sr','sv','uk','val','zh'];
+            let found = false;
+            if (arasaacLangs.includes(lang)) { try { const r = await fetch(`https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(q)}`); const d = await r.json(); const urls = d.map(x=>`https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`); urls.forEach(url=>{ const i=document.createElement('img'); i.src=url; i.onclick=()=>aplicarImatge(url); div.appendChild(i); }); if(urls.length > 0) found = true; } catch(e) {} }
+            if (!found) { try { const base = GLOBAL_SYMBOLS_CONFIG.baseUrl.replace(/\/$/, ''); const r = await fetch(`${base}/labels/search?query=${encodeURIComponent(q)}&language=${encodeURIComponent(lang)}`); if(r.ok) { const d = await r.json(); const items = extreureResultatsGlobalSymbols(d); items.forEach(item=>{ const imgUrl = extreureImatgeGlobalSymbols(item); if(imgUrl){ const i=document.createElement('img'); i.src=imgUrl; i.onclick=()=>aplicarImatge(imgUrl); div.appendChild(i); } }); } } catch(e) {} }
         }
         function pujarImatge(i) { const r=new FileReader(); r.onload=e=>aplicarImatge(e.target.result); if(i.files[0]) r.readAsDataURL(i.files[0]); }
 
