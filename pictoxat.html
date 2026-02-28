@@ -195,6 +195,9 @@
                         <label id="label-idioma-traductor" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">El teu idioma:</label>
                         <select id="idioma-input" onchange="canviarIdiomaUI()"></select>
                     </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; justify-content:flex-end;">
+                        <button onclick="intercanviarIdiomes()" style="background:#f0f0f0; border:2px solid #ccc; border-radius:50%; width:38px; height:38px; font-size:1.2em; cursor:pointer; line-height:1;" title="Intercanvia idiomes">⇄</button>
+                    </div>
                     <div style="display:flex; flex-direction:column; align-items:center;">
                         <label id="label-idioma-desti" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">Tradueix a:</label>
                         <select id="idioma-desti"></select>
@@ -394,6 +397,16 @@
         let isListening = false;
         let textSpeak = "🎤 Parlar";
         let textListen = "👂 Escoltant...";
+
+        function intercanviarIdiomes() {
+            const selInput = document.getElementById('idioma-input');
+            const selDesti = document.getElementById('idioma-desti');
+            if (!selInput.value || !selDesti.value) return;
+            const temp = selInput.value;
+            selInput.value = selDesti.value;
+            selDesti.value = temp;
+            canviarIdiomaUI();
+        }
 
         function canviarIdiomaUI() {
             const lang = document.getElementById('idioma-input').value;
@@ -1105,7 +1118,7 @@
                 return true;
             } catch(e) {
                 console.error('Error processant IA:', e);
-                alert("Error amb la IA. Canviant al mode bàsic temporalment...");
+                alert("Estàs traduint molt de pressa i la IA necessita un descans! Espera un minut per tornar a fer servir les traduccions avançades. Mentrestant, farem servir el mode bàsic.");
                 return false;
             }
         }
