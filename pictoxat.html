@@ -930,14 +930,43 @@
             return null;
         }
 
+        async function fetchGeminiJson(prompt, apiKey) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: {
+                    responseMimeType: "application/json",
+                    temperature: 0.2
+                }
+            };
+
+            let response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            let data = await response.json();
+
+            if (data?.error?.message) {
+                const fallbackPayload = { contents: [{ parts: [{ text: prompt }] }] };
+                response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(fallbackPayload)
+                });
+                data = await response.json();
+            }
+
+            if (data?.error?.message) throw new Error(data.error.message);
+            return data;
+        }
+
         async function processarAmbGemini(text, apiKey) {
             const langOrigen = document.getElementById('idioma-input').value; 
             const langDesti = document.getElementById('idioma-desti').value;
             const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, corregeix errors ortogràfics o de transcripció per entendre bé el missatge (sense canviar la intenció). Si la frase és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, missatge curt en idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema a l'idioma destí", "orig": "terme original corresponent", "negada": true o false}\n  ]\n}\nRegles de qualitat: \n- Prioritza comprensió completa del missatge.\n- Dona entre 4 i 8 pictogrames si la frase ho permet.\n- Evita articles/preposicions que no aportin significat, però mantén negacions, temps, lloc i accions essencials.\n- Mantén cobertura semàntica equivalent independentment de l'idioma origen (àrabs, ciríl·lics, etc.).`;
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                const data = await response.json();
-                if (data?.error?.message) throw new Error(data.error.message);
+                const data = await fetchGeminiJson(prompt, apiKey);
                 const textResposta = data?.candidates?.[0]?.content?.parts?.[0]?.text;
                 if (!textResposta) throw new Error("Resposta IA buida o no vàlida.");
                 const resultat = parseRespostaGemini(textResposta);
