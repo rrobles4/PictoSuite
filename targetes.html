@@ -183,7 +183,7 @@
 
 <style>
         .menu-btn { position: fixed; top: 20px; left: 20px; background-color: var(--color-principal); color: white; border: none; border-radius: 8px; padding: 10px 15px; font-size: 24px; cursor: pointer; z-index: 1000; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        .menu-btn:hover { background-color: #357abd; }
+        .menu-btn:hover { background-color: var(--color-principal); }
         .side-menu { height: 100%; width: 0; position: fixed; z-index: 1001; top: 0; left: 0; background-color: #ffffff; overflow-x: hidden; transition: 0.4s; box-shadow: 2px 0 10px rgba(0,0,0,0.1); padding-top: 70px; display: flex; flex-direction: column; font-family: 'Fredoka', sans-serif;}
         .side-menu a { padding: 15px 25px; text-decoration: none; font-size: 18px; color: #333; display: block; transition: 0.2s; }
         .side-menu a:hover { background-color: #f0f8ff; color: var(--color-principal); }
@@ -195,12 +195,12 @@
     <div id="elMeuMenu" class="side-menu no-print">
         <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
         <a href="index.html">🏠 Inici (PictoSuite)</a>
-        <a href="pictotargetes.html">🃏 PictoTargetes</a>
+        <a href="targetes.html">🃏 Targetes</a>
         <a href="pictoxat.html">💬 PictoXat</a>
     </div>
         <div id="view-pictojocs">
         <div class="configuracio no-print">
-            <div class="projecte-controls" style="justify-content: flex-end; padding-left: 60px;">
+            <div class="projecte-controls" style="justify-content: flex-end; padding-left: 0;">
                 <button class="btn-nav-app" style="background:#f5b041; margin-right: auto;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 <button id="btn-desar" class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
@@ -208,7 +208,7 @@
             </div>
             <div class="header-app">
                 <img id="app-logo-header" class="logo-pictojocs" src="https://raw.githubusercontent.com/rrobles4/pictojocs/main/logo%20PictoJocs.png" alt="Logo PictoTargetes">
-                <h1 style="color: var(--color-principal);">PictoTargetes</h1>
+                <h1 style="color: var(--color-principal);">Targetes</h1>
             </div>
             <div class="fila-flex">
                 <div class="columna" style="flex: 0.6;">
@@ -334,45 +334,6 @@
                     <div class="graella" id="contenidor-revers"></div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="view-pictotraductor" style="display: none;">
-        <div class="configuracio no-print">
-            <div class="projecte-controls" style="justify-content: flex-start; margin-bottom: 15px; display: flex; gap: 8px;">
-                <button class="btn-nav-app" style="background:#4a90e2;" onclick="switchAppView('pictojocs')">🔙 Anar a PictoJocs</button>
-                <button class="btn-nav-app" style="background:#f5b041;" onclick="obrirSettings()">🤖 Configuració IA</button>
-            </div>
-            <div class="header-app">
-                <h1 style="font-size: 3em;">🗣️ PictoXat</h1>
-            </div>
-            <p class="descripcio-traductor" id="desc-traductor">
-                Necessites ajuda i no saps com dir-ho? Tria el teu idioma i ho podràs explicar amb pictogrames!
-            </p>
-            <div class="controls-traductor">
-                <div style="display:flex; gap: 15px; width: 100%; justify-content: center; align-items: flex-end; flex-wrap: wrap; margin-bottom: 15px;">
-                    <div style="display:flex; flex-direction:column; align-items:center;">
-                        <label id="label-idioma-traductor" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">El teu idioma:</label>
-                        <select id="idioma-input" onchange="canviarIdiomaUI()"></select>
-                    </div>
-                    <div style="display:flex; flex-direction:column; align-items:center;">
-                        <label id="label-idioma-desti" style="font-size:0.9em; font-weight:bold; margin-bottom:5px;">Tradueix a:</label>
-                        <select id="idioma-desti"></select>
-                    </div>
-                </div>
-                
-                <div class="caixa-escriptura">
-                    <textarea id="text-input" placeholder="Escriu la frase aquí o utilitza el micròfon..." onkeyup="if(event.key==='Enter') executarTraduccio()"></textarea>
-                    <div class="botons-accio">
-                        <button id="btn-mic-trad" class="btn-mic-trad" onclick="activarMicrofon()">🎤 Parlar</button>
-                        <button id="btn-trad" class="btn-trad" onclick="executarTraduccio()">➡️ Traduir</button>
-                    </div>
-                </div>
-            </div>
-            <div id="traduccio-literal-box" class="traduccio-literal-box">
-                <strong>Traducció:</strong> <span id="text-traduit-literal"></span>
-            </div>
-            <div id="resultat-pictos" class="frase-pictos"></div>
         </div>
     </div>
 
@@ -545,8 +506,10 @@
             const l=[{v:'ca',t:'Català'},{v:'es',t:'Castellà (Español)'},{v:'en',t:'Anglès (English)'},{v:'fr',t:'Francès (Français)'},{v:'de',t:'Alemany (Deutsch)'},{v:'it',t:'Italià (Italiano)'},{v:'pt',t:'Portuguès (Português)'},{v:'nl',t:'Neerlandès (Nederlands)'},{v:'ro',t:'Romanès (Română)'},{v:'pl',t:'Polonès (Polski)'},{v:'uk',t:'Ucraïnès (Українська)'},{v:'ru',t:'Rus (Русский)'},{v:'bg',t:'Búlgar (Български)'},{v:'ar',t:'Àrab (العربية)'},{v:'zh',t:'Xinès (中文)'},{v:'fa',t:'Persa (فارسی)'},{v:'he',t:'Hebreu (עברית)'},{v:'el',t:'Grec (Ελληνικά)'},{v:'eu',t:'Basc (Euskara)'},{v:'gl',t:'Gallec (Galego)'},{v:'val',t:'Valencià (Valencià)'},{v:'cs',t:'Txec (Čeština)'},{v:'sk',t:'Eslovac (Slovenčina)'},{v:'sl',t:'Eslovè (Slovenščina)'},{v:'hr',t:'Croat (Hrvatski)'},{v:'sr',t:'Serbi (Српски)'},{v:'mk',t:'Macedoni (Македонски)'},{v:'sq',t:'Albanès (Shqip)'},{v:'hu',t:'Hongarès (Magyar)'},{v:'da',t:'Danès (Dansk)'},{v:'sv',t:'Suec (Svenska)'},{v:'fi',t:'Finlandès (Suomi)'},{v:'et',t:'Estonià (Eesti)'},{v:'lt',t:'Lituà (Lietuvių)'},{v:'lv',t:'Letó (Latviešu)'},{v:'ko',t:'Coreà (한국어)'},{v:'ur',t:'Urdu (اردو)'}];
             const opts=l.map(x=>`<option value="${x.v}">${x.t}</option>`).join('');
             document.getElementById('idioma').innerHTML=opts;
-            document.getElementById('idioma-input').innerHTML=opts;
-            document.getElementById('idioma-desti').innerHTML=opts;
+            const idiomaInput = document.getElementById('idioma-input');
+            const idiomaDesti = document.getElementById('idioma-desti');
+            if (idiomaInput) idiomaInput.innerHTML = opts;
+            if (idiomaDesti) idiomaDesti.innerHTML = opts;
         }
         initLangs();
 
@@ -555,17 +518,27 @@
         let textListen = "👂 Escoltant...";
 
         function canviarIdiomaUI() {
-            const lang = document.getElementById('idioma-input').value;
+            const idiomaInput = document.getElementById('idioma-input');
+            if (!idiomaInput) return;
+            const lang = idiomaInput.value;
             const texts = uiDict[lang] || uiDict['ca'];
-            document.getElementById('desc-traductor').innerText = texts[0];
-            document.getElementById('label-idioma-traductor').innerText = texts[1];
-            document.getElementById('label-idioma-desti').innerText = texts[2];
-            document.getElementById('text-input').placeholder = texts[3];
+            const descTraductor = document.getElementById('desc-traductor');
+            const labelIdiomaTraductor = document.getElementById('label-idioma-traductor');
+            const labelIdiomaDesti = document.getElementById('label-idioma-desti');
+            const textInput = document.getElementById('text-input');
+            if (descTraductor) descTraductor.innerText = texts[0];
+            if (labelIdiomaTraductor) labelIdiomaTraductor.innerText = texts[1];
+            if (labelIdiomaDesti) labelIdiomaDesti.innerText = texts[2];
+            if (textInput) textInput.placeholder = texts[3];
             textSpeak = texts[4];
             textListen = texts[6];
-            if(!isListening) document.getElementById('btn-mic-trad').innerHTML = textSpeak;
-            else document.getElementById('btn-mic-trad').innerHTML = textListen;
-            if(!document.getElementById('btn-trad').disabled) document.getElementById('btn-trad').innerHTML = texts[5];
+            const btnMicTrad = document.getElementById('btn-mic-trad');
+            const btnTrad = document.getElementById('btn-trad');
+            if (btnMicTrad) {
+                if(!isListening) btnMicTrad.innerHTML = textSpeak;
+                else btnMicTrad.innerHTML = textListen;
+            }
+            if (btnTrad && !btnTrad.disabled) btnTrad.innerHTML = texts[5];
         }
 
         let currentView = 'pictojocs'; 
