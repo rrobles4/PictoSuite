@@ -158,6 +158,14 @@
             .header-print{height:auto;padding-bottom:5px}
             .big-logo-print{height:70px}
         }
+        body.dark-mode{background-color:#1e1e2e;color:#cdd6f4}
+        body.dark-mode .configuracio{background-color:#2a2a3e;color:#cdd6f4}
+        body.dark-mode .side-menu{background-color:#2a2a3e}
+        body.dark-mode .side-menu a{color:#cdd6f4}
+        body.dark-mode .side-menu a:hover{background-color:#1e1e2e}
+        body.dark-mode #modal-contacte>div{background:#2a2a3e;color:#cdd6f4}
+        body.dark-mode #modal-contacte input,body.dark-mode #modal-contacte textarea{background:#1e1e2e;color:#cdd6f4;border-color:#555}
+        body.dark-mode input[type="text"],body.dark-mode input[type="email"],body.dark-mode select,body.dark-mode textarea{background:#1e1e2e;color:#cdd6f4;border-color:#555}
         @media screen and (max-width:850px){
             .configuracio{width:auto;margin:10px;padding:15px}
             .fila-flex{flex-direction:column;align-items:stretch;gap:10px}
@@ -190,24 +198,41 @@
         .side-menu .close-btn { position: absolute; top: 10px; right: 20px; font-size: 30px; background: none; border: none; cursor: pointer; color: #999; }
     </style>
 
-    <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '250px'">☰</button>
+    <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '280px'">☰</button>
 
     <div id="elMeuMenu" class="side-menu no-print">
         <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
         <a href="index.html">🏠 Inici (PictoSuite)</a>
         <a href="targetes.html">🃏 Targetes</a>
         <a href="pictoxat.html">💬 PictoXat</a>
+        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
+        <div style="padding:10px 25px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:16px;font-family:'Fredoka',sans-serif;">🌙 Mode Fosc</span>
+            <label style="position:relative;display:inline-block;width:46px;height:22px;">
+                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)" style="opacity:0;width:0;height:0;">
+                <span id="toggle-slider" style="position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#ccc;border-radius:22px;transition:.3s;"></span>
+            </label>
+        </div>
+        <div style="padding:5px 25px 10px;">
+            <span style="display:block;font-size:0.82em;font-weight:bold;color:#555;margin-bottom:4px;font-family:'Fredoka',sans-serif;">🤖 Clau API OpenRouter:</span>
+            <input type="password" id="openrouter-api-key" placeholder="sk-or-..." style="width:100%;box-sizing:border-box;padding:7px 10px;border:1px solid #ddd;border-radius:6px;font-size:0.85em;">
+            <button onclick="guardarApiKey(this)" style="margin-top:5px;background:var(--color-accio);color:white;border:none;padding:6px 12px;border-radius:5px;cursor:pointer;font-size:0.85em;width:100%;font-weight:bold;">💾 Desar clau</button>
+            <a href="https://openrouter.ai/keys" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;">👉 Aconseguir clau gratis</a>
+        </div>
+        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
+        <div style="padding:5px 25px 15px;">
+            <button onclick="document.getElementById('elMeuMenu').style.width='0'; document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</button>
+        </div>
     </div>
         <div id="view-pictojocs">
         <div class="configuracio no-print">
             <div class="projecte-controls" style="justify-content: flex-end; padding-left: 0;">
-                <button class="btn-nav-app" style="background:#f5b041; margin-right: auto;" onclick="obrirSettings()">🤖 Configuració IA</button>
                 <button id="btn-desar" class="btn-mini" onclick="desarProjecte()">💾 Desar</button>
                 <button class="btn-mini" onclick="document.getElementById('input-carregar').click()">📂 Obre</button>
                 <input type="file" id="input-carregar" accept=".json" style="display:none" onchange="carregarProjecte(event)">
             </div>
             <div class="header-app">
-                <img id="app-logo-header" class="logo-pictojocs" src="https://raw.githubusercontent.com/rrobles4/pictojocs/main/logo%20PictoJocs.png" alt="Logo PictoTargetes">
+                <span style="font-size:4rem;" aria-label="Logo PictoTargetes">🃏</span>
                 <h1 style="color: var(--color-principal);">Targetes</h1>
             </div>
             <div class="fila-flex">
@@ -337,16 +362,21 @@
         </div>
     </div>
 
-    <div class="seccio-suggeriments no-print">
-        <h3>Tens alguna suggerència?</h3>
-        <p>Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
-        <div style="display:flex; flex-direction:column; gap:10px; width:100%;">
-            <div style="display:flex; gap:10px; width:100%;">
-                <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;">
-                <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;">
+    <div id="modal-contacte" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;" class="no-print">
+        <div style="background:#fff;border-radius:12px;width:90%;max-width:500px;padding:25px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
+            <h3 style="margin-top:0;color:#2c3e50;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</h3>
+            <p style="color:#666;font-size:0.9em;">Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+                <div style="display:flex;gap:10px;">
+                    <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
+                    <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
+                </div>
+                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:80px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
+                <div style="display:flex;gap:10px;justify-content:center;">
+                    <button onclick="enviarSuggeriment()" style="background:#333;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px;">✉️ Envia'm un missatge</button>
+                    <button onclick="document.getElementById('modal-contacte').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
+                </div>
             </div>
-            <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%; min-height:80px; resize:vertical; box-sizing:border-box;"></textarea>
-            <button onclick="enviarSuggeriment()" class="btn-contacte" style="align-self: center; justify-content:center;">✉️ Envia'm un missatge</button>
         </div>
     </div>
     <div class="footer-credits no-print">
@@ -359,23 +389,6 @@
         </p>
     </div>
 
-    <div id="modal-settings">
-        <div class="modal-contingut" style="max-width: 500px;">
-            <div style="background:#f1f1f1; padding: 15px; font-weight: bold; border-bottom: 2px solid #ddd; text-align:center;">🤖 Mode IA Avançat</div>
-            <div class="modal-body" style="text-align: left;">
-                <p style="font-size: 0.9em; color: #555;">Vols fer llistes de pictogrames segons el tema que demanis? O vols que la traducció amb pictogrames sigui perfecta? Doncs enganxa aquí la teva clau API gratuïta de Gemini (Google). Es guardarà només al teu ordinador de forma segura.</p>
-                <input type="password" id="gemini-api-key" placeholder="AIzaSy..." style="width:100%; padding:10px; margin-bottom:10px; border:2px solid #ccc; border-radius:5px;">
-                <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:15px; text-align:center;">
-                    <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size: 0.9em; color: var(--color-principal); text-decoration: none; font-weight: bold;">👉 Com aconseguir una clau d'API gratis?</a>
-                    <a href="https://github.com/rrobles4/pictojocs/blob/main/guia%20api.jpg" target="_blank" style="font-size: 0.9em; color: var(--color-principal); text-decoration: none; font-weight: bold;">👉 Miniguia per aconseguir la clau API</a>
-                </div>
-            </div>
-            <div style="padding:15px; background:#f9f9f9; display:flex; justify-content:center; gap:10px;">
-                <button onclick="guardarSettings()" style="background:var(--color-accio); border:none; padding:10px 20px; border-radius:8px; color:white; font-weight:bold; cursor:pointer;">Guardar</button>
-                <button onclick="document.getElementById('modal-settings').style.display='none'" style="background:#999; border:none; padding:10px 20px; border-radius:8px; color:white; font-weight:bold; cursor:pointer;">Tancar</button>
-            </div>
-        </div>
-    </div>
 
     <div id="modal-prompt-ia">
         <div class="modal-contingut" style="max-width: 500px;">
@@ -475,8 +488,10 @@
                             <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
                             <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
                             <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
-                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div> 
+                            <button id="tool-text" class="btn-tool" onclick="setTool('text')" title="Quadre de Text">🔤</button>
+                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div>
                             <button style="background:#95a5a6; border:none; padding:5px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
+                            <button style="background:#e74c3c; border:none; padding:5px 12px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="eliminarElementSeleccionat()" title="Eliminar element seleccionat">🗑️</button>
                         </div>
                         <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px; width:100%; box-sizing:border-box;">
                             <label style="font-size:0.8em; font-weight:bold;">🔍 Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
@@ -559,6 +574,7 @@
         let startX, startY, currentX, currentY;
         let isDraggingShape = false;
         let draggedShapeIndex = -1;
+        let selectedShapeIndex = -1;
         let lastMouseX = 0, lastMouseY = 0;
 
         window.onload = function() {
@@ -577,6 +593,13 @@
                 editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
                 window.addEventListener('touchend', stopDrawingCanvas);
             }
+            if (localStorage.getItem('dark_mode') === '1') {
+                document.body.classList.add('dark-mode');
+                const t = document.getElementById('dark-mode-toggle');
+                if (t) { t.checked = true; document.getElementById('toggle-slider').style.backgroundColor = 'var(--color-principal)'; }
+            }
+            const key = localStorage.getItem('openrouter_api_key');
+            if (key) { const inp = document.getElementById('openrouter-api-key'); if (inp) inp.value = key; }
         };
 
         function switchAppView(view) {
@@ -586,13 +609,6 @@
             if (viewPictojocs) viewPictojocs.style.display = (view === 'pictojocs') ? 'block' : 'none';
             if (viewPictotraductor) viewPictotraductor.style.display = (view === 'pictotraductor') ? 'block' : 'none';
             if (view === 'pictotraductor' && viewPictotraductor) canviarIdiomaUI();
-        }
-
-        function enviarSuggeriment() {
-            const email = document.getElementById('sugg-email').value;
-            const subject = document.getElementById('sugg-assumpte').value;
-            const msg = document.getElementById('sugg-missatge').value;
-            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
         }
 
         function desarProjecte() {
@@ -872,14 +888,33 @@
         }
 
         function obrirModalPromptIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nPer utilitzar aquest mètode intel·ligent, clica a la icona '🤖 Configuració IA' de dalt a la dreta i enganxa-hi la teva clau gratuïta de Google Gemini."); return; }
+            const apiKey = localStorage.getItem('openrouter_api_key');
+            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i afegeix la teva clau gratuïta d'OpenRouter."); return; }
             document.getElementById('ia-prompt-text').value = '';
             document.getElementById('modal-prompt-ia').style.display = 'flex';
         }
 
+        const OPENROUTER_MODELS = ['meta-llama/llama-3.1-8b-instruct:free', 'google/gemma-2-9b-it:free'];
+        async function fetchOpenRouterText(prompt, apiKey) {
+            const url = 'https://openrouter.ai/api/v1/chat/completions';
+            const headers = { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' };
+            let lastError = 'Error desconegut';
+            for (const model of OPENROUTER_MODELS) {
+                try {
+                    const response = await fetch(url, { method: 'POST', headers, body: JSON.stringify({ model, messages: [{ role: 'user', content: prompt }], temperature: 0.2 }) });
+                    if (!response.ok) { lastError = 'HTTP error: ' + response.status + ' for model ' + model; continue; }
+                    const data = await response.json();
+                    if (data?.error) { lastError = data.error.message || JSON.stringify(data.error); continue; }
+                    const text = data?.choices?.[0]?.message?.content;
+                    if (!text) { lastError = 'Resposta buida del model ' + model; continue; }
+                    return text.toString().trim();
+                } catch (e) { lastError = e.message; }
+            }
+            throw new Error(lastError);
+        }
+
         async function generarLlistaIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
+            const apiKey = localStorage.getItem('openrouter_api_key');
             const promptUser = document.getElementById('ia-prompt-text').value.trim();
             if (!promptUser) return;
             const lang = document.getElementById('idioma').options[document.getElementById('idioma').selectedIndex].text;
@@ -887,10 +922,8 @@
             btn.innerHTML = "⏳ Generant..."; btn.disabled = true;
             const prompt = `Ets un expert en crear materials educatius amb pictogrames (com ARASAAC). \nEl mestre et demana: "${promptUser}".\nGenera una llista ordenada i lògica de paraules que encaixin perfectament amb el que demana. \nIdioma de les paraules: ${lang}.\nNormes:\n- Retorna ÚNICAMENT les paraules separades per comes.\n- No posis cap text extra, ni llistes numerades, ni explicacions.\n- Usa paraules en la seva forma de diccionari (infinitius, singulars) sempre que sigui possible, ja que són més fàcils de trobar com a pictogrames.`;
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                const data = await response.json();
-                if(data.error) throw new Error(data.error.message);
-                let text = data.candidates[0].content.parts[0].text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
+                let text = await fetchOpenRouterText(prompt, apiKey);
+                text = text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
                 document.getElementById('llista-paraules').value = text; document.getElementById('modal-prompt-ia').style.display = 'none'; generarDocument();
             } catch (err) { alert("Error connectant amb la IA: " + err.message); } finally { btn.innerHTML = "✅ Generar"; btn.disabled = false; }
         }
@@ -912,14 +945,33 @@
             recognition.lang = speechLangMap[idio] || idio; recognition.start();
         }
 
-        function obrirSettings() { document.getElementById('gemini-api-key').value = localStorage.getItem('gemini_api_key') || ""; document.getElementById('modal-settings').style.display = 'flex'; }
-        function guardarSettings() { localStorage.setItem('gemini_api_key', document.getElementById('gemini-api-key').value.trim()); document.getElementById('modal-settings').style.display = 'none'; }
+        function obrirSettings() { document.getElementById('elMeuMenu').style.width = '280px'; }
+        function guardarSettings() { /* handled by guardarApiKey in sidebar */ }
+        function guardarApiKey(btn) {
+            const key = document.getElementById('openrouter-api-key').value.trim();
+            localStorage.setItem('openrouter_api_key', key);
+            const orig = btn.textContent;
+            btn.textContent = '✅ Desada!';
+            setTimeout(() => btn.textContent = orig, 2000);
+        }
+        function toggleDarkMode(el) {
+            document.body.classList.toggle('dark-mode', el.checked);
+            localStorage.setItem('dark_mode', el.checked ? '1' : '0');
+            const s = document.getElementById('toggle-slider');
+            if (s) s.style.backgroundColor = el.checked ? 'var(--color-principal)' : '#ccc';
+        }
+        function enviarSuggeriment() {
+            const email = document.getElementById('sugg-email').value;
+            const subject = document.getElementById('sugg-assumpte').value;
+            const msg = document.getElementById('sugg-missatge').value;
+            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
+        }
 
         async function executarTraduccio() {
             const frase = document.getElementById('text-input').value.trim(); if(!frase) return;
             const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div>`; btnTrad.disabled = true;
             document.getElementById('resultat-pictos').innerHTML = ''; document.getElementById('traduccio-literal-box').style.display = 'none';
-            const apiKey = localStorage.getItem('gemini_api_key');
+            const apiKey = localStorage.getItem('openrouter_api_key');
             if (apiKey) { await processarAmbGemini(frase, apiKey); } else { await processarBasic(frase); }
             const lang = document.getElementById('idioma-input').value; const texts = uiDict[lang] || uiDict['ca'];
             btnTrad.innerHTML = texts[5]; btnTrad.disabled = false;
@@ -930,8 +982,9 @@
             const langDesti = document.getElementById('idioma-desti').value;
             const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible. Corregeix petites faltes d'ortografia. Si és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí", "orig": "paraula original escrita pel nen que hi correspon"}\n  ]\n}\nRegles: Extreu NOMÉS les paraules clau per dibuixar la frase (màxim 6). Pots ometre articles, preposicions o paraules com 'si us plau' a menys que tu, com a IA, consideris que són estrictament necessaris per al sentit del missatge.`;
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }) });
-                const data = await response.json(); let jsonText = data.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '').trim(); const resultat = JSON.parse(jsonText);
+                let jsonText = await fetchOpenRouterText(prompt, apiKey);
+                jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
+                const resultat = JSON.parse(jsonText);
                 if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return; }
                 document.getElementById('text-traduit-literal').innerText = resultat.traduccio_literal; document.getElementById('traduccio-literal-box').style.display = 'block';
                 for (let picto of resultat.pictogrames) { 
@@ -941,7 +994,7 @@
                         if (d && d.length > 0) { const imgUrl = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_300.png`; crearTargetaTrad(picto.cat, picto.orig, imgUrl, langOrigen); } 
                     } catch(e) {} 
                 }
-            } catch(e) { alert("Error amb la IA. Comprova que la teva clau d'API és correcte. Canviant al mode bàsic..."); await processarBasic(text); }
+            } catch(e) { alert("Error amb la IA. Comprova que la teva clau d'API és correcta. Canviant al mode bàsic..."); await processarBasic(text); }
         }
 
         async function processarBasic(frase) {
@@ -954,7 +1007,7 @@
                     const dataT = await resT.json(); 
                     if(dataT.responseData && dataT.responseData.translatedText) { 
                         if(dataT.responseData.translatedText.includes('MYMEMORY WARNING')) { 
-                            alert("⚠️ Has superat el límit de traduccions gratuïtes per avui.\nSi us plau, afegeix la teva clau de Google Gemini a 'Configuració IA' per continuar sense límits."); 
+                            alert("⚠️ Has superat el límit de traduccions gratuïtes per avui.\nSi us plau, afegeix la teva clau d'OpenRouter al menú lateral (☰) per continuar sense límits."); 
                             document.getElementById('text-traduit-literal').innerText = "⚠️ Límit de traducció assolit."; 
                             document.getElementById('traduccio-literal-box').style.display = 'block'; 
                             return; 
@@ -1024,7 +1077,7 @@
                     let nousTextos = []; document.querySelectorAll('.input-text-modal').forEach(inp => { if(inp.value.trim() !== "") nousTextos.push(inp.value.trim()); });
                     let htmlFinal = nousTextos.map(t => `<div class="fila-paraula">${t}</div>`).join(''); if(htmlFinal === "") htmlFinal = `<div class="fila-paraula">&nbsp;</div>`; let currentImgUrl = null;
                     if (mode === 'domino') { currentImgUrl = elementEditant.querySelector('img').src; } else if (mode === 'memory') { const imgCard = document.querySelector(`.mode-memory-front .nomes-img[data-index="${index}"]`); if (imgCard) currentImgUrl = imgCard.querySelector('img').src; } else { currentImgUrl = elementEditant.querySelector('img') ? elementEditant.querySelector('img').src : null; }
-                    memoriaEdicions[original] = { htmlFinal: htmlFinal, imgUrl: currentImgUrl };
+                    memoriaEdicions[original] = { htmlFinal: htmlFinal, imgUrl: currentImgUrl, drawings: JSON.parse(JSON.stringify(currentDrawings)) };
                     if (mode === 'domino') { elementEditant.querySelector('.text-domino').innerHTML = htmlFinal; autoMidaText(elementEditant.querySelector('.text-domino')); if(dadesDomino[index]) { dadesDomino[index].txt = htmlFinal; dadesDomino[index].isHtml = true; } } else if (mode === 'targeta') { document.getElementById(`text-${index}-back`).innerHTML = htmlFinal; autoMidaText(document.getElementById(`text-${index}-back`)); } else if (mode === 'memory') { if(elementEditant.classList.contains('nomes-text')) { elementEditant.querySelector('p').innerHTML = htmlFinal; autoMidaText(elementEditant.querySelector('p')); } else { const p = elementEditant.querySelector('p'); if(p) p.innerHTML = htmlFinal; } } else { const p = elementEditant.querySelector('p'); p.innerHTML = htmlFinal; autoMidaText(p); }
                     if(currentColorSelected !== '#ffffff') { elementEditant.style.backgroundColor = currentColorSelected; }
                 }
@@ -1072,7 +1125,14 @@
 
         function setTool(tool) { currentTool = tool; document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu')); document.getElementById('tool-' + tool).classList.add('actiu'); }
         function setDrawColor(c) { drawColor = c; }
-        function undoLastDrawing() { if (currentDrawings.length > 0) { currentDrawings.pop(); drawEditorCanvas(); } }
+        function undoLastDrawing() { if (currentDrawings.length > 0) { currentDrawings.pop(); selectedShapeIndex = -1; drawEditorCanvas(); } }
+        function eliminarElementSeleccionat() { 
+            if (selectedShapeIndex >= 0 && selectedShapeIndex < currentDrawings.length) { 
+                currentDrawings.splice(selectedShapeIndex, 1); 
+                selectedShapeIndex = -1; 
+                drawEditorCanvas(); 
+            } 
+        }
         function getMousePos(e) { const rect = editorCanvas.getBoundingClientRect(); const clientX = e.touches ? e.touches[0].clientX : e.clientX; const clientY = e.touches ? e.touches[0].clientY : e.clientY; return { x: clientX - rect.left, y: clientY - rect.top }; }
         function buildPath(ctx, shape) {
             ctx.beginPath();
@@ -1081,9 +1141,21 @@
             else if (shape.type === 'circle') { let r = Math.sqrt(Math.pow(shape.end.x - shape.start.x, 2) + Math.pow(shape.end.y - shape.start.y, 2)); ctx.arc(shape.start.x, shape.start.y, r, 0, 2 * Math.PI); } 
             else if (shape.type === 'arrow') { let headlen = 15; let dx = shape.end.x - shape.start.x; let dy = shape.end.y - shape.start.y; let angle = Math.atan2(dy, dx); ctx.moveTo(shape.start.x, shape.start.y); ctx.lineTo(shape.end.x, shape.end.y); ctx.lineTo(shape.end.x - headlen * Math.cos(angle - Math.PI / 6), shape.end.y - headlen * Math.sin(angle - Math.PI / 6)); ctx.moveTo(shape.end.x, shape.end.y); ctx.lineTo(shape.end.x - headlen * Math.cos(angle + Math.PI / 6), shape.end.y - headlen * Math.sin(angle + Math.PI / 6)); } 
             else if (shape.type === 'cross') { ctx.moveTo(shape.start.x, shape.start.y); ctx.lineTo(shape.end.x, shape.end.y); ctx.moveTo(shape.end.x, shape.start.y); ctx.lineTo(shape.start.x, shape.end.y); }
+            else if (shape.type === 'text') { ctx.rect(shape.start.x - 5, shape.start.y - 14, (shape.text || '').length * 8 + 10, 20); }
         }
         function getHitShapeIndex(x, y) { editorCtx.lineWidth = 15; for (let i = currentDrawings.length - 1; i >= 0; i--) { buildPath(editorCtx, currentDrawings[i]); if (editorCtx.isPointInStroke(x, y)) return i; } return -1; }
-        function startDrawingCanvas(e) { const pos = getMousePos(e); let hitIdx = getHitShapeIndex(pos.x, pos.y); if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; } else { isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y; if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] }); } }
+        function startDrawingCanvas(e) { 
+            const pos = getMousePos(e); let hitIdx = getHitShapeIndex(pos.x, pos.y); 
+            if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; selectedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); } 
+            else if (currentTool === 'text') {
+                const txt = prompt('Escriu el text:');
+                if (txt) { currentDrawings.push({ type: 'text', color: drawColor, start: {x: pos.x, y: pos.y}, text: txt }); selectedShapeIndex = currentDrawings.length - 1; drawEditorCanvas(); }
+            } else { 
+                selectedShapeIndex = -1; isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y; 
+                if (currentTool === 'freehand') currentDrawings.push({ type: 'freehand', color: drawColor, points: [{x: startX, y: startY}] }); 
+                drawEditorCanvas();
+            } 
+        }
         function drawCanvas(e) {
             const pos = getMousePos(e);
             if (isDraggingShape) { let dx = pos.x - lastMouseX; let dy = pos.y - lastMouseY; let shape = currentDrawings[draggedShapeIndex]; if (shape.type === 'freehand') shape.points.forEach(pt => { pt.x += dx; pt.y += dy; }); else { shape.start.x += dx; shape.start.y += dy; shape.end.x += dx; shape.end.y += dy; } lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); } 
@@ -1094,14 +1166,21 @@
         function obrirTabEdicio() {
             canviarPestanya('tab-dibuix'); let currentSrc = ''; document.getElementById('ed-scale').value = 1; document.getElementById('ed-x').value = 0; document.getElementById('ed-y').value = 0; setTool('freehand');
             if (currentView === 'pictotraductor') { currentSrc = elementEditant.querySelector('img') ? elementEditant.querySelector('img').src : ''; } else { const mode = document.getElementById('selector-mode').value; if (mode === 'domino') { currentSrc = elementEditant.querySelector('img').src; } else if (mode === 'memory') { if (elementEditant.classList.contains('nomes-img')) { currentSrc = elementEditant.querySelector('img').src; } else { const index = elementEditant.dataset.index; const imgCard = document.querySelector(`.mode-memory-front .nomes-img[data-index="${index}"]`); if(imgCard) currentSrc = imgCard.querySelector('img').src; } } else { const img = elementEditant.querySelector('img'); if(img) currentSrc = img.src; } }
-            if(currentSrc) { if (currentSrc.indexOf('static.arasaac.org') !== -1 && currentSrc.indexOf('?') === -1 && !currentSrc.endsWith('.mp4')) { currentSrc += '?c=' + new Date().getTime(); } editorImgObj.onload = () => { currentDrawings = []; drawEditorCanvas(); editorImgObj.onload = null; }; editorImgObj.src = currentSrc; if(editorImgObj.complete) editorImgObj.onload(); }
+            const cardKey = elementEditant ? (elementEditant.dataset.original || elementEditant.dataset.index || '') : '';
+            const savedDrawings = cardKey && memoriaEdicions[cardKey] ? memoriaEdicions[cardKey].drawings : null;
+            if(currentSrc) { if (currentSrc.indexOf('static.arasaac.org') !== -1 && currentSrc.indexOf('?') === -1 && !currentSrc.endsWith('.mp4')) { currentSrc += '?c=' + new Date().getTime(); } editorImgObj.onload = () => { currentDrawings = savedDrawings ? JSON.parse(JSON.stringify(savedDrawings)) : []; drawEditorCanvas(); editorImgObj.onload = null; }; editorImgObj.src = currentSrc; if(editorImgObj.complete) editorImgObj.onload(); }
         }
         function drawEditorCanvas() {
             editorCtx.clearRect(0, 0, 300, 300); const scale = parseFloat(document.getElementById('ed-scale').value); const dx = parseFloat(document.getElementById('ed-x').value); const dy = parseFloat(document.getElementById('ed-y').value);
             editorCtx.save(); editorCtx.translate(150 + dx, 150 + dy); editorCtx.scale(scale, scale);
             if (editorImgObj.src && !editorImgObj.src.endsWith('.mp4')) { const aspect = editorImgObj.width / editorImgObj.height; let w = 280, h = 280; if (aspect > 1) h = w / aspect; else w = h * aspect; editorCtx.drawImage(editorImgObj, -w/2, -h/2, w, h); }
             editorCtx.restore(); editorCtx.lineCap = 'round'; editorCtx.lineJoin = 'round'; 
-            currentDrawings.forEach(shape => { editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4; buildPath(editorCtx, shape); editorCtx.stroke(); });
+            currentDrawings.forEach(shape => { 
+                if (shape.type === 'text') { 
+                    editorCtx.fillStyle = shape.color; editorCtx.font = 'bold 16px Arial'; editorCtx.fillText(shape.text || '', shape.start.x, shape.start.y); 
+                    if (shape === currentDrawings[selectedShapeIndex]) { editorCtx.strokeStyle = '#4a90e2'; editorCtx.lineWidth = 1; editorCtx.setLineDash([3,3]); buildPath(editorCtx, shape); editorCtx.stroke(); editorCtx.setLineDash([]); }
+                } else { editorCtx.strokeStyle = shape.color; editorCtx.lineWidth = 4; buildPath(editorCtx, shape); editorCtx.stroke(); } 
+            });
             if(isDrawing && currentTool !== 'freehand') { editorCtx.strokeStyle = drawColor; editorCtx.lineWidth = 4; let tempShape = { type: currentTool, start: {x: startX, y: startY}, end: {x: currentX, y: currentY} }; buildPath(editorCtx, tempShape); editorCtx.stroke(); }
         }
         function aplicarEdicioImatge(canviarTab = true) { const dataUrl = editorCanvas.toDataURL('image/png'); aplicarImatge(dataUrl); if(canviarTab) canviarPestanya('tab-arasaac'); }
