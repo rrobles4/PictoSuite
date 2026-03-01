@@ -985,6 +985,10 @@
         }
 
         async function fetchGeminiText(prompt, apiKey) {
+            // Use apiCallWithFallback when available (supports OpenRouter fallback), fall back to direct call
+            if (typeof apiCallWithFallback === 'function') {
+                return await apiCallWithFallback(prompt, { temperature: 0.2 });
+            }
             const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
             const response = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2 } }) });
             if (!response.ok) throw new Error('HTTP error: ' + response.status);

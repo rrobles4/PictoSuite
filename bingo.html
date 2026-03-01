@@ -752,6 +752,11 @@
             const word = (document.getElementById('input-modal-0') || {}).value || '';
             const divRes = document.getElementById('resultats-traductor');
             divRes.innerHTML = "<p style='text-align:center'>⏳ Traduint...</p>";
+            // Use event delegation so translated text is never placed in inline handlers
+            divRes.onclick = function(e) {
+                const item = e.target.closest('.copiar-trad');
+                if (item && item.dataset.text) copiarText(item.dataset.text);
+            };
             let html = '';
             const checkboxes = document.querySelectorAll('.check-trad:checked');
             if (checkboxes.length === 0) { divRes.innerHTML = "<p style='text-align:center'>⚠️ Selecciona com a mínim un idioma.</p>"; return; }
@@ -763,7 +768,8 @@
                     const data = await res.json();
                     if (data.responseData && data.responseData.translatedText) {
                         if (data.responseData.translatedText.includes('MYMEMORY WARNING')) { html += `<p style='text-align:center;color:#e74c3c;grid-column:1/-1;'>⚠️ Límit diari esgotat.</p>`; break; }
-                        html += `<div class="item-traduccio" onclick="copiarText('${data.responseData.translatedText.replace(/'/g,"\\'").replace(/"/g,'&quot;')}')"><div><span class="lang-code">${langNom}</span><span class="trad-text">${data.responseData.translatedText}</span></div><span class="copy-hint">📋</span></div>`;
+                        const safeText = data.responseData.translatedText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+                        html += `<div class="item-traduccio copiar-trad" data-text="${safeText}"><div><span class="lang-code">${langNom}</span><span class="trad-text">${safeText}</span></div><span class="copy-hint">📋</span></div>`;
                     }
                 } catch(e) {}
             }
@@ -861,7 +867,12 @@
             const img = elementEditant ? elementEditant.querySelector('img') : null;
             let currentSrc = img ? img.src : '';
             if (currentSrc) {
-                if (currentSrc.indexOf('static.arasaac.org') !== -1 && currentSrc.indexOf('?') === -1 && !currentSrc.endsWith('.mp4')) { currentSrc += '?c=' + new Date().getTime(); }
+                try {
+                    const srcUrl = new URL(currentSrc);
+                    if (srcUrl.hostname === 'static.arasaac.org' && !srcUrl.search && !currentSrc.endsWith('.mp4')) {
+                        currentSrc += '?c=' + new Date().getTime();
+                    }
+                } catch(e) {}
                 editorImgObj.onload = () => { currentDrawings = []; drawEditorCanvas(); editorImgObj.onload = null; };
                 editorImgObj.src = currentSrc;
                 if (editorImgObj.complete) editorImgObj.onload();
