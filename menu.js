@@ -63,7 +63,7 @@
                 return await _callGemini(prompt, geminiKey, temperature, maxTokens);
             } catch (e) {
                 var status = e.httpStatus || 0;
-                if (openrouterKey && (status === 429 || status >= 500)) {
+                if (openrouterKey && (status === 400 || status === 404 || status === 429 || status >= 500)) {
                     return await _callOpenRouter(prompt, openrouterKey, temperature, maxTokens);
                 }
                 throw e;
@@ -77,7 +77,7 @@
     };
 
     async function _callGemini(prompt, apiKey, temperature, maxTokens) {
-        var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=' + apiKey;
+        var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' + apiKey;
         var resp = await fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
