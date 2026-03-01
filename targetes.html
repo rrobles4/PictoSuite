@@ -226,45 +226,12 @@
         const RUTA_LOGO_PICTOJOCS = "logo PictoSuite.png";
     </script>
 
-    <button class="menu-btn no-print" onclick="document.getElementById('elMeuMenu').style.width = '280px'">☰</button>
+    <script src="menu.js"></script>
+    <script>
+        const RUTA_LOGO_PICTOJOCS = "logo PictoSuite.png";
+    </script>
 
-    <div id="elMeuMenu" class="side-menu no-print">
-        <button class="close-btn" onclick="document.getElementById('elMeuMenu').style.width = '0'">×</button>
-        <a href="index.html">🏠 Inici (PictoSuite)</a>
-        <a href="targetes.html">🃏 Targetes</a>
-        <a href="pictoxat.html">💬 PictoXat</a>
-        <a href="bingo.html">🎯 Bingo</a>
-        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
-        <div class="toggle-wrap">
-            <span style="font-size:16px;" data-i18n="mode_fosc">🌙 Mode Fosc</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
-                <span class="toggle-slider"></span>
-            </label>
-        </div>
-        <div class="sidebar-section">
-            <span class="sidebar-label" data-i18n="idioma_ui">🌐 Idioma de l'aplicació</span>
-            <select id="ui-lang-select" class="sidebar-input" onchange="canviarIdiomaInterficie(this.value)">
-                <option value="ca">Català</option>
-                <option value="es">Castellà</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="ar">العربية</option>
-                <option value="zh">中文</option>
-                <option value="ur">اردو</option>
-            </select>
-        </div>
-        <div class="sidebar-section">
-            <span class="sidebar-label" data-i18n="clau_api">🤖 Clau API Google AI Studio:</span>
-            <input type="password" id="gemini-api-key" class="sidebar-input" placeholder="AIza...">
-            <button class="sidebar-btn" onclick="guardarApiKey(this)" data-i18n="desar_clau">💾 Desar clau</button>
-            <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;" data-i18n="aconseguir_clau">👉 Aconseguir clau gratis</a>
-        </div>
-        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
-        <div class="sidebar-section">
-            <button onclick="document.getElementById('elMeuMenu').style.width='0'; document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:'Fredoka',sans-serif;" data-i18n="suggerencia">✉️ Tens alguna suggerència?</button>
-        </div>
-    </div>
+
         <div id="view-pictojocs">
         <div class="configuracio no-print">
             <div class="projecte-controls" style="justify-content: flex-end; padding-left: 0;">
@@ -410,25 +377,6 @@
             </div>
         </div>
     </div>
-
-    <div id="modal-contacte" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;" class="no-print">
-        <div style="background:#fff;border-radius:12px;width:90%;max-width:600px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-            <h3 style="margin-top:0;color:#2c3e50;font-family:'Fredoka',sans-serif;">✉️ Tens alguna suggerència?</h3>
-            <p style="color:#666;font-size:0.9em;">Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-                <div style="display:flex;gap:10px;">
-                    <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
-                    <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
-                </div>
-                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:96px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
-                <div style="display:flex;gap:10px;justify-content:center;">
-                    <button onclick="enviarSuggeriment()" style="background:#333;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px;">✉️ Envia'm un missatge</button>
-                    <button onclick="document.getElementById('modal-contacte').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div id="modal-prompt-ia">
         <div class="modal-contingut" style="max-width: 500px;">
@@ -655,13 +603,6 @@
                 editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
                 window.addEventListener('touchend', stopDrawingCanvas);
             }
-            if (localStorage.getItem('dark_mode') === '1') {
-                document.body.classList.add('dark-mode');
-                const t = document.getElementById('dark-mode-toggle');
-                if (t) t.checked = true;
-            }
-            const key = localStorage.getItem('gemini_api_key');
-            if (key) { const inp = document.getElementById('gemini-api-key'); if (inp) inp.value = key; }
             const lang = localStorage.getItem('ui_lang') || 'ca';
             canviarIdiomaInterficie(lang);
         };
@@ -971,8 +912,9 @@
         }
 
         function obrirModalPromptIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (!apiKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i afegeix la teva clau de Google AI Studio."); return; }
+            const geminiKey = (localStorage.getItem('gemini_api_key') || '').trim();
+            const orKey = (localStorage.getItem('openrouter_api_key') || '').trim();
+            if (!geminiKey && !orKey) { alert("⚠️ Encara no has afegit la teva clau API!\n\nObre el menú lateral (☰) i fes clic a 'Activa la IA!' per afegir la teva clau de Google AI Studio o OpenRouter."); return; }
             document.getElementById('ia-prompt-text').value = '';
             document.getElementById('modal-prompt-ia').style.display = 'flex';
         }
@@ -989,7 +931,6 @@
         }
 
         async function generarLlistaIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
             const promptUser = document.getElementById('ia-prompt-text').value.trim();
             if (!promptUser) return;
             const lang = document.getElementById('idioma').options[document.getElementById('idioma').selectedIndex].text;
@@ -997,10 +938,13 @@
             btn.innerHTML = "⏳ Generant..."; btn.disabled = true;
             const prompt = `Ets un expert en crear materials educatius amb pictogrames (com ARASAAC). \nEl mestre et demana: "${promptUser}".\nGenera una llista ordenada i lògica de paraules que encaixin perfectament amb el que demana. \nIdioma de les paraules: ${lang}.\nNormes:\n- Retorna ÚNICAMENT les paraules separades per comes.\n- No posis cap text extra, ni llistes numerades, ni explicacions.\n- Usa paraules en la seva forma de diccionari (infinitius, singulars) sempre que sigui possible, ja que són més fàcils de trobar com a pictogrames.`;
             try {
-                let text = await fetchGeminiText(prompt, apiKey);
+                let text = await apiCallWithFallback(prompt, { temperature: 0.2, maxOutputTokens: 1000 });
                 text = text.trim().replace(/\n/g, ', ').replace(/,\s*,/g, ',');
                 document.getElementById('llista-paraules').value = text; document.getElementById('modal-prompt-ia').style.display = 'none'; generarDocument();
-            } catch (err) { alert("Error connectant amb la IA: " + err.message); } finally { btn.innerHTML = "✅ Generar"; btn.disabled = false; }
+            } catch (err) {
+                if (err.message === 'no_key') { alert("⚠️ Afegeix una clau API al menú lateral."); }
+                else { alert("Error connectant amb la IA: " + err.message); }
+            } finally { btn.innerHTML = "✅ Generar"; btn.disabled = false; }
         }
 
         const stopWords = new Set(["el", "la", "els", "les", "un", "una", "uns", "unes", "a", "al", "als", "de", "del", "dels", "en", "per", "amb", "i", "o", "u", "si", "no", "que", "què", "com", "on", "em", "et", "es", "ens", "us", "meu", "meva", "teu", "teva", "seu", "seva", "si us plau", "sisplau", "hi", "ho", "li", "puc", "podem", "vull", "volem", "los", "las", "unos", "unas", "por", "para", "con", "y", "qué", "como", "donde", "me", "te", "se", "nos", "os", "mi", "tu", "su", "por favor", "puedo", "podemos", "quiero", "queremos", "the", "an", "to", "of", "in", "for", "on", "with", "at", "by", "from", "and", "or", "but", "is", "are", "am", "was", "were", "be", "been", "being", "you", "he", "she", "it", "we", "they", "my", "your", "his", "her", "its", "our", "their", "please", "can", "could", "would", "will", "shall", "should", "may", "might", "must", "do", "does", "did", "have", "has", "had", "ein", "eine", "einer", "eines", "einem", "einen", "der", "die", "das", "den", "dem", "des", "ich", "du", "er", "sie", "es", "wir", "ihr", "mich", "dich", "sich", "uns", "euch", "ist", "sind", "war", "waren", "sein", "haben", "hat", "hatte", "bitte"]);
@@ -1020,42 +964,26 @@
             recognition.lang = speechLangMap[idio] || idio; recognition.start();
         }
 
-        function obrirSettings() { document.getElementById('elMeuMenu').style.width = '280px'; }
+        function obrirSettings() { obrirMenu(); }
         function guardarSettings() { /* handled by guardarApiKey in sidebar */ }
-        function guardarApiKey(btn) {
-            const key = document.getElementById('gemini-api-key').value.trim();
-            localStorage.setItem('gemini_api_key', key);
-            const orig = btn.textContent;
-            btn.textContent = '✅ Desada!';
-            setTimeout(() => btn.textContent = orig, 2000);
-        }
-        function toggleDarkMode(el) {
-            document.body.classList.toggle('dark-mode', el.checked);
-            localStorage.setItem('dark_mode', el.checked ? '1' : '0');
-        }
-        function enviarSuggeriment() {
-            const email = document.getElementById('sugg-email').value;
-            const subject = document.getElementById('sugg-assumpte').value;
-            const msg = document.getElementById('sugg-missatge').value;
-            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent("Suggerència per a PictoSuite: "+subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
-        }
 
         async function executarTraduccio() {
             const frase = document.getElementById('text-input').value.trim(); if(!frase) return;
             const btnTrad = document.getElementById('btn-trad'); btnTrad.innerHTML = `<div class="loader" style="margin:0;"></div>`; btnTrad.disabled = true;
             document.getElementById('resultat-pictos').innerHTML = ''; document.getElementById('traduccio-literal-box').style.display = 'none';
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (apiKey) { await processarAmbGemini(frase, apiKey); } else { await processarBasic(frase); }
+            const geminiKey = (localStorage.getItem('gemini_api_key') || '').trim();
+            const orKey = (localStorage.getItem('openrouter_api_key') || '').trim();
+            if (geminiKey || orKey) { await processarAmbGemini(frase); } else { await processarBasic(frase); }
             const lang = document.getElementById('idioma-input').value; const texts = uiDict[lang] || uiDict['ca'];
             btnTrad.innerHTML = texts[5]; btnTrad.disabled = false;
         }
 
-        async function processarAmbGemini(text, apiKey) {
+        async function processarAmbGemini(text) {
             const langOrigen = document.getElementById('idioma-input').value; 
             const langDesti = document.getElementById('idioma-desti').value;
             const prompt = `Actua com el cervell d'un comunicador augmentatiu escolar. Un alumne ha escrit o dit aquesta frase en l'idioma amb codi ISO '${langOrigen}': "${text}". Vol traduir-ho a l'idioma amb codi ISO '${langDesti}'.\nPrimer, avalua si la frase té sentit o si és incomprensible. Corregeix petites faltes d'ortografia. Si és incomprensible, posa te_sentit a false.\nRetorna ÚNICAMENT un objecte JSON (sense format markdown) amb aquesta estructura:\n{\n  "te_sentit": true o false,\n  "missatge_error": "Si no té sentit, posa un missatge curt en l'idioma origen.",\n  "traduccio_literal": "Frase completa traduïda a l'idioma destí",\n  "pictogrames": [\n    {"cat": "lema en l'idioma destí", "orig": "paraula original escrita pel nen que hi correspon"}\n  ]\n}\nRegles: Extreu NOMÉS les paraules clau per dibuixar la frase (màxim 6). Pots ometre articles, preposicions o paraules com 'si us plau' a menys que tu, com a IA, consideris que són estrictament necessaris per al sentit del missatge.`;
             try {
-                let jsonText = await fetchGeminiText(prompt, apiKey);
+                let jsonText = await apiCallWithFallback(prompt, { temperature: 0.2 });
                 jsonText = jsonText.replace(/```json/g, '').replace(/```/g, '').trim();
                 const resultat = JSON.parse(jsonText);
                 if(!resultat.te_sentit) { alert(resultat.missatge_error || "No s'ha entès la frase."); return; }
@@ -1067,7 +995,7 @@
                         if (d && d.length > 0) { const imgUrl = `https://static.arasaac.org/pictograms/${d[0]._id}/${d[0]._id}_300.png`; crearTargetaTrad(picto.cat, picto.orig, imgUrl, langOrigen); } 
                     } catch(e) {} 
                 }
-            } catch(e) { alert("Error amb la IA. Comprova que la teva clau de Google AI Studio és correcta. Canviant al mode bàsic..."); await processarBasic(text); }
+            } catch(e) { alert("Error amb la IA. Canviant al mode bàsic..."); await processarBasic(text); }
         }
 
         async function processarBasic(frase) {

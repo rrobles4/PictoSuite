@@ -187,66 +187,43 @@
             .cards-container { display: block; }
             .bingo-card { width: 100%; margin-bottom: 15mm; }
         }
+
+        /* Modal editor (same as Targetes) */
+        #modal-edicio{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);z-index:3000;justify-content:center;align-items:center}
+        .modal-contingut{background:#fff;border-radius:12px;width:90%;max-width:650px;display:flex;flex-direction:column;max-height:90vh;overflow:hidden}
+        .modal-tabs{display:flex;background:#f1f1f1;border-bottom:2px solid #ddd;overflow-x:auto;flex-shrink:0}
+        .tab-btn{flex:1;padding:10px 4px;border:none;background:none;cursor:pointer;font-weight:600;color:#666;border-bottom:3px solid transparent;display:flex;align-items:center;justify-content:center;white-space:nowrap;gap:5px;min-width:auto}
+        .tab-btn.actiu{border-bottom:3px solid var(--color-principal);color:var(--color-principal);background:#fff;font-weight:bold}
+        .modal-body{padding:25px;overflow-y:auto}
+        .grup-titol-modal{margin-bottom:20px;text-align:center}
+        .inputs-container-modal{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:15px;justify-content:center}
+        .input-text-modal{font-size:1.1em;text-align:center;border:2px solid #ddd;padding:8px;border-radius:6px;box-sizing:border-box}
+        .dues-paraules .input-text-modal{width:48%}
+        .color-palette{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;gap:10px}
+        .color-btn{width:30px;height:30px;border-radius:50%;border:2px solid #ccc;cursor:pointer;transition:.2s;box-sizing:border-box;padding:0}
+        .color-btn:hover{transform:scale(1.1);border-color:#333}
+        .cerca-wrapper{display:flex;gap:8px;margin-bottom:15px}
+        .btn-cerca-modal{background:var(--color-principal);border-radius:8px;padding:10px 20px;font-size:1em;flex-shrink:0;color:#fff;border:none;cursor:pointer}
+        .btn-cerca-trad{background:#8e44ad}
+        .resultats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:10px;margin-top:15px}
+        .resultats-grid img{width:100%;height:90px;object-fit:contain;border:1px solid #eee;border-radius:8px;cursor:pointer;padding:5px}
+        .resultats-grid img:hover{transform:scale(1.05);border-color:var(--color-principal);background:#f0f8ff}
+        .grid-traduccions{display:flex;flex-direction:column;gap:10px;margin-top:15px}
+        .item-traduccio{display:flex;justify-content:space-between;align-items:center;background:#f8f9fa;padding:10px;border-radius:8px;border:1px solid #eee;cursor:pointer;transition:.2s}
+        .item-traduccio:hover{background:#e8f6f3;border-color:#27ae60}
+        .lang-code{font-weight:bold;color:#555;background:#ddd;padding:2px 6px;border-radius:4px;font-size:.8em;margin-right:10px}
+        .copy-hint{font-size:.8em;color:#27ae60;opacity:0;transition:.2s}
+        .item-traduccio:hover .copy-hint{opacity:1}
+        .toolbar-dibuix{display:flex;gap:8px;margin-bottom:5px;align-items:center;flex-wrap:wrap;justify-content:center}
+        .btn-color-dibuix{width:30px;height:30px;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 4px rgba(0,0,0,.3);cursor:pointer;flex-shrink:0;box-sizing:border-box;padding:0}
+        .btn-tool{background:#fff;border:1px solid #ccc;font-size:1.2em;border-radius:5px;padding:5px 10px;cursor:pointer;transition:.2s;flex-shrink:0}
+        .btn-tool.actiu{background:#e8f8f5;border:2px solid var(--color-accio);box-shadow:0 0 5px rgba(39,174,96,.3)}
+        .caixa-idiomes-check{max-height:150px;overflow-y:auto;border:2px solid #eee;padding:10px;border-radius:8px;margin-bottom:10px;display:grid;grid-template-columns:1fr 1fr;gap:5px;text-align:left;background:#fafafa}
+        .caixa-idiomes-check label{margin:0;font-weight:normal;font-size:.9em;display:flex;align-items:center;gap:5px;cursor:pointer}
+        @media screen and (max-width:850px){.modal-contingut{width:95%;height:90vh;max-height:90vh}}
     </style>
 </head>
 <body>
-    <button class="menu-btn" onclick="obrirMenu()">☰</button>
-
-    <div id="elMeuMenu" class="side-menu">
-        <button class="close-btn" onclick="tancarMenu()">×</button>
-        <a href="index.html">🏠 Inici (PictoSuite)</a>
-        <a href="targetes.html">🃏 Targetes</a>
-        <a href="pictoxat.html">💬 PictoXat</a>
-        <a href="bingo.html">🎯 Bingo</a>
-        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:15px auto;">
-        <div class="toggle-wrap">
-            <span style="font-size:16px;" data-i18n="mode_fosc">🌙 Mode Fosc</span>
-            <label class="toggle-switch">
-                <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode(this)">
-                <span class="toggle-slider"></span>
-            </label>
-        </div>
-        <div class="sidebar-section">
-            <span class="sidebar-label" data-i18n="idioma_ui">🌐 Idioma de l'aplicació</span>
-            <select id="ui-lang-select" class="sidebar-input" onchange="canviarIdiomaInterficie(this.value)">
-                <option value="ca">Català</option>
-                <option value="es">Castellà</option>
-                <option value="en">English</option>
-                <option value="fr">Français</option>
-                <option value="ar">العربية</option>
-                <option value="zh">中文</option>
-                <option value="ur">اردو</option>
-            </select>
-        </div>
-        <div class="sidebar-section">
-            <span class="sidebar-label" data-i18n="clau_api">🤖 Clau API Google AI Studio:</span>
-            <input type="password" id="gemini-api-key" class="sidebar-input" placeholder="AIza...">
-            <button class="sidebar-btn" onclick="guardarApiKey(this)" data-i18n="desar_clau">💾 Desar clau</button>
-            <a href="https://aistudio.google.com/app/apikey" target="_blank" style="font-size:0.8em;color:var(--color-principal);display:block;margin-top:6px;text-align:center;" data-i18n="aconseguir_clau">👉 Aconseguir clau gratis</a>
-        </div>
-        <hr style="width:80%;border:0;border-top:1px solid #eee;margin:10px auto;">
-        <div class="sidebar-section">
-            <button onclick="tancarMenu(); document.getElementById('modal-contacte').style.display='flex';" style="background:#333;color:white;border:none;padding:10px;border-radius:8px;cursor:pointer;width:100%;font-size:0.9em;font-family:var(--font-titols);" data-i18n="suggerencia">✉️ Tens alguna suggerència?</button>
-        </div>
-    </div>
-
-    <div id="modal-contacte" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:2000;justify-content:center;align-items:center;">
-        <div style="background:#fff;border-radius:12px;width:90%;max-width:600px;padding:30px;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-            <h3 style="margin-top:0;color:#2c3e50;font-family:var(--font-titols);">✉️ Tens alguna suggerència?</h3>
-            <p style="color:#666;font-size:0.9em;">Vols crear algun altre mena de joc o consultar dubtes? Estaré encantat de respondre't!</p>
-            <div style="display:flex;flex-direction:column;gap:10px;">
-                <div style="display:flex;gap:10px;">
-                    <input type="email" id="sugg-email" placeholder="El teu correu electrònic" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
-                    <input type="text" id="sugg-assumpte" placeholder="Assumpte" style="flex:1;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;">
-                </div>
-                <textarea id="sugg-missatge" placeholder="Escriu el teu missatge aquí..." style="width:100%;min-height:96px;resize:vertical;box-sizing:border-box;padding:8px;border:1px solid #ddd;border-radius:6px;font-size:0.9em;"></textarea>
-                <div style="display:flex;gap:10px;justify-content:center;">
-                    <button onclick="enviarSuggeriment()" style="background:#333;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;display:flex;align-items:center;gap:6px;">✉️ Envia'm un missatge</button>
-                    <button onclick="document.getElementById('modal-contacte').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div class="configuracio">
         <div class="header-app">
@@ -340,37 +317,116 @@
         </div>
     </div>
 
-    <!-- Modal editor de casella del Bingo -->
-    <div id="modal-bingo-edicio" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:3000;justify-content:center;align-items:center;">
-        <div style="background:#fff;border-radius:12px;width:90%;max-width:550px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,0.3);">
-            <div style="background:#f1f1f1;padding:15px;font-weight:bold;border-bottom:2px solid #ddd;text-align:center;font-family:var(--font-titols);">✏️ Editar casella del Bingo</div>
-            <div style="padding:15px;overflow-y:auto;flex:1;">
-                <div style="margin-bottom:12px;">
-                    <label style="font-weight:bold;color:#555;font-size:0.9em;margin-bottom:5px;display:block;">Text de la casella (màxim 2 paraules):</label>
-                    <input type="text" id="bingo-edit-text" placeholder="Ex: gat" style="width:100%;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
+    <!-- Modal editor de casella (igual que Targetes: pestanyes Pictos, Traductor, Pujar, IA, Editar) -->
+    <div id="modal-edicio">
+        <div class="modal-contingut">
+            <div class="modal-tabs">
+                <button class="tab-btn actiu" onclick="canviarPestanya('tab-arasaac')">🧩 Pictos</button>
+                <button id="tab-btn-traductor" class="tab-btn" onclick="canviarPestanya('tab-traductor')">🌍 Traductor</button>
+                <button id="tab-btn-pujar" class="tab-btn" onclick="canviarPestanya('tab-pujar')">📤 Pujar</button>
+                <button id="tab-btn-ia" class="tab-btn" onclick="canviarPestanya('tab-ia-img')">🤖 IA</button>
+                <button class="tab-btn" onclick="obrirTabEdicio()">🎨 Editar</button>
+            </div>
+            <div class="modal-body">
+                <div class="grup-titol-modal">
+                    <label style="margin-bottom:10px;">Editar Text:</label>
+                    <div id="camps-text" class="inputs-container-modal"></div>
                 </div>
-                <div style="margin-bottom:12px;">
-                    <label style="font-weight:bold;color:#555;font-size:0.9em;margin-bottom:5px;display:block;">🔍 Cerca pictograma (ARASAAC):</label>
-                    <div style="display:flex;gap:8px;">
-                        <input type="text" id="bingo-edit-cerca" placeholder="Cerca..." style="flex:1;padding:10px;border:2px solid #ddd;border-radius:8px;font-size:16px;box-sizing:border-box;">
-                        <button onclick="cercarPictoBingoModal()" style="background:var(--color-principal);border-radius:8px;padding:10px 15px;font-size:1em;color:#fff;border:none;cursor:pointer;white-space:nowrap;">🔍 Cerca</button>
+                <div id="tab-arasaac" class="contingut-tab">
+                    <div class="cerca-wrapper"><input id="input-arasaac" onkeyup="if(event.key==='Enter') buscarArasaacModal()"><button class="btn-cerca-modal" onclick="buscarArasaacModal()">🔍 Cerca</button></div>
+                    <div id="resultats-arasaac" class="resultats-grid"></div>
+                </div>
+                <div id="tab-traductor" class="contingut-tab" style="display:none;">
+                    <p style="font-size:0.9em; margin-top:0;">Tria els idiomes a traduir per al text:</p>
+                    <div class="caixa-idiomes-check">
+                        <label><input type="checkbox" value="es" class="check-trad" checked> Castellà</label>
+                        <label><input type="checkbox" value="en" class="check-trad" checked> Anglès</label>
+                        <label><input type="checkbox" value="fr" class="check-trad"> Francès</label>
+                        <label><input type="checkbox" value="de" class="check-trad"> Alemany</label>
+                        <label><input type="checkbox" value="it" class="check-trad"> Italià</label>
+                        <label><input type="checkbox" value="pt" class="check-trad"> Portuguès</label>
+                        <label><input type="checkbox" value="nl" class="check-trad"> Neerlandès</label>
+                        <label><input type="checkbox" value="ro" class="check-trad"> Romanès</label>
+                        <label><input type="checkbox" value="pl" class="check-trad"> Polonès</label>
+                        <label><input type="checkbox" value="uk" class="check-trad"> Ucraïnès</label>
+                        <label><input type="checkbox" value="ru" class="check-trad"> Rus</label>
+                        <label><input type="checkbox" value="ar" class="check-trad"> Àrab</label>
+                        <label><input type="checkbox" value="zh" class="check-trad"> Xinès</label>
+                        <label><input type="checkbox" value="ur" class="check-trad"> Urdu</label>
+                    </div>
+                    <div class="cerca-wrapper"><button class="btn-cerca-modal btn-cerca-trad" onclick="traduirParaula()" style="width:100%">🌍 Traduir text</button></div>
+                    <div id="resultats-traductor" class="grid-traduccions"></div>
+                </div>
+                <div id="tab-pujar" class="contingut-tab" style="display:none;text-align:center;">
+                    <p>Puja una imatge pròpia des del teu ordinador:</p>
+                    <input type="file" accept="image/*" onchange="pujarImatge(this)" style="margin-top:10px;">
+                </div>
+                <div id="tab-ia-img" class="contingut-tab" style="display:none;text-align:center;">
+                    <p style="font-size:1.1em; margin-bottom:15px; color:#555;">Genera imatges amb Intel·ligència Artificial fent servir l'eina externa gratuïta de Craiyon.</p>
+                    <button onclick="window.open('https://www.craiyon.com/','_blank','width=400,height=600')" style="background:var(--color-accio);color:white;padding:15px 25px;border-radius:30px;font-size:1.1em;border:none;cursor:pointer;font-weight:bold;box-shadow:0 4px 10px rgba(0,0,0,0.2);display:block;margin:0 auto;">🎨 Obrir generador Craiyon</button>
+                    <p style="font-size:0.85em; margin-top:20px; color:#999;">Guarda la imatge al teu ordinador i puja-la a la pestanya "Pujar".</p>
+                </div>
+                <div id="tab-dibuix" class="contingut-tab" style="display:none; text-align:center;">
+                    <div style="display:flex; gap:10px; margin-bottom:15px; align-items:stretch;">
+                        <div style="flex:1; background:#fffcf5; padding:10px; border-radius:10px; border:1px dashed #ccc; display:flex; flex-direction:column; justify-content:center;">
+                            <label style="margin-top:0; margin-bottom:5px; font-size:0.85em; font-weight:bold;">🎨 Fons targeta:</label>
+                            <div class="color-palette" style="margin-bottom:0; justify-content:space-around;">
+                                <button class="color-btn" style="background:#ffffff; border-color:#333;" onclick="setTargetColor('#ffffff', this)"></button>
+                                <button class="color-btn" style="background:#ffe082" onclick="setTargetColor('#ffe082', this)"></button>
+                                <button class="color-btn" style="background:#a5d6a7" onclick="setTargetColor('#a5d6a7', this)"></button>
+                                <button class="color-btn" style="background:#90caf9" onclick="setTargetColor('#90caf9', this)"></button>
+                                <button class="color-btn" style="background:#ffcc80" onclick="setTargetColor('#ffcc80', this)"></button>
+                                <button class="color-btn" style="background:#e1bee7" onclick="setTargetColor('#e1bee7', this)"></button>
+                            </div>
+                        </div>
+                        <div style="flex:1; background:#f0f8ff; padding:10px; border-radius:10px; border:1px dashed #ccc; display:flex; flex-direction:column; justify-content:center;">
+                            <label style="margin-top:0; margin-bottom:5px; font-size:0.85em; font-weight:bold;">🖌️ Color d'edició:</label>
+                            <div class="color-palette" style="margin-bottom:0; justify-content:space-around;">
+                                <button class="btn-color-dibuix" style="background:#e74c3c" onclick="setDrawColor('#e74c3c')"></button>
+                                <button class="btn-color-dibuix" style="background:#2980b9" onclick="setDrawColor('#2980b9')"></button>
+                                <button class="btn-color-dibuix" style="background:#27ae60" onclick="setDrawColor('#27ae60')"></button>
+                                <button class="btn-color-dibuix" style="background:#f1c40f" onclick="setDrawColor('#f1c40f')"></button>
+                                <button class="btn-color-dibuix" style="background:#000000" onclick="setDrawColor('#000000')"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display:flex; flex-direction:column; align-items:center; gap:10px;">
+                        <div class="toolbar-dibuix">
+                            <button id="tool-freehand" class="btn-tool actiu" onclick="setTool('freehand')" title="Dibuix Lliure">〰️</button>
+                            <button id="tool-rect" class="btn-tool" onclick="setTool('rect')" title="Quadrat">🔲</button>
+                            <button id="tool-circle" class="btn-tool" onclick="setTool('circle')" title="Cercle">⭕</button>
+                            <button id="tool-arrow" class="btn-tool" onclick="setTool('arrow')" title="Fletxa">↗️</button>
+                            <button id="tool-cross" class="btn-tool" onclick="setTool('cross')" title="Creu">❌</button>
+                            <div style="width:2px; height:20px; background:#ccc; margin:0 5px;"></div>
+                            <button style="background:#95a5a6; border:none; padding:5px 15px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="undoLastDrawing()" title="Desfer últim pas">↩️</button>
+                            <button style="background:#e74c3c; border:none; padding:5px 12px; border-radius:5px; color:white; cursor:pointer; font-size:1.2em; font-weight:bold;" onclick="eliminarElementSeleccionat()" title="Eliminar element seleccionat">🗑️</button>
+                        </div>
+                        <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:center; background:#eee; padding:10px; border-radius:10px; width:100%; box-sizing:border-box;">
+                            <label style="font-size:0.8em; font-weight:bold;">🔍 Mida: <input type="range" id="ed-scale" min="0.5" max="3" step="0.1" value="1" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em; font-weight:bold;">↔️ X: <input type="range" id="ed-x" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
+                            <label style="font-size:0.8em; font-weight:bold;">↕️ Y: <input type="range" id="ed-y" min="-150" max="150" value="0" oninput="drawEditorCanvas()"></label>
+                        </div>
+                        <div style="position:relative;display:inline-block;">
+                            <canvas id="canvasEditor" width="300" height="300" style="border:2px dashed #ccc; border-radius:10px; touch-action:none; background:white; cursor:crosshair;"></canvas>
+                            <input type="text" id="canvas-inline-text" placeholder="Escriu i prem ↵" style="display:none;position:absolute;background:rgba(255,255,255,0.95);border:2px solid #4a90e2;border-radius:4px;padding:3px 8px;font:bold 14px Arial;min-width:90px;z-index:5;box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+                        </div>
                     </div>
                 </div>
-                <div id="bingo-edit-resultats" style="display:flex;flex-wrap:wrap;gap:6px;max-height:250px;overflow-y:auto;padding:5px;border:1px solid #eee;border-radius:8px;min-height:60px;"></div>
-                <div id="bingo-edit-preview" style="margin-top:12px;display:flex;align-items:center;gap:10px;padding:10px;background:#f8f9fa;border-radius:8px;display:none;">
-                    <img id="bingo-edit-preview-img" src="" style="width:60px;height:60px;object-fit:contain;border:1px solid #ddd;border-radius:6px;">
-                    <span id="bingo-edit-preview-text" style="font-weight:bold;"></span>
-                </div>
             </div>
-            <div style="padding:15px;border-top:1px solid #eee;display:flex;gap:10px;justify-content:center;">
-                <button onclick="aplicarEdicioBingo()" style="background:var(--color-accio);color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">✅ Aplicar</button>
-                <button onclick="document.getElementById('modal-bingo-edicio').style.display='none'" style="background:#999;color:white;padding:10px 20px;border-radius:30px;border:none;cursor:pointer;font-weight:bold;">Tancar</button>
+            <div style="padding:15px;background:#f9f9f9; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;">
+                <button onclick="eliminarTargeta()" style="background:#e74c3c; color:white; display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold;">🗑️ Buidar casella</button>
+                <div style="display:flex; gap:10px;">
+                    <button onclick="guardarTancar()" style="background:var(--color-accio);display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold; color:white;">✅ Fet</button>
+                    <button onclick="tancarModalSenseGuardar()" style="background:#999;display:inline-flex; border:none; padding:10px 15px; border-radius:8px; cursor:pointer; font-weight:bold; color:white;">Cancel·lar</button>
+                </div>
             </div>
         </div>
     </div>
+    <div id="toast" style="display:none; position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background:#333; color:white; padding:10px 20px; border-radius:30px; z-index:4000;">Copiat!</div>
 
     <div id="zona-sortida"></div>
 
+    <script src="menu.js"></script>
     <script>
         const i18nUI = {
             ca: { mode_fosc:"🌙 Mode Fosc", idioma_ui:"🌐 Idioma de l'aplicació", clau_api:"🤖 Clau API Google AI Studio:", desar_clau:"💾 Desar clau", aconseguir_clau:"👉 Aconseguir clau gratis", suggerencia:"✉️ Tens alguna suggerència?", mida_cartro:"Mida del cartró", num_jugadors:"Nombre de cartrons", mode_visual:"Mode de visualització", mida_paper_bingo:"Mida impressió", orientacio_paper:"Orientació", paraules_bingo:"Paraules (separades amb comes):", generar_bingo:"🎯 Generar Bingo", mode_ia:"🤖 Mode IA", imprimir:"🖨️ Imprimir", ia_descripcio:"Escriu una temàtica i la IA generarà una llista de paraules per al Bingo.", tematica:"Temàtica:", num_paraules_ia:"Nombre de paraules:", generar_ia:"✨ Genera paraules", tancar:"Tancar", opt_imatgetext:"Imatge + Text", opt_nomesimg:"Només pictogrames", opt_nomestext:"Només text", files_bingo:"Files", columnes_bingo:"Columnes" },
@@ -395,29 +451,6 @@
             });
             const sel = document.getElementById('ui-lang-select');
             if (sel && sel.value !== lang) sel.value = lang;
-        }
-
-        function obrirMenu() { document.getElementById("elMeuMenu").style.width = "280px"; }
-        function tancarMenu() { document.getElementById("elMeuMenu").style.width = "0"; }
-
-        function toggleDarkMode(el) {
-            document.body.classList.toggle('dark-mode', el.checked);
-            localStorage.setItem('dark_mode', el.checked ? '1' : '0');
-        }
-
-        function guardarApiKey(btn) {
-            const key = document.getElementById('gemini-api-key').value.trim();
-            localStorage.setItem('gemini_api_key', key);
-            const orig = btn.textContent;
-            btn.textContent = '✅ Desada!';
-            setTimeout(() => btn.textContent = orig, 2000);
-        }
-
-        function enviarSuggeriment() {
-            const email = document.getElementById('sugg-email').value;
-            const subject = document.getElementById('sugg-assumpte').value;
-            const msg = document.getElementById('sugg-missatge').value;
-            window.location.href = `mailto:rrobles4@xtec.cat?subject=${encodeURIComponent("Suggerència per a PictoSuite: "+subject)}&body=${encodeURIComponent("Correu: "+email+"\n\n"+msg)}`;
         }
 
         // Fisher-Yates shuffle
@@ -497,7 +530,7 @@
                     const cell = document.createElement('div');
                     cell.className = 'bingo-cell';
                     cell.style.cursor = 'pointer';
-                    cell.addEventListener('click', () => obrirEditorBingoCell(cell));
+                    cell.addEventListener('click', () => obrirModal(cell));
                     if (modeVisual === 'nomes-text') cell.classList.add('nomes-text');
                     if (modeVisual === 'nomes-img') cell.classList.add('nomes-img');
 
@@ -554,48 +587,29 @@
         }
 
         function obrirModalIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (!apiKey) {
-                alert('⚠️ Necessites una clau API de Google AI Studio per usar el Mode IA. Afegeix-la al menú lateral.');
+            const geminiKey = (localStorage.getItem('gemini_api_key') || '').trim();
+            const orKey = (localStorage.getItem('openrouter_api_key') || '').trim();
+            if (!geminiKey && !orKey) {
+                alert('⚠️ Necessites una clau API per usar el Mode IA. Afegeix-la al menú lateral (botó "Activa la IA!").');
                 return;
             }
             document.getElementById('modal-ia').style.display = 'flex';
         }
 
         async function generarParaulesIA() {
-            const apiKey = localStorage.getItem('gemini_api_key');
-            if (!apiKey) { alert('Clau API no trobada.'); return; }
-
             const tematica = document.getElementById('ia-tematica').value.trim();
             const numParaules = parseInt(document.getElementById('ia-num-paraules').value) || 30;
             const estat = document.getElementById('ia-estat');
 
             if (!tematica) { estat.textContent = '⚠️ Escriu una temàtica.'; return; }
 
-            estat.innerHTML = '<span class="loader"></span> Generant paraules...';
-            const btn = document.querySelector('#modal-ia button');
+            estat.innerHTML = '<span style="display:inline-block;width:18px;height:18px;border:3px solid #f3f3f3;border-top:3px solid #8e44ad;border-radius:50%;animation:spin 1s linear infinite;vertical-align:middle;margin-right:6px;"></span> Generant paraules...';
 
             const prompt = `Generate a list of exactly ${numParaules} words or short expressions (maximum 3 words each) about the theme: "${tematica}". The words must be suitable for primary school or special education students. Respond ONLY with the words separated by commas, in the same language as the theme provided, without numbering or any additional explanation.`;
 
             try {
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: prompt }] }],
-                        generationConfig: { temperature: 0.7, maxOutputTokens: 500 }
-                    })
-                });
-
-                if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.error?.message || 'Error API');
-                }
-
-                const data = await response.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                const text = await apiCallWithFallback(prompt, { temperature: 0.7, maxOutputTokens: 500 });
                 const paraules = text.split(',').map(p => p.trim().replace(/\n/g, ' ')).filter(p => p.length > 0);
-
                 document.getElementById('llista-paraules').value = paraules.join(', ');
                 estat.textContent = `✅ ${paraules.length} paraules generades!`;
                 setTimeout(() => {
@@ -603,112 +617,295 @@
                     estat.textContent = '';
                 }, 1500);
             } catch (e) {
-                estat.textContent = `❌ Error: ${e.message}`;
+                if (e.message === 'no_key') {
+                    estat.textContent = '❌ Afegeix una clau API al menú lateral.';
+                } else {
+                    estat.textContent = `❌ Error: ${e.message}`;
+                }
             }
         }
 
-        let currentBingoCell = null;
-        let currentBingoImg = null;
-        let currentBingoText = null;
-        let selectedBingoPictoUrl = null;
+        // ── Editor modal de casella (igual que Targetes) ──────────────────
 
-        function obrirEditorBingoCell(cell) {
-            currentBingoCell = cell;
-            currentBingoImg = cell.querySelector('img');
-            currentBingoText = cell.querySelector('.cell-text');
-            selectedBingoPictoUrl = currentBingoImg ? currentBingoImg.src : null;
-            const textInput = document.getElementById('bingo-edit-text');
-            const cercaInput = document.getElementById('bingo-edit-cerca');
-            textInput.value = currentBingoText ? currentBingoText.textContent : '';
-            cercaInput.value = currentBingoText ? currentBingoText.textContent : '';
-            document.getElementById('bingo-edit-resultats').innerHTML = '';
-            const preview = document.getElementById('bingo-edit-preview');
-            if (selectedBingoPictoUrl && !selectedBingoPictoUrl.includes('1x1.png')) {
-                document.getElementById('bingo-edit-preview-img').src = selectedBingoPictoUrl;
-                document.getElementById('bingo-edit-preview-text').textContent = textInput.value;
-                preview.style.display = 'flex';
-            } else {
-                preview.style.display = 'none';
-            }
-            document.getElementById('modal-bingo-edicio').style.display = 'flex';
-            if (cercaInput.value) cercarPictoBingoModal();
+        let elementEditant = null;
+        let imgOriginalSrcOnOpen = '';
+        let currentColorSelected = '#ffffff';
+        let editorCanvas, editorCtx;
+        let editorImgObj = new Image();
+        editorImgObj.crossOrigin = "Anonymous";
+        let currentDrawings = [];
+        let isDrawing = false;
+        let drawColor = '#e74c3c';
+        let currentTool = 'freehand';
+        let startX, startY, currentX, currentY;
+        let isDraggingShape = false;
+        let draggedShapeIndex = -1;
+        let selectedShapeIndex = -1;
+        let lastMouseX = 0, lastMouseY = 0;
+
+        function obrirModal(cell) {
+            elementEditant = cell;
+            imgOriginalSrcOnOpen = cell.querySelector('img') ? cell.querySelector('img').src : '';
+            currentDrawings = [];
+            const textEl = cell.querySelector('.cell-text');
+            const word = textEl ? textEl.textContent.trim() : '';
+            const containerInputs = document.getElementById('camps-text');
+            containerInputs.innerHTML = '';
+            containerInputs.className = 'inputs-container-modal dues-paraules';
+            containerInputs.innerHTML = `<input type="text" class="input-text-modal" id="input-modal-0" value="${word.replace(/"/g,'&quot;')}" placeholder="Text de la casella">`;
+            document.getElementById('input-arasaac').value = word;
+            document.getElementById('resultats-traductor').innerHTML = '';
+            document.getElementById('modal-edicio').style.display = 'flex';
+            canviarPestanya('tab-arasaac');
+            if (word) buscarArasaacModal();
         }
 
-        async function cercarPictoBingoModal() {
-            const q = document.getElementById('bingo-edit-cerca').value.trim();
-            const div = document.getElementById('bingo-edit-resultats');
+        function guardarTancar() {
+            if (elementEditant) {
+                if (document.getElementById('tab-dibuix').style.display === 'block') {
+                    aplicarEdicioImatge(false);
+                }
+                const inp = document.getElementById('input-modal-0');
+                const trimmed = inp ? inp.value.trim() : '';
+                const words = trimmed.split(/\s+/).filter(w => w.length > 0);
+                const finalText = words.slice(0, 2).join(' ');
+                const textEl = elementEditant.querySelector('.cell-text');
+                if (textEl) textEl.textContent = finalText;
+                if (currentColorSelected !== '#ffffff') {
+                    elementEditant.style.backgroundColor = currentColorSelected;
+                }
+            }
+            tancarModal();
+        }
+
+        function tancarModalSenseGuardar() {
+            if (elementEditant && imgOriginalSrcOnOpen) {
+                const img = elementEditant.querySelector('img');
+                if (img) img.src = imgOriginalSrcOnOpen;
+            }
+            tancarModal();
+        }
+
+        function tancarModal() {
+            document.getElementById('modal-edicio').style.display = 'none';
+            elementEditant = null;
+            currentColorSelected = '#ffffff';
+            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ccc');
+        }
+
+        function eliminarTargeta() {
+            if (!elementEditant) return;
+            if (confirm('Segur que vols buidar aquesta casella?')) {
+                const img = elementEditant.querySelector('img');
+                if (img) {
+                    img.src = 'https://upload.wikimedia.org/wikipedia/commons/c/ca/1x1.png';
+                    img.style.opacity = '0.1';
+                }
+                const textEl = elementEditant.querySelector('.cell-text');
+                if (textEl) textEl.textContent = '';
+                tancarModal();
+            }
+        }
+
+        function aplicarImatge(src) {
+            if (elementEditant) {
+                const img = elementEditant.querySelector('img');
+                if (img) { img.src = src; img.style.opacity = '1'; }
+            }
+        }
+
+        function canviarPestanya(id) {
+            document.querySelectorAll('.contingut-tab').forEach(e => e.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(e => e.classList.remove('actiu'));
+            const tab = document.getElementById(id);
+            if (tab) tab.style.display = 'block';
+            document.querySelectorAll(`.tab-btn[onclick*="${id}"]`).forEach(b => b.classList.add('actiu'));
+        }
+
+        async function buscarArasaacModal() {
+            const q = document.getElementById('input-arasaac').value;
+            const div = document.getElementById('resultats-arasaac');
             div.innerHTML = '';
-            if (!q) return;
             const lang = localStorage.getItem('ui_lang') || 'ca';
             try {
-                const r = await fetch(`https://api.arasaac.org/v1/pictograms/${lang}/search/${encodeURIComponent(q)}`);
+                const r = await fetch(`https://api.arasaac.org/api/pictograms/${lang}/search/${encodeURIComponent(q)}`);
                 const d = await r.json();
-                const urls = (d||[]).map(x => `https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`);
-                urls.forEach(url => {
-                    const i = document.createElement('img');
-                    i.src = url;
-                    i.style.cssText = 'width:60px;height:60px;object-fit:contain;cursor:pointer;border:2px solid transparent;border-radius:6px;padding:2px;';
-                    i.onclick = () => {
-                        document.querySelectorAll('#bingo-edit-resultats img').forEach(x => x.style.borderColor = 'transparent');
-                        i.style.borderColor = '#27ae60';
-                        selectedBingoPictoUrl = url;
-                        document.getElementById('bingo-edit-preview-img').src = url;
-                        document.getElementById('bingo-edit-preview-text').textContent = document.getElementById('bingo-edit-text').value;
-                        document.getElementById('bingo-edit-preview').style.display = 'flex';
-                    };
-                    div.appendChild(i);
-                });
-                if (urls.length === 0) {
+                const urls = d.map(x => `https://static.arasaac.org/pictograms/${x._id}/${x._id}_300.png`);
+                urls.forEach(url => { const i = document.createElement('img'); i.src = url; i.onclick = () => aplicarImatge(url); div.appendChild(i); });
+                if (d.length === 0) {
                     try {
                         const gsR = await fetch(`https://www.globalsymbols.com/api/v1/labels/search/?query=${encodeURIComponent(q)}&language=${lang}&limit=20`);
                         const gsD = await gsR.json();
-                        (gsD.results || gsD || []).forEach(item => {
-                            const url = item.picto?.image_url || item.image_url;
-                            if (url) {
-                                const i = document.createElement('img');
-                                i.src = url;
-                                i.style.cssText = 'width:60px;height:60px;object-fit:contain;cursor:pointer;border:2px solid transparent;border-radius:6px;padding:2px;';
-                                i.onclick = () => {
-                                    document.querySelectorAll('#bingo-edit-resultats img').forEach(x => x.style.borderColor = 'transparent');
-                                    i.style.borderColor = '#27ae60';
-                                    selectedBingoPictoUrl = url;
-                                    document.getElementById('bingo-edit-preview-img').src = url;
-                                    document.getElementById('bingo-edit-preview-text').textContent = document.getElementById('bingo-edit-text').value;
-                                    document.getElementById('bingo-edit-preview').style.display = 'flex';
-                                };
-                                div.appendChild(i);
-                            }
-                        });
+                        (gsD.results || gsD || []).forEach(item => { const url = item.picto?.image_url || item.image_url; if (url) { const i = document.createElement('img'); i.src = url; i.onclick = () => aplicarImatge(url); div.appendChild(i); } });
                     } catch(e2) {}
                 }
             } catch(e) {}
         }
 
-        function aplicarEdicioBingo() {
-            if (!currentBingoCell) return;
-            let text = document.getElementById('bingo-edit-text').value.trim();
-            // Limit to 2 words
-            const words = text.split(/\s+/).filter(w => w.length > 0);
-            if (words.length > 2) text = words.slice(0, 2).join(' ');
-            if (currentBingoText) currentBingoText.textContent = text;
-            if (currentBingoImg && selectedBingoPictoUrl && !selectedBingoPictoUrl.includes('1x1.png')) {
-                currentBingoImg.src = selectedBingoPictoUrl;
-                currentBingoImg.style.opacity = '1';
-            }
-            document.getElementById('modal-bingo-edicio').style.display = 'none';
-            currentBingoCell = null;
+        function pujarImatge(i) {
+            const r = new FileReader();
+            r.onload = e => aplicarImatge(e.target.result);
+            if (i.files[0]) r.readAsDataURL(i.files[0]);
         }
 
-        window.addEventListener('load', function() {
-            if (localStorage.getItem('dark_mode') === '1') {
-                document.body.classList.add('dark-mode');
-                const t = document.getElementById('dark-mode-toggle');
-                if (t) t.checked = true;
+        async function traduirParaula() {
+            const word = (document.getElementById('input-modal-0') || {}).value || '';
+            const divRes = document.getElementById('resultats-traductor');
+            divRes.innerHTML = "<p style='text-align:center'>⏳ Traduint...</p>";
+            // Use event delegation so translated text is never placed in inline handlers
+            divRes.onclick = function(e) {
+                const item = e.target.closest('.copiar-trad');
+                if (item && item.dataset.text) copiarText(item.dataset.text);
+            };
+            let html = '';
+            const checkboxes = document.querySelectorAll('.check-trad:checked');
+            if (checkboxes.length === 0) { divRes.innerHTML = "<p style='text-align:center'>⚠️ Selecciona com a mínim un idioma.</p>"; return; }
+            for (const cb of checkboxes) {
+                const langCode = cb.value;
+                const langNom = cb.parentNode.innerText.trim();
+                try {
+                    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=ca|${langCode}`);
+                    const data = await res.json();
+                    if (data.responseData && data.responseData.translatedText) {
+                        if (data.responseData.translatedText.includes('MYMEMORY WARNING')) { html += `<p style='text-align:center;color:#e74c3c;grid-column:1/-1;'>⚠️ Límit diari esgotat.</p>`; break; }
+                        const safeText = data.responseData.translatedText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+                        html += `<div class="item-traduccio copiar-trad" data-text="${safeText}"><div><span class="lang-code">${langNom}</span><span class="trad-text">${safeText}</span></div><span class="copy-hint">📋</span></div>`;
+                    }
+                } catch(e) {}
             }
-            const key = localStorage.getItem('gemini_api_key');
-            if (key) {
-                const inp = document.getElementById('gemini-api-key');
-                if (inp) inp.value = key;
+            divRes.innerHTML = html || "Error de connexió";
+        }
+
+        function copiarText(t) {
+            navigator.clipboard.writeText(t);
+            const o = document.getElementById('toast');
+            o.style.display = 'block';
+            setTimeout(() => o.style.display = 'none', 2000);
+        }
+
+        function setTargetColor(color, btnElem) {
+            currentColorSelected = color;
+            document.querySelectorAll('.color-btn').forEach(b => b.style.borderColor = '#ccc');
+            if (btnElem) btnElem.style.borderColor = '#333';
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.btn-tool').forEach(btn => btn.classList.remove('actiu'));
+            const el = document.getElementById('tool-' + tool);
+            if (el) el.classList.add('actiu');
+        }
+
+        function setDrawColor(c) { drawColor = c; }
+        function undoLastDrawing() { if (currentDrawings.length > 0) { currentDrawings.pop(); selectedShapeIndex = -1; drawEditorCanvas(); } }
+        function eliminarElementSeleccionat() { if (selectedShapeIndex >= 0 && selectedShapeIndex < currentDrawings.length) { currentDrawings.splice(selectedShapeIndex, 1); selectedShapeIndex = -1; drawEditorCanvas(); } }
+
+        function getMousePos(e) {
+            const rect = editorCanvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            return { x: clientX - rect.left, y: clientY - rect.top };
+        }
+
+        function buildPath(ctx, shape) {
+            ctx.beginPath();
+            if (shape.type === 'freehand') { shape.points.forEach((p, i) => { if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); }); }
+            else if (shape.type === 'rect') { ctx.rect(shape.start.x, shape.start.y, shape.end.x - shape.start.x, shape.end.y - shape.start.y); }
+            else if (shape.type === 'circle') { let r = Math.sqrt(Math.pow(shape.end.x-shape.start.x,2)+Math.pow(shape.end.y-shape.start.y,2)); ctx.arc(shape.start.x,shape.start.y,r,0,2*Math.PI); }
+            else if (shape.type === 'arrow') { let hl=15,dx=shape.end.x-shape.start.x,dy=shape.end.y-shape.start.y,ang=Math.atan2(dy,dx); ctx.moveTo(shape.start.x,shape.start.y); ctx.lineTo(shape.end.x,shape.end.y); ctx.lineTo(shape.end.x-hl*Math.cos(ang-Math.PI/6),shape.end.y-hl*Math.sin(ang-Math.PI/6)); ctx.moveTo(shape.end.x,shape.end.y); ctx.lineTo(shape.end.x-hl*Math.cos(ang+Math.PI/6),shape.end.y-hl*Math.sin(ang+Math.PI/6)); }
+            else if (shape.type === 'cross') { ctx.moveTo(shape.start.x,shape.start.y); ctx.lineTo(shape.end.x,shape.end.y); ctx.moveTo(shape.end.x,shape.start.y); ctx.lineTo(shape.start.x,shape.end.y); }
+            else if (shape.type === 'text') { ctx.rect(shape.start.x-5,shape.start.y-14,(shape.text||'').length*8+10,20); }
+        }
+
+        function getHitShapeIndex(x, y) {
+            editorCtx.lineWidth = 15;
+            for (let i = currentDrawings.length-1; i >= 0; i--) { buildPath(editorCtx, currentDrawings[i]); if (editorCtx.isPointInStroke(x,y)) return i; }
+            return -1;
+        }
+
+        function startDrawingCanvas(e) {
+            const pos = getMousePos(e);
+            let hitIdx = getHitShapeIndex(pos.x, pos.y);
+            if (hitIdx !== -1) { isDraggingShape = true; draggedShapeIndex = hitIdx; selectedShapeIndex = hitIdx; lastMouseX = pos.x; lastMouseY = pos.y; drawEditorCanvas(); }
+            else if (currentTool === 'text') {
+                const inlineInput = document.getElementById('canvas-inline-text');
+                if (inlineInput) {
+                    inlineInput.style.left = pos.x + 'px'; inlineInput.style.top = (pos.y-18) + 'px';
+                    inlineInput.style.display = 'block'; inlineInput.value = ''; inlineInput.focus();
+                    inlineInput._pendingPos = {x: pos.x, y: pos.y};
+                    inlineInput.onkeydown = function(ev) { if (ev.key==='Enter'){ev.preventDefault();inlineInput.blur();} if(ev.key==='Escape'){inlineInput.style.display='none';inlineInput.onblur=null;} };
+                    inlineInput.onblur = function() {
+                        const txt = inlineInput.value.trim(); inlineInput.style.display = 'none';
+                        if (txt && inlineInput._pendingPos) { currentDrawings.push({type:'text',color:drawColor,start:{x:inlineInput._pendingPos.x,y:inlineInput._pendingPos.y},text:txt}); selectedShapeIndex=currentDrawings.length-1; drawEditorCanvas(); }
+                    };
+                }
+            } else {
+                selectedShapeIndex = -1; isDrawing = true; startX = pos.x; startY = pos.y; currentX = pos.x; currentY = pos.y;
+                if (currentTool === 'freehand') currentDrawings.push({type:'freehand',color:drawColor,points:[{x:startX,y:startY}]});
+                drawEditorCanvas();
+            }
+        }
+
+        function drawCanvas(e) {
+            const pos = getMousePos(e);
+            if (isDraggingShape) { let dx=pos.x-lastMouseX,dy=pos.y-lastMouseY,shape=currentDrawings[draggedShapeIndex]; if(shape.type==='freehand') shape.points.forEach(pt=>{pt.x+=dx;pt.y+=dy;}); else{shape.start.x+=dx;shape.start.y+=dy;if(shape.end){shape.end.x+=dx;shape.end.y+=dy;}} lastMouseX=pos.x;lastMouseY=pos.y;drawEditorCanvas(); }
+            else if (isDrawing) { currentX=pos.x;currentY=pos.y;if(currentTool==='freehand')currentDrawings[currentDrawings.length-1].points.push({x:currentX,y:currentY});drawEditorCanvas(); }
+            else { let hitIdx=getHitShapeIndex(pos.x,pos.y);editorCanvas.style.cursor=hitIdx!==-1?'pointer':'crosshair'; }
+        }
+
+        function stopDrawingCanvas() {
+            if (isDraggingShape){isDraggingShape=false;draggedShapeIndex=-1;}
+            if (isDrawing){isDrawing=false;if(currentTool!=='freehand'&&(startX!==currentX||startY!==currentY)){currentDrawings.push({type:currentTool,color:drawColor,start:{x:startX,y:startY},end:{x:currentX,y:currentY}});}drawEditorCanvas();}
+        }
+
+        function obrirTabEdicio() {
+            canviarPestanya('tab-dibuix');
+            document.getElementById('ed-scale').value = 1;
+            document.getElementById('ed-x').value = 0;
+            document.getElementById('ed-y').value = 0;
+            setTool('freehand');
+            const img = elementEditant ? elementEditant.querySelector('img') : null;
+            let currentSrc = img ? img.src : '';
+            if (currentSrc) {
+                try {
+                    const srcUrl = new URL(currentSrc);
+                    if (srcUrl.hostname === 'static.arasaac.org' && !srcUrl.search && !currentSrc.endsWith('.mp4')) {
+                        currentSrc += '?c=' + new Date().getTime();
+                    }
+                } catch(e) {}
+                editorImgObj.onload = () => { currentDrawings = []; drawEditorCanvas(); editorImgObj.onload = null; };
+                editorImgObj.src = currentSrc;
+                if (editorImgObj.complete) editorImgObj.onload();
+            }
+        }
+
+        function drawEditorCanvas() {
+            editorCtx.clearRect(0,0,300,300);
+            const scale=parseFloat(document.getElementById('ed-scale').value);
+            const dx=parseFloat(document.getElementById('ed-x').value);
+            const dy=parseFloat(document.getElementById('ed-y').value);
+            editorCtx.save(); editorCtx.translate(150+dx,150+dy); editorCtx.scale(scale,scale);
+            if(editorImgObj.src&&!editorImgObj.src.endsWith('.mp4')){const asp=editorImgObj.width/editorImgObj.height;let w=280,h=280;if(asp>1)h=w/asp;else w=h*asp;editorCtx.drawImage(editorImgObj,-w/2,-h/2,w,h);}
+            editorCtx.restore(); editorCtx.lineCap='round'; editorCtx.lineJoin='round';
+            currentDrawings.forEach((shape,idx)=>{
+                if(shape.type==='text'){editorCtx.fillStyle=shape.color;editorCtx.font='bold 16px Arial';editorCtx.fillText(shape.text||'',shape.start.x,shape.start.y);if(idx===selectedShapeIndex){editorCtx.strokeStyle='#4a90e2';editorCtx.lineWidth=1;editorCtx.setLineDash([3,3]);buildPath(editorCtx,shape);editorCtx.stroke();editorCtx.setLineDash([]);}}
+                else{if(idx===selectedShapeIndex){editorCtx.strokeStyle='rgba(74,144,226,0.55)';editorCtx.lineWidth=10;editorCtx.setLineDash([]);buildPath(editorCtx,shape);editorCtx.stroke();}editorCtx.strokeStyle=shape.color;editorCtx.lineWidth=4;buildPath(editorCtx,shape);editorCtx.stroke();}
+            });
+            if(isDrawing&&currentTool!=='freehand'){editorCtx.strokeStyle=drawColor;editorCtx.lineWidth=4;buildPath(editorCtx,{type:currentTool,start:{x:startX,y:startY},end:{x:currentX,y:currentY}});editorCtx.stroke();}
+        }
+
+        function aplicarEdicioImatge(canviarTab=true){const dataUrl=editorCanvas.toDataURL('image/png');aplicarImatge(dataUrl);if(canviarTab)canviarPestanya('tab-arasaac');}
+
+        window.addEventListener('load', function() {
+            editorCanvas = document.getElementById('canvasEditor');
+            if (editorCanvas) {
+                editorCtx = editorCanvas.getContext('2d');
+                editorCanvas.addEventListener('mousedown', startDrawingCanvas);
+                editorCanvas.addEventListener('mousemove', drawCanvas);
+                window.addEventListener('mouseup', stopDrawingCanvas);
+                editorCanvas.addEventListener('touchstart', e => { e.preventDefault(); startDrawingCanvas(e); }, {passive: false});
+                editorCanvas.addEventListener('touchmove', e => { e.preventDefault(); drawCanvas(e); }, {passive: false});
+                window.addEventListener('touchend', stopDrawingCanvas);
             }
             const lang = localStorage.getItem('ui_lang') || 'ca';
             canviarIdiomaInterficie(lang);
